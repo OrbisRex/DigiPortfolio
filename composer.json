@@ -47,6 +47,7 @@
     "require-dev": {
         "phpdocumentor/reflection-common": "^2.2",
         "phpunit/phpunit": "^9.5",
+        "rector/rector": "^1.2",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",
         "symfony/debug-bundle": "5.4.*",
