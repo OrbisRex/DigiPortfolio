@@ -1,0 +1,34 @@
+{# Settings template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Settings - Subject{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <div class="wide-envelop">
+        {%if subject == FALSE %}
+            <p class='info'>No subject found. Add some!</p>
+        {% else %}
+            <h1>{{ subject.name }}</h1>
+            <p>by {{ subject.person.name }}</p>
+        {% endif %}
+
+        {{ form_start(formSubject) }}
+            {{ form_errors(formSubject) }}
+            {{ form_row(formSubject.name) }}
+            <div class="wide">
+                {{ form_row(formSubject.save) }}
+            </div>
+        {{ form_end(formSubject) }}
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('settings') }}#subject" title="Settings"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

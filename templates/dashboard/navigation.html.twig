@@ -1,0 +1,13 @@
+<section id="navigation">
+    {% if is_granted('ROLE_TEACHER') %}
+        <span class="button"><a href="{{ path('assignment')}}">Assignments</a></span>
+        <span class="button"><a href="{{ path('submission')}}">Submissions</a></span>
+        <span class="button"><a href="{{ path('person')}}">People</a></span>
+        <span class="button"><a href="{{ path('settings')}}">Settings</a></span>
+    {% else %}
+        <span class="button"><a href="{{ path('assignment')}}">Assignments</a></span>
+        <span class="button"><a href="{{ path('submission')}}">Submissions</a></span>
+        <span class="button"><a href="{{ path('person-profile', {'id':app.user.id })}}">Profile</a></span>
+    {% endif %}
+    <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+</section>

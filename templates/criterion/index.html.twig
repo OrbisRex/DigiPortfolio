@@ -1,0 +1,34 @@
+{# Criteria template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Criteria{% endblock %}
+
+{% block body %}
+
+    {% for message in app.session.flashBag('error') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <section id="top" class="main">
+        <h1>Criteria</h1>
+        <div class="wide-white-block">
+            <div class="button-list">
+                {%if criteria == FALSE %}
+                    <p class='info'>No criterion found. Add some!</p>
+                {% else %}
+                    {% for criterion in criteria %}
+                        <span class="button"><a href="{{ path('edit-criterion', {'id':criterion.id }) }}">{{ criterion.name }}</a></span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>    
+    </section>
+
+    {% include "criterion/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

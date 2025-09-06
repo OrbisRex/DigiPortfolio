@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | File Management{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Files</h1>
+        <div class="wide-white-block">
+            <div class="button-list">
+            {%if files == FALSE %}
+                <p class='info'>No file found. Add some!</p>
+            {% else %}
+                {% for file in files %}
+                    <span class="button"><a href="{{ asset(file.path) }}" title="Open file in new tab." target="_blank">{{ file.name }}^</a></span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>    
+    </section>
+
+    <section id="new" class="lightgray">
+        <h2>New files</h2>
+        <div class="wide-envelop">
+            {% if error != FALSE %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_row(form.files) }}
+
+                <div class="wide">
+                    {{ form_row(form.save) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+
+    <section id="image" class="darkblue">
+        <h2>Images</h2>
+        <div class="wide-envelop">
+            <div class="button-list">
+            {%if images == FALSE %}
+                <p class='info'>No file found. Add some!</p>
+            {% else %}
+                {% for image in images %}
+                    <span class="button"><a href="{{ asset(image.path) }}" title="Open file in new tab." target="_blank">{{ image.name }}^</a></span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section id="other" class="lightgray">
+        <h2>Other files</h2>
+        <div class="wide-envelop">
+            <div class="button-list">
+            {%if otherFiles == FALSE %}
+                <p class='info'>No file found. Add some!</p>
+            {% else %}
+                {% for otherFile in otherFiles %}
+                    <span class="button"><a href="{{ path('import-person', {'id':otherFile.id }) }}" title="{{ otherFile.type }}">{{ otherFile.name }}</a></span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </section>
+
+{% include "file/navigation.html.twig" %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Log in{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+    <section id="top" class="main">
+        <h1>Hello {{ app.user.username }}</h1>
+        <div class="button-list">
+            <span class="button"><a href="{{ path('person-profile', {'id':app.user.id }) }}">Go to profile</a></span>
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('dashboard') }}" title="Back"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+    {% else %}
+    <section id="top" class="main">
+        <h1>Welcome</h1>
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <div>
+                <input type="email" value="{{ last_username }}" name="email" placeholder="Email" id="inputEmail" required autofocus>
+            </div>
+            <div>
+                <input type="password" name="password" placeholder="Password" id="inputPassword" required>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <p><a href="{{ path('app_forgot_password_request') }}">Forget your password?</a></p>
+            {#
+                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                See https://symfony.com/doc/current/security/remember_me.html
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+            #}
+
+            <div class="wide">
+                <span class="button">
+                    <button type="submit">Sign in</button>
+                </span>
+            </div>
+        </form>
+    </section>
+            
+    <section id="navigation">
+        <span class="button"><a href="{{ path('home') }}" title="Home"><</a></span>
+    </section>
+    {% endif %}
+{% endblock %}

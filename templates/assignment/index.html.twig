@@ -1,0 +1,82 @@
+{# Dashboard template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Assignments{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Assignments</h1>
+        <div class="wide-white-block">
+        {%if assignments == FALSE %}
+            <p class='info'>No assignment found.</p>
+        {% else %}    
+            {% for assignmentPerson in assignments %}
+                <span class="block-envelop">
+                    <span class="group">{% if assignmentPerson.assignment.subject %}{{ assignmentPerson.assignment.subject.name }} {% else %} No Subject {% endif %}</span>
+                    <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                </span>
+            {% endfor %}    
+        {% endif %}    
+        </div>    
+    </section>
+
+    <section id="subject" class="darkblue">
+        <h2>Assignments {% if currentSubject is empty %} by subject {% else %} for {{ currentSubject.name }} {% endif %}</h2>
+        <div class="button-list">
+        <span class="button"><a href="{{ path('assignment') }}#subject">All</a></span>
+        {% for subject in subjects %}
+            <span class="button"><a href="{{ path('assignment', {'subjectId':subject.id }) }}#subject">{{ subject.name }}</a></span>
+        {% endfor %}
+        </div>
+        
+        <div class="wide-envelop">
+            <div class="wide-darkblue-block">
+            {%if assignmentsBySubject == false and currentSubject is not empty %}
+                <p class='info'>No assignment found. Did you choose correct subject?</p>
+            {%elseif assignmentsBySubject == false and currentSubject is empty %}
+                <p class='info'>No assignment found.</p>
+            {% else %}
+                {% for assignmentPerson in assignmentsBySubject %}
+                    <span class="block-envelop">
+                        <span class="group">{% if assignmentPerson.assignment.subject %}{{ assignmentPerson.assignment.subject.name }} {% else %} No Subject {% endif %}</span>
+                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                    </span>
+                {% endfor %}    
+            {% endif %}
+            </div>    
+        </div>
+    </section>
+
+    <section id="topic" class="lightgray">
+        <h2>Assignments {% if currentTopic is empty %} by topic {% else %} for {{ currentTopic.name }} {% endif %}</h2>
+        <div class="button-list">
+        <span class="button"><a href="{{ path('assignment') }}#topic">All</a></span>
+        {% for topic in topics %}
+            <span class="button"><a href="{{ path('assignment', {'topicId':topic.id }) }}#topic">{{ topic.name }}</a></span>
+        {% endfor %}    
+        </div>
+        
+        <div class="wide-envelop">
+            <div class="wide-darkgary-block">
+            {%if assignmentsByTopic == false and currentTopic is not empty %}
+                <p class='info'>No assignment found. Did you choose correct topic?</p>
+            {%elseif assignmentsByTopic == false and currentTopic is empty %}
+                <p class='info'>No assignment found.</p>
+            {% else %}
+                {% for assignmentPerson in assignmentsByTopic %}
+                    <span class="block-envelop">
+                        <span class="group">{% if assignmentPerson.assignment.topic %}{{ assignmentPerson.assignment.topic.name }} {% else %} No Topic {% endif %}</span>
+                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                    </span>
+                {% endfor %}
+            {% endif %}
+            </div>    
+        </div>
+    </section>
+            
+{% include "assignment/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

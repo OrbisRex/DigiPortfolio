@@ -1,0 +1,38 @@
+{# Submission template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | New Submission{% endblock %}
+
+{% block body %}
+    <section id="top" class="form">
+        <h1>New Submission</h1>
+
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.assignment) }}            
+            {{ form_row(form.owner) }}
+
+            {{ form_row(form.name) }}            
+            {{ form_row(form.link) }}
+            
+            {{ form_row(form.note) }}
+            {{ form_row(form.text) }}
+            {{ form_row(form.files) }}
+            
+            
+            <div class="wide">    
+                {{ form_row(form.save) }}
+            </div>    
+        {{ form_end(form) }}
+    </section>
+    
+    <section id="navigation">
+        <span class="button"><a href="{{ path('submission') }}" title="Submissions"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}

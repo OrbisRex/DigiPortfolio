@@ -1,0 +1,16 @@
+{# Reset password template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Reset password{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Email sent</h1>
+        <p>The password reset link has been sent to your email and will be available for {{ tokenLifetime|date('g') }} hour(s).</p>
+        <p>If you did not receive the email please check your SPAM folder or <a href="{{ path('app_forgot_password_request') }}">try it again</a>.</p>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('home') }}" title="Home"><</a></span>
+    </section>
+{% endblock %}

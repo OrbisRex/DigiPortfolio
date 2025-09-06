@@ -1,0 +1,39 @@
+{# Criteria template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | New Criterion{% endblock %}
+
+{% block body %}
+
+    {% for message in app.session.flashBag('error') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <section id="top" class="form">
+        <h1>New Criterion</h1>
+
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.name) }}
+            <div class="wide">
+                {{ form_row(form.save) }}
+            </div>
+        {{ form_end(form) }}
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('criterion') }}" title="Back"><</a></span>
+        <span class="button"><a href="#top">Top</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

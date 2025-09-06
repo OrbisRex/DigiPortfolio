@@ -1,0 +1,28 @@
+{# Descriptor template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Descriptor{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Descriptor</h1>
+        <div class="wide-white-block">
+            <div class="button-list">
+                {%if descriptors == FALSE %}
+                    <p class='info'>No descriptor found. Add some!</p>
+                    <span class="button"><a href="{{ path('new-descriptor') }}">+</a></span>
+                {% else %}
+                    {% for descriptor in descriptors %}
+                        <span class="button"><a href="{{ path('descriptor') }}">{{ descriptor.name }}</a></span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>    
+    </section>
+
+    {% include "descriptor/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

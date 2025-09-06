@@ -1,0 +1,64 @@
+{# Criteria template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Criterion Edit{% endblock %}
+
+{% block body %}
+    <section id="top" class="form">
+        {%if criterion == FALSE %}
+            <p class='info'>No criterion found. Add some!</p>
+        {% else %}
+            <h3>Edit Criterion</h3>
+            <h1>{{ criterion.name }}</h1>
+        {% endif %}
+
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.name) }}
+            <div class="wide">
+                {{ form_row(form.save) }}
+            </div>
+        {{ form_end(form) }}
+    </section>
+
+    <section id="descriptors" class="lightgray">
+        <h2>What they do?</h2>
+        <div class="local-navigation">
+            <span class="button"><a href="{{ path('new-descriptor', {'criterionId':criterion.id }) }}" title="Add new descriptor.">+</a></span>
+        </div>
+        
+        <div class="wide-envelop">
+        {%if criterion.descriptors == FALSE %}
+            <p class='info'>No descriptor found.</p>
+        {% else %}
+            {% for descriptor in criterion.descriptors %}
+            <div class="darkgary-block">
+                <h3 class="title"> {{ descriptor.name }}</h3>
+                <div class="data">
+                    <p class="text">#{{ loop.index }} {{ descriptor.description }}</p>
+                    <p class="tools">
+                        <span title="Level">{{ descriptor.type }}</span> / <span title="Relevance">{{ descriptor.weight }}</span> /
+                        <a href="{{ path('edit-descriptor', {'criterionId':criterion.id, 'id':descriptor.id}) }}">edit</a>
+                    </p>
+                </div>
+            </div>    
+            {% endfor %}    
+        {% endif %}
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('criterion') }}" title="Back"><</a></span>
+        <span class="button"><a href="#top">Top</a></span>
+        <span class="button"><a href="#descriptors">What</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

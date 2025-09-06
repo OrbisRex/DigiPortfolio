@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | People{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>People</h1>
+        <div class="wide-white-block">
+            <div class="button-list">
+            {%if people == FALSE %}
+                <p class='info'>No user found. Add some!</p>
+            {% else %}
+                {% for user in people %}
+                    {%if user.name %}
+                        <span class="button"><a href="{{ path('person-profile', {'id':user.id }) }}">{{ user.name }}</a></span>
+                    {% else %}
+                        <span class="button"><a href="{{ path('person-profile', {'id':user.id }) }}">{{ user.email }}</a></span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>    
+    </section>
+    
+    <section id="list" class="lightgray">
+        <h2>People</h2>
+        <div class="button-list">
+        {%if people == FALSE %}
+            <p class='info'>No user found. Add some!</p>
+        {% else %}
+            {% for user in people %}
+                {%if user.name %}
+                    <span class="button"><a href="{{ path('person-profile', {'id':user.id }) }}">{{ user.name }}</a></span>
+                {% else %}
+                    <span class="button"><a href="{{ path('person-profile', {'id':user.id }) }}">{{ user.email }}</a></span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+    </section>    
+    
+    <section id="import" class="darkblue">
+        <h2>Import people</h2>
+        <div class="wide-envelop">
+            <div class="button-list">
+            {%if otherFiles == FALSE %}
+                <p class='info'>No CSV file found for an import. Add some!</p>
+            {% else %}
+                {% for otherFile in otherFiles %}
+                    <span class="button"><a href="{{ path('import-person', {'id':otherFile.id }) }}" title="{{ otherFile.type }}">{{ otherFile.name }}</a></span>
+                {% endfor %}
+            {% endif %}
+                <span class="button"><a href="{{ path('file') }}#new" title="Add CSV file for import">+</a></span>
+            </div>
+        </div>
+    </section>
+
+{% include "person/navigation.html.twig" %}
+{% endblock %}

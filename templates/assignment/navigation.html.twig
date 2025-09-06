@@ -1,0 +1,10 @@
+<section id="navigation">
+    <span class="button"><a href="{{ path('dashboard') }}" title="Dashboard"><</a></span>
+    {% if is_granted('ROLE_TEACHER') %}
+        <span class="button"><a href="{{ path('new-assignment')}}" title="New Assignment">+</a></span>
+    {% endif %}
+    <span class="button"><a href="#top">Last</a></span>
+    <span class="button"><a href="#subject">Subject</a></span>
+    <span class="button"><a href="#topic">Topic</a></span>
+    <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+</section>

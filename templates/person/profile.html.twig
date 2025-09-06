@@ -1,0 +1,109 @@
+{# Settings template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Personal Profile{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <div class="wide-envelop">
+        {%if user == FALSE %}
+            <p class='info'>No user found. Add some!</p>
+        {% else %}
+            {% if user.name %}
+                <h1>{{ user.name }}</h1>
+            {% else %}
+                <h1>{{ user.email }}</h1>
+            {% endif %}
+            {% for role in user.roles %}
+                {% if role == 'ROLE_STUDENT' %}
+                    <p>Student</p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+    </section>
+
+    <section id="assignments" class="lightgray">
+        <h2>Assignments</h2>
+        <div class="wide-envelop">
+            {%if assignments == FALSE %}
+                <p class='info'>No assignment found.</p>
+                <span class="button"><a href="{{ path('new-assignment') }}">+</a></span>
+            {% else %}    
+                <div>
+                    <span class="button"><a href="{{ path('new-assignment') }}">+</a></span>
+                </div>
+                {% for assignment in assignments %}
+                    <span class="block-envelop">
+                        <span class="group">{% if assignment.assignment.subject %}{{ assignment.assignment.subject.name }} {% else %} No Subject {% endif %}</span>
+                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignment.assignment.id }) }}'>{{ assignment.assignment.name }}</a></span>
+                    </span>
+                {% endfor %}    
+            {% endif %}    
+        </div>
+    </section> 
+
+    <section id="submissions" class="darkblue">
+        <h2>Submissions</h2>
+        <div class="wide-envelop">
+            {%if submissions == FALSE %}
+                <p class='info'>No submission found.</p>
+                <span class="button"><a href="{{ path('new-submission') }}">+</a></span>
+            {% else %}    
+                <div>
+                    <span class="button"><a href="{{ path('new-submission') }}">+</a></span>
+                </div>
+                {% for submission in submissions %}
+                    <span class="block-envelop">
+                        <span class="group">{{ submission.assignment.name }}</span>
+                        <span class="data"><a href='{{ path('edit-submission', {'id':submission.id }) }}'>{{ submission.name }}</a></span>
+                    </span>
+                {% endfor %}    
+            {% endif %}    
+        </div>
+    </section> 
+
+    {% if is_granted('ROLE_TEACHER') %}
+        <section id="profile" class="lightgray">
+            <h2>Profile</h2>
+
+            <div class="wide-envelop">
+            {% if error != FALSE %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.plainPassword) }}
+                {{ form_row(form.disabled) }}
+                {{ form_row(form.roles) }}
+                {{ form_row(form.sets) }}
+                <div class="wide">
+                    {{ form_row(form.save) }}
+                </div>
+            {{ form_end(form) }}
+            </div>
+        </section>
+    {% endif %}
+
+    <section id="navigation">
+        {% if is_granted('ROLE_TEACHER') %}
+            <span class="button"><a href="{{ path('person') }}" title="People"><</a></span>
+        {% else %}
+            <span class="button"><a href="{{ path('dashboard') }}" title="Dasboard"><</a></span>
+        {% endif %}
+        <span class="button"><a href="#top">Info</a></span>
+        <span class="button"><a href="#assignments">ToDo</a></span>
+        <span class="button"><a href="#submissions">Done</a></span>
+        {% if is_granted('ROLE_TEACHER') %}
+            <span class="button"><a href="#profile">Edit</a></span>
+        {% endif %}    
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

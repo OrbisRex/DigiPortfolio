@@ -1,0 +1,34 @@
+{# Settings template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Settings - Topic{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <div class="wide-envelop">
+        {%if topic == FALSE %}
+            <p class='info'>No topic found. Add some!</p>
+        {% else %}
+            <h1>{{ topic.name }}</h1>
+            <p>by {{ topic.person.name }}</p>
+        {% endif %}
+
+        {{ form_start(formTopic) }}
+            {{ form_errors(formTopic) }}
+            {{ form_row(formTopic.name) }}
+            <div class="wide">
+                {{ form_row(formTopic.save) }}
+            </div>
+        {{ form_end(formTopic) }}
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('settings') }}#topic" title="Settings"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

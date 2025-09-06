@@ -1,0 +1,36 @@
+{# Sign In template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Edit Assignment{% endblock %}
+
+{% block body %}
+    <section id="top" class="form">
+        <h1>Edit Assignment</h1>
+
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.subject) }}
+            {{ form_row(form.topic) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.set) }}
+            
+            {{ form_row(form.note) }}
+            {{ form_row(form.criteria) }}
+                        
+            <div class="wide">    
+                {{ form_row(form.save) }}
+            </div>    
+        {{ form_end(form) }}
+    </section>
+    
+    <section id="navigation">
+        <span class="button"><a href="{{ path('assignment-detail', {'id':assignment.id }) }}" title="Assignment Detail"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}

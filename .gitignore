@@ -1,0 +1,11 @@
+### Symfony
+/.env.local
+/.env.local.php
+/.env.*.php
+/vendor/
+/var/
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

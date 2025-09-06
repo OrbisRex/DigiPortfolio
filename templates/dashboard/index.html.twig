@@ -1,0 +1,23 @@
+{# Dashboard template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Dashboard{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Dashboard</h1>
+    </section>
+    <section class="peopleIn">
+        <h2>Who is in?</h2>
+        {#<span class="button"><a href="{{ path('assignment')}}">Assignments</a></span>#}
+    </section> 
+    <section class="workload">
+        <h2>Workload</h2>
+    </section>
+    
+    {% include "dashboard/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

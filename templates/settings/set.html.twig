@@ -1,0 +1,36 @@
+{# Settings template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Settings - Set{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <div class="wide-envelop">
+        {%if set == FALSE %}
+            <p class='info'>No set found. Add some!</p>
+        {% else %}
+            <h1>{{ set.name }}</h1>
+        {% endif %}
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="wide">
+                {{ form_row(form.name) }}
+            </div>
+            {{ form_row(form.people) }}
+            <div class="wide">
+                {{ form_row(form.save) }}
+            </div>
+        {{ form_end(form) }}
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('settings') }}#set" title="Settings"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

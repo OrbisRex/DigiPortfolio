@@ -1,0 +1,21 @@
+{# Index template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Welcome{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1 class="logo">SinglePoint</h1>
+    </section>
+    
+    <section id="navigation">
+        {% if app.user %}
+           {# <span class="button"><a href="{{ path('dashboard') }}">Dashboard</a></span> #}
+           {# <span class="button warning"><a href="{{ path('security_out')}}">Log Out</a></span> #}
+        {% else %}
+           <span class="button"><a href="{{ path('app_login') }}">Log In</a></span>
+           {# <span class="button"><a href="{{ path('security_up') }}">Register</a></span> #}
+        {% endif %} 
+        <div class="note">Version 0.5.0 (13/10/20)</div>
+    </section>
+{% endblock %}

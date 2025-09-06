@@ -1,0 +1,45 @@
+{# Submission template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Edit Submission{% endblock %}
+
+{% block body %}
+    <section id="top" class="form">
+        <h1>Edit Submission v{{ submission.version }}</h1>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.assignment) }}            
+            {{ form_row(form.owner) }}
+
+            {{ form_row(form.name) }}            
+            {{ form_row(form.link) }}
+            
+            {{ form_row(form.note) }}
+            {{ form_row(form.text) }}
+            {{ form_row(form.files) }}
+            
+            <div class="wide">    
+                {{ form_row(form.save) }}
+            </div>    
+        {{ form_end(form) }}
+    </section>
+    <section id="photos" class="lightgray">
+        <h2>Files</h2>
+        <div class="wide-envelop">
+            <div class="button-list">
+            {%if files %}
+                {% for file in files %}
+                    <span class="button"><a href="{{ asset(file.path) }}" title="Open file in new tab." target="_blank">{{ file.name }}</a></span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section id="navigation">
+        <span class="button"><a href="{{ path('submission') }}" title="Submissions"><</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}

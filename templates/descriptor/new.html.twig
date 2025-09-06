@@ -1,0 +1,66 @@
+{# Descriptor template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | New Descriptor{% endblock %}
+
+{% block body %}
+    <section id="top" class="form">
+        <h3>New descriptor for criterion</h3>
+        <h1>{{ criterion.name }}</h1>
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            
+            <div class="wide">    
+                {{ form_row(form.description) }}
+            </div>
+            <div class="triple">    
+                {{ form_row(form.name) }}
+                {{ form_row(form.type) }}
+                {{ form_row(form.weight) }}
+            </div>
+            <div class="wide">    
+                {{ form_row(form.add) }}
+            </div>    
+        {{ form_end(form) }}
+    </section>
+    
+    <section id="descriptors" class="lightgray">
+        <h2 class="logo">What they already do?</h2>
+        {%if criterion.descriptors is empty %}
+            <p class='info'>No descriptor found.</p>
+        {% else %}
+            <table>
+                <tbody>
+                    {% for descriptor in criterion.descriptors %}
+                    <tr>
+                        <td class="name">{{ descriptor.name }}</td>
+                        <td class="name">{{ descriptor.description }}</td>
+                        <td class="name">{{ descriptor.type }}</td>
+                        <td class="name">{{ descriptor.weight }}</td>
+                    </tr>
+                    {% endfor %}    
+                </tbody>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Weight</th>
+                    </tr>    
+                </thead>
+            </table>    
+        {% endif %}
+    </section>
+    
+    <section id="navigation">
+        <span class="button"><a href="{{ path('criterion') }}" title="Criteria list"><</a></span>
+        <span class="button"><a href="#top">+</a></span>
+        <span class="button"><a href="#descriptors">What</a></span>
+        <span class="button"><a href="{{ path('edit-criterion', {'id':criterion.id }) }}#descriptors" title="Criteria">Finish</a></span>        
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}

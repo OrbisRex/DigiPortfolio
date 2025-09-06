@@ -1,0 +1,102 @@
+{# Settings template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Settings{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Settings</h1>
+        <div class="button-list">
+            <span class="button"><a href="{{ path('criterion') }}">Criteria</a></span>
+            <span class="button"><a href="{{ path('file')}}">Files</a></span>
+        </div>
+    </section>
+
+    <section id="subject" class="darkblue">
+        <h2>Subject Management</h2>
+        {%if subjects == FALSE %}
+            <p class='info'>No subjects found. Add some!</p>
+        {% else %}
+            <div class="button-list">
+            {% for subject in subjects %}
+                <span class="button"><a href="{{ path('settings-subject', {'id':subject.id }) }}">{{ subject.name }}</a></span>
+            {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="wide-envelop">
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {{ form_start(formSubject) }}
+            {{ form_errors(formSubject) }}
+            {{ form_row(formSubject.name) }}
+
+            <div class="wide">
+                {{ form_row(formSubject.save) }}
+            </div>
+        {{ form_end(formSubject) }}
+        </div>
+    </section>
+
+    <section id="topic" class="lightgray">
+        <h2>Topic Management</h2>
+        {%if topics == FALSE %}
+            <p class='info'>No topics found. Add some!</p>
+        {% else %}
+            <div class="button-list">
+            {% for topic in topics %}
+                <span class="button"><a href="{{ path('settings-topic', {'id':topic.id }) }}">{{ topic.name }}</a></span>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="wide-envelop">
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {{ form_start(formTopic) }}
+            {{ form_errors(formTopic) }}
+            {{ form_row(formTopic.name) }}
+
+            <div class="wide">
+                {{ form_row(formTopic.save) }}
+            </div>
+        {{ form_end(formTopic) }}
+        </div>
+    </section>
+        
+    <section id="set" class="darkblue">
+        <h2>Set Management</h2>
+        {%if sets == FALSE %}
+            <p class='info'>No forms found. Add some!</p>
+        {% else %}
+            {% for set in sets %}
+                <span class="button"><a href="{{ path('settings-set', {'id':set.id }) }}">{{ set.name }}</a></span>
+            {% endfor %}
+        {% endif %}
+
+        <div class="wide-envelop">
+        {% if error != FALSE %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {{ form_start(formSet) }}
+            {{ form_errors(formSet) }}
+            {{ form_row(formSet.name) }}
+
+            <div class="wide">
+                {{ form_row(formSet.save) }}
+            </div>
+        {{ form_end(formSet) }}
+        </div>
+    </section>
+
+    {% include "settings/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

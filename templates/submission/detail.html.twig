@@ -1,0 +1,127 @@
+{# Submission template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | {{ submission.name }}{% endblock %}
+
+{% block body %}
+    <div class="body-envelop">
+    <section id="top" class="main">
+        <h1>{{ submission.name }} v{{ submission.version }}</h1>
+        <p>
+            by <strong>{{ submission.owner.name }}</strong> for {{ submission.assignment.name }}  
+            | created {{ submission.createtime|date('d-m-Y') }}
+            | updated {{ submission.updatetime|date('d-m-Y') }}
+        </p>
+        <p class="text">{{ submission.note }}</p>
+        <span class="button"><a href="{{ path('edit-submission', {'id':submission.id}) }}" title="Edit Submission">Edit</a></span>
+    </section>
+
+    <section id="content" class="darkblue">
+        <h2>Content</h2>
+            <div class="wide-envelop">
+                <div class="darkblue-block">
+                <h3 class="title">Submitted text</h3>
+                {%if not submission.text %}
+                    <p class="text">No text found.</p>
+                {% else %}
+                    <div class="long-text">{{ submission.text|nl2br }}</div>
+                {% endif %}
+                </div>
+                <div class="darkblue-block">
+                <h3 class="title">Submitted link</h3>
+                {%if not submission.link %}
+                    <p class="text">No link found.</p>
+                {% else %}
+                    <p class="text"><a href="{{ submission.link }}" title="Open link in new tab" target="_blank">{{ submission.link }}</a>^</p>
+                {% endif %}
+                </div>
+            </div>
+    </section> 
+
+    <section id="photos" class="lightgray">
+        <h2>Files</h2>
+        <div class="wide-envelop">
+            <div class="button-list">
+            {%if not files %}
+                <p>No files found.</p>
+            {% else %}
+                {% for file in files %}
+                    <span class="button"><a href="{{ asset(file.path) }}" title="Open file in new tab." target="_blank">{{ file.name }}</a></span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section id="feedback" class="darkblue">
+        <h2>Feedback</h2>
+        <div class="wide-envelop">
+            {{ form_start(form) }}
+                {{ form_errors(form) }}            
+
+                <div class="wide">
+                    <div>
+                    <ul class="long-text">
+                        {{ form_label(form.descriptors) }}
+                        {% for descriptor in form.descriptors %}
+                        <li>
+                            {{ form_widget(descriptor) }}
+                            {{ form_label(descriptor, null, {'label_attr': {'class': 'inline'}}) }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    </div>
+                </div>
+                <div class="wide">
+                    {{ form_row(form.note) }}
+                </div>
+                <div>    
+                    {{ form_row(form.save) }}
+                </div>    
+            {{ form_end(form) }}
+        </div>
+    </section>
+     
+    <section id="comment" class="lightgray">
+        <h2>Comments</h2>
+        <div class="wide-envelop">
+            <div class="darkgary-block">
+            {%if not comments %}
+                <p>Nobody drop a comment yet.</p>
+            {% else %}
+                <div class="long-text">
+                {% for comment in comments %}
+                    <p><strong>{{ comment.owner.name }}:</strong> {{ comment.text|nl2br }} ({{ comment.createtime|date('d/m/Y') }})</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+            <div class="darkgary-block">
+            {{ form_start(formComment, {'attr': {'class': 'js-comment-form'}}) }}
+                {{ form_errors(formComment) }}            
+
+                {{ form_row(formComment.text) }}
+
+                <div>    
+                    {{ form_row(formComment.save) }}
+                </div>    
+            {{ form_end(formComment) }}
+            </div>
+        </div>
+    </section>
+    </div>
+    
+    <section id="navigation">
+        <span class="button"><a href="{{ path('submission') }}" title="Submission"><</a></span>
+        <span class="button"><a href="#top">Top</a></span>
+        <span class="button"><a href="#content">What</a></span>
+        <span class="button"><a href="#photos">Images</a></span>
+        <span class="button"><a href="#feedback">Feedback</a></span>
+        <span class="button"><a href="#comment">Comment</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

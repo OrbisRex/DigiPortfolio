@@ -1,0 +1,60 @@
+{# Submission template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Submission{% endblock %}
+
+{% block body %}
+    <section id="top" class="main">
+        <h1>Submissions</h1>
+        <div class="wide-white-block">
+        {%if submissions == FALSE %}
+            <p class='info'>No submission found.</p>
+        {% else %}    
+            {% for submission in submissions %}
+                <span class="block-envelop">
+                    <span class="group">{{ submission.assignment.name }}</span>
+                    <span class="data"><a href='{{ path('submission-detail', {'id':submission.id }) }}'>{{ submission.name }}</a></span>
+                </span>
+            {% endfor %}    
+        {% endif %}    
+        </div>    
+    </section>
+
+    <section id="sets" class="darkblue">
+        <h2>Submissions {% if currentSet is empty %} by Set {% else %} for {{ currentSet.name }} {% endif %}</h2>
+        <div class="button-list">
+        <span class="button"><a href="{{ path('submission') }}#sets">All</a></span>
+        {% for set in sets %}
+            <span class="button"><a href="{{ path('submission', {'setId':set.id }) }}#sets">{{ set.name }}</a></span>
+        {% endfor %}
+        </div>
+       
+        <div class="wide-envelop">
+            <div class="wide-darkblue-block">
+            {%if submissionsBySet is null and currentSet is null %}
+                <p class='info'>No submission found. Did you choose correct Set?</p>
+            {%elseif submissionsBySet is null %}
+                <p class='info'>No submission found.</p>
+                {% if is_granted('ROLE_TEACHER') %}
+                    <span class="button"><a href="{{ path('new-submission') }}">+</a></span>
+                {% endif %}
+            {% else %}
+                {% for submissions in submissionsBySet %}
+                    {% for submission in submissions %}
+                        <span class="block-envelop">
+                            <span class="group">{{ submission.owner.name }}</span>
+                            <span class="data"><a href='{{ path('submission-detail', {'id':submission.id }) }}'>{{ submission.name }}</a></span>
+                        </span>
+                    {% endfor %}    
+                {% endfor %}    
+            {% endif %}
+            </div>    
+        </div>
+    </section>
+
+{% include "submission/navigation.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

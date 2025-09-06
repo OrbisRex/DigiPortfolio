@@ -1,0 +1,122 @@
+{# Dashboard template #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SinglePoint | Assignment{% endblock %}
+
+{% block body %}
+    <div class="body-envelop">
+    <section id="top" class="main">
+        <h1>{{ assignment.name }}</h1>
+        <p>
+           {% if assignment.subject %} {{ assignment.subject.name }} {% else %} No Subject {% endif %} 
+            | 
+           {% if assignment.topic %} {{ assignment.topic.name }} {% else %} No Topic {% endif %}
+        </p>
+        <p>{{ assignment.note }}</p>
+        {% if is_granted('ROLE_TEACHER') %}
+            <span class="button"><a href="{{ path('edit-assignment', {'id':assignment.id}) }}" title="Edit Assignment.">Edit</a></span>
+        {% else %}
+            <span class="button"><a href="{{ path('new-submission') }}" title="Add Submission.">Add Submission</a></span>
+        {% endif %}
+    </section>
+
+    <section id="students" class="darkblue">
+        <h2>Who is in?</h2>
+        {%if students == FALSE %}
+            <p class='info'>No student found.</p>
+        {% else %}
+            <div class="wide-envelop">
+            {% for student in students %}
+                <div class="darkblue-block">
+                    <h3 class="title">
+                    {% if is_granted('ROLE_TEACHER') %}
+                        <a href="{{ path('person-profile', {'id': student.person.id}) }}" title="Student's profile">{{ student.person.name }}</a>
+                    {% else %}
+                        {{ student.person.name }}
+                    {% endif %}
+                    </h3>
+                    {% for comments in student %}
+                        {% for comment in comments %}
+                        <div class="data">
+                            <p class="text"><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                            <p class="tools">
+                                #{{ loop.index }} / <span title="Type">{{ comment.type }}</span> / <span title="Posted">{{ comment.updatetime|date('H:i.s') }}</span> /
+                                <a href="#">edit</a>
+                            </p>
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}    
+            </div>
+        {% endif %}
+    </section> 
+
+    <section id="criteria" class="lightgray">
+        <h2>What is expected?</h2>
+        <div class="wide-envelop">
+        {%if criteria == FALSE %}
+            <p class='info'>No criteria found.</p>
+        {% else %}
+            {% for criterion in criteria %}    
+                <div class="darkgary-block">
+                <h3 class="title"> {{ criterion.name }}</h3>
+                    {% for descriptor in criterion.descriptors %}
+                    <div class="data">
+                        <p class="text">#{{ loop.index }} {{ descriptor.description }}</p>
+                        <p class="tools">
+                            <span title="Level">{{ descriptor.type }}</span>
+                            {% if is_granted('ROLE_TEACHER') %}
+                                / <span title="Relevance">{{ descriptor.weight }}</span>
+                                / <a href="{{ path('edit-criterion', {'id':criterion.id}) }}">edit</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endfor %}    
+                </div>    
+            {% endfor %}    
+        {% endif %}
+        </div>
+    </section>
+
+    <section id="submissions" class="darkblue">
+        <h2>What si done?</h2>
+        {%if assignment.submissions == FALSE %}
+            <p class='info'>No submission found.</p>
+        {% else %}
+            <div class="wide-envelop">
+            {% for submission in assignment.submissions %}
+                <div class="darkblue-block">
+                    <h3 class="title">
+                        {{ submission.name }}
+                    </h3>
+                    <div class="data">
+                        <p class="text">{{ submission.note }}</p>
+                        <p class="tools">
+                            <span>{{ submission.owner.name }}</span>
+                            {% if is_granted('ROLE_TEACHER') %}
+                                / <span>v{{ submission.version }}</span>
+                                / <a href="{{ path('submission-detail', {'id':submission.id}) }}">open</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}    
+            </div>
+        {% endif %}
+    </section> 
+    </div>
+    
+    <section id="navigation">
+        <span class="button"><a href="{{ path('assignment') }}" title="Assignments"><</a></span>
+        <span class="button"><a href="#top">Top</a></span>
+        <span class="button"><a href="#students">Who</a></span>
+        <span class="button"><a href="#criteria">What</a></span>
+        <span class="button"><a href="#submissions">Done</a></span>
+        <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
