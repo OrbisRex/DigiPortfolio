@@ -131,7 +131,7 @@ class Person implements UserInterface
     {
         return $this->getUserIdentifier();
     }
-    
+
     /**
      * A visual identifier that represents this user.
      * 
@@ -149,9 +149,7 @@ class Person implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles = [];
         $roles[] = 'ROLE_USER';
-        $roles[] = 'ROLE_ADMIN';
 
         return array_unique($roles);
     }

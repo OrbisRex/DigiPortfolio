@@ -50,6 +50,13 @@ class Set
      */
     private $assignments;
 
+    /**
+     * One Topic has One Log.
+     * @ORM\OneToOne(targetEntity="Log")
+     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
+     */
+    private $log;
+
     public function __construct()
     {
         $this->people = new ArrayCollection();
@@ -125,6 +132,18 @@ class Set
             $this->people->removeElement($person);
             $person->removeSet($this);
         }
+
+        return $this;
+    }
+    
+    public function getLog(): ?Log
+    {
+        return $this->log;
+    }
+
+    public function setLog(?Log $log): self
+    {
+        $this->log = $log;
 
         return $this;
     }
