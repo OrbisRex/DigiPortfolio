@@ -112,18 +112,6 @@ class Topic
         return $this->description;
     }
 
-    public function getLog(): ?Log
-    {
-        return $this->log;
-    }
-
-    public function setLog(?Log $log): self
-    {
-        $this->log = $log;
-
-        return $this;
-    }
-
     public function getPerson(): ?Person
     {
         return $this->person;
@@ -135,5 +123,16 @@ class Topic
 
         return $this;
     }   
+    public function getLog(): ?Log
+    {
+        return $this->log;
+    }
+
+    public function setLog(?Log $log): self
+    {
+        $this->log = $log;
+
+        return $this;
+    }
 }
 
