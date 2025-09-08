@@ -39,43 +39,37 @@ class Assignment
     
     /**
      * Many Assignments has one Subject.
-     * @ORM\ManyToOne(targetEntity="Subject", inversedBy="Assignment", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Subject", inversedBy="assignments", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="subject_id", referencedColumnName="id")
      */
     private $subject;
 
     /**
      * Many Assignments has one Topic.
-     * @ORM\ManyToOne(targetEntity="Topic", inversedBy="Assignment", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Topic", inversedBy="assignments", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="topic_id", referencedColumnName="id")
      */
     private $topic;
 
     /**
      * Many Assignments has one set.
-     * @ORM\ManyToOne(targetEntity="Set", inversedBy="Assignment", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Set", inversedBy="assignments", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="set_id", referencedColumnName="id")
      */
     private $set;
 
     /**
-     * Many Assignments has one Person-Teacher.
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="Assignment", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
+     * One assignment can have many people.
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="AssignmentPerson", mappedBy="person")
      */
-    private $teacher;
+    private $people;    
 
     /**
      * @var string
      * @ORM\Column(name="note", type="string", length=255, nullable=true)
      */
     private $note;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="Assignment", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
-     */
-    private $person;    
 
     /**
      * @var \DateTime
@@ -90,12 +84,15 @@ class Assignment
     private $criteria;
 
     /**
+     * One assignment can have many submissions.
+     * @var Collection
      * @ORM\OneToMany(targetEntity=Submission::class, mappedBy="assignment", cascade={"persist", "remove"})
      */
     private $submissions;
 
     public function __construct()
     {
+        $this->people = new ArrayCollection();
         $this->criteria = new ArrayCollection();
         $this->submissions = new ArrayCollection();
     }
@@ -204,22 +201,48 @@ class Assignment
     public function getTopic()
     {
         return $this->topic;
-    }    
+    }  
 
-    /**
-     * Set teacher
-     *
-     * @param string $teacher
-     *
-     * @return Assignment
-     */
-    public function setTeacher($teacher)
+    public function getSet(): ?Set
     {
-        $this->teacher = $teacher;
+        return $this->set;
+    }
+
+    public function setSet(?Set $set): self
+    {
+        $this->set = $set;
 
         return $this;
-    } 
-    
+    }
+
+    /**
+     * @return Collection|Person[]
+     */
+    public function getPeople(): Collection
+    {
+        return $this->people;
+    }
+
+    public function addPerson(Person $person): self
+    {
+        if (!$this->people->contains($person)) {
+            $this->people[] = $person;
+            $person->addAssignment($this);
+        }
+
+        return $this;
+    }
+
+    public function removePerson(Person $person): self
+    {
+        if ($this->people->contains($person)) {
+            $this->people->removeElement($person);
+            $person->removeAssignment($this);
+        }
+
+        return $this;
+    }
+
     /**
      * Get note
      *
@@ -245,6 +268,16 @@ class Assignment
     }    
 
     /**
+     * Get updatetime
+     *
+     * @return \DateTime
+     */
+    public function getUpdatetime()
+    {
+        return $this->updatetime;
+    }
+
+    /**
      * Set updatetime
      *
      * @param string $updatetime
@@ -258,45 +291,6 @@ class Assignment
         return $this;
     }    
     
-    /**
-     * Get updatetime
-     *
-     * @return DateTime
-     */
-    public function getUpdatetime()
-    {
-        return $this->updatetime;
-    }
-
-    public function getTeacher(): ?Person
-    {
-        return $this->teacher;
-    }
-
-    public function getPerson(): ?Person
-    {
-        return $this->person;
-    }
-
-    public function setPerson(?Person $person): self
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    public function getSet(): ?Set
-    {
-        return $this->set;
-    }
-
-    public function setSet(?Set $set): self
-    {
-        $this->set = $set;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Criterion[]
      */

@@ -18,7 +18,7 @@ class SetRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Set::class);
     }
-    
+
     // /**
     //  * @return Set[] Returns an array of Set objects
     //  */

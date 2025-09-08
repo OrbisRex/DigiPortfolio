@@ -10,10 +10,12 @@ use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterfac
 
 return RectorConfig::configure()
     ->withPaths([
-        # __DIR__ . '/config',
-        # __DIR__ . '/public',
+        __DIR__ . '/config',
         __DIR__ . '/src',
         __DIR__ . '/tests',
+    ])
+    ->withSkip([
+        __DIR__ . '/src/Migrations',
     ])
     ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
     ->registerService(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class)
@@ -22,7 +24,7 @@ return RectorConfig::configure()
         SymfonySetList::SYMFONY_54,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-         __DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml'
+        __DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml'
     ])
     // uncomment to reach your current PHP version
     // ->withPhpSets()

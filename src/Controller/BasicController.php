@@ -35,8 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @author David Yilma
  */
 class BasicController extends AbstractController {
-    
-    
+       
     protected function findById($em, $entity, $id)
     {
         //Fetch data
@@ -53,9 +52,6 @@ class BasicController extends AbstractController {
     
     /**
      * Create a list of choices
-     * @param string $entityRepository
-     * @return array
-     * @throws type
      */
     protected function createChoiceList($entityRepository, $search = FALSE)
     {
@@ -114,10 +110,6 @@ class BasicController extends AbstractController {
 
     /**
      * Find user in DB
-     * @param string $username
-     * @param string $password
-     * @param string $token
-     * @return User or NULL
      */
     protected function findUser($username, $password, $token = NULL)
     {

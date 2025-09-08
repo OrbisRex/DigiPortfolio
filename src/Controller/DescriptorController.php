@@ -58,7 +58,7 @@ class DescriptorController extends BasicController
     /**
      * @Route("/descriptor", name="descriptor")
      */
-    public function index() 
+    public function index(): \Symfony\Component\HttpFoundation\Response 
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

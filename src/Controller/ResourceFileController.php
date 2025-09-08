@@ -21,7 +21,7 @@ class ResourceFileController extends AbstractController
     /**
      * @Route("/file", name="file")
      */
-    public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader)
+    public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

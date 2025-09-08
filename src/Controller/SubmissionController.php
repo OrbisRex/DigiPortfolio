@@ -128,7 +128,7 @@ class SubmissionController extends AbstractController
     /**
      * @Route("/submission", name="submission")
      */
-    public function index(Request $request)
+    public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_USER');

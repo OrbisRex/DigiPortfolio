@@ -22,7 +22,7 @@ class CriterionController extends AbstractController
     /**
      * @Route("/criterion", name="criterion")
      */
-    public function index(CriterionRepository $criterionRepository)
+    public function index(CriterionRepository $criterionRepository): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

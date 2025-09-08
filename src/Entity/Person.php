@@ -49,26 +49,61 @@ class Person implements UserInterface
     private $disabled;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Set", inversedBy="people", cascade={"persist"})
-     * @ORM\JoinTable(name="people_sets")
+     * Many people can organise many sets (co-leading).
      * @var Collection
+     * @ORM\ManyToMany(targetEntity="Set", mappedBy="people", cascade={"persist"})
+     * @ORM\JoinTable(name="person_set")
      */
     private $sets;
 
     /**
+     * Many people can have many subjects (co-teaching).
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Subject", mappedBy="people")
+     */
+    private $subjects;
+
+    /**
+     * One person can have many topics (author).
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="Topic", mappedBy="person")
+     */
+    private $topics;
+
+    /**
+     * One peron can have multiple files.
+     * @var Collection
      * @ORM\OneToMany(targetEntity="ResourceFile", mappedBy="owner")
      */
     private $resourceFiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="Submission", mappedBy="owner")
+     * One person can be part of many assignments (teaher and students).
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="AssignmentPerson", mappedBy="assignment")
+     */
+    private $assignments;
+
+    /**
+     * Many persons can create many submissions (sharing).
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Submission", mappedBy="people")
      */
     private $submissions;
+    
+    /**
+     * One Person has One Log.
+     * @ORM\OneToOne(targetEntity=Log::class)
+     */
+    private $log;
 
     public function __construct()
     {
         $this->sets = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
+        $this->topics = new ArrayCollection();
         $this->resourceFiles = new ArrayCollection();
+        $this->assignments = new ArrayCollection();
         $this->submissions = new ArrayCollection();
     }
 
@@ -90,11 +125,19 @@ class Person implements UserInterface
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
+     * Deprecated - remove in Symfony 6
      */
     public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
+    }
+    
+    /**
+     * A visual identifier that represents this user.
+     * 
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
@@ -106,7 +149,9 @@ class Person implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = "ROLE_USER";
+        $roles = [];
+        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_ADMIN';
 
         return array_unique($roles);
     }
@@ -201,6 +246,58 @@ class Person implements UserInterface
     }
 
     /**
+     * @return Collection|Subject[]
+     */
+    public function getSubject(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): self
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects[] = $subject;
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): self
+    {
+        if ($this->subjects->contains($subject)) {
+            $this->subjects->removeElement($subject);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Topic[]
+     */
+    public function getTopics(): Collection
+    {
+        return $this->topics;
+    }
+
+    public function addTopic(Topic $topic): self
+    {
+        if (!$this->sets->contains($$topic)) {
+            $this->sets[] = $$topic;
+        }
+
+        return $this;
+    }
+
+    public function removeTopic(Topic $topic): self
+    {
+        if ($this->topics->contains($topic)) {
+            $this->topics->removeElement($topic);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection|ResourceFile[]
      */
     public function getResourceFiles(): Collection
@@ -212,7 +309,6 @@ class Person implements UserInterface
     {
         if (!$this->resourceFiles->contains($file)) {
             $this->resourceFiles[] = $file;
-            $file->setOwner($this);
         }
 
         return $this;
@@ -222,27 +318,32 @@ class Person implements UserInterface
     {
         if ($this->resourceFiles->contains($file)) {
             $this->resourceFiles->removeElement($file);
-            // set the owning side to null (unless already changed)
-            if ($file->getOwner() === $this) {
-                $file->setOwner(null);
-            }
         }
 
         return $this;
     }
 
-    public function getSubmission(): ?Submission
+    /**
+     * @return Collection|Submission[]
+     */
+    public function getAssignments(): Collection
     {
-        return $this->submission;
+        return $this->assignments;
     }
 
-    public function setSubmission(Submission $submission): self
+    public function addAssignment(Assignment $assigment): self
     {
-        $this->submission = $submission;
+        if (!$this->assignments->contains($assigment)) {
+            $this->assignments[] = $assigment;
+        }
 
-        // set the owning side of the relation if necessary
-        if ($submission->getOwner() !== $this) {
-            $submission->setOwner($this);
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assigment): self
+    {
+        if ($this->submissions->contains($assigment)) {
+            $this->submissions->removeElement($assigment);
         }
 
         return $this;
@@ -260,7 +361,6 @@ class Person implements UserInterface
     {
         if (!$this->submissions->contains($submission)) {
             $this->submissions[] = $submission;
-            $submission->setOwner($this);
         }
 
         return $this;
@@ -270,10 +370,6 @@ class Person implements UserInterface
     {
         if ($this->submissions->contains($submission)) {
             $this->submissions->removeElement($submission);
-            // set the owning side to null (unless already changed)
-            if ($submission->getOwner() === $this) {
-                $submission->setOwner(null);
-            }
         }
 
         return $this;

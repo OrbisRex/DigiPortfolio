@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ResourceFileRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,10 +42,23 @@ class ResourceFile
     private $meta = [];
 
     /**
+     * One file can have one owner.
      * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="resourceFiles")
      * @ORM\JoinColumn(nullable=false)
      */
     private $owner;
+
+    /**
+     * Many file can be in many submissions.
+     * @var Collection 
+     * @ORM\ManyToMany(targetEntity="Submission", mappedBy="files", cascade={"persist"})
+     */
+    private $submissions;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $path;
 
     /**
      * @ORM\OneToOne(targetEntity=Log::class, cascade={"persist", "remove"})
@@ -62,15 +77,10 @@ class ResourceFile
      */
     private $file;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Submission::class, inversedBy="file")
-     */
-    private $submission;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $path;
+    public function __construct()
+    {
+        $this->submissions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +147,40 @@ class ResourceFile
         return $this;
     }
 
+    /**
+     * @return Collection|Submission[]
+     */
+    public function getSubmissions(): Collection
+    {
+        return $this->submissions;
+    }
+
+    public function getSubmission(Submission $submission): self
+    {
+        return $this->submissions[$submission];
+    }
+
+    public function addSubmission(Submission $submission): self
+    {
+        if (!$this->submissions->contains($submission)) {
+            $this->submissions[] = $submission;
+        }
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
     public function getLog(): ?Log
     {
         return $this->log;
@@ -173,30 +217,6 @@ class ResourceFile
     public function setUpdatetime(\DateTimeInterface $updatetime): self
     {
         $this->updatetime = $updatetime;
-
-        return $this;
-    }
-
-    public function getSubmission(): ?Submission
-    {
-        return $this->submission;
-    }
-
-    public function setSubmission(?Submission $submission): self
-    {
-        $this->submission = $submission;
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
 
         return $this;
     }

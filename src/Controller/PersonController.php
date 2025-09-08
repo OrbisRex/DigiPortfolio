@@ -38,7 +38,7 @@ class PersonController extends AbstractController
     /**
      * @Route("/person", name="person")
      */
-    public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository)
+    public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -66,7 +66,7 @@ class PersonController extends AbstractController
             PersonRepository $personRepository, 
             AssignmentPersonRepository $assignmentPersonRepository,
             SubmissionRepository $submissionRepository
-    )
+    ): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -83,7 +83,7 @@ class PersonController extends AbstractController
         $assignments = $assignmentPersonRepository->findByPerson($user->getId());
 
         //Find all submissions for user
-        $submissions = $submissionRepository->findByOwner($user->getId());
+        $submissions = $submissionRepository->findByPeople($user->getId());
 
         //Edit User Profile
         $form = $this->createForm(ProfileFormType::class, $user);
@@ -132,7 +132,7 @@ class PersonController extends AbstractController
         ResourceFileRepository $resourceFileRepository,
         PersonRepository $personRepository,
         SetRepository $setRepository
-    )
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

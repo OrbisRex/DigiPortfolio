@@ -57,7 +57,7 @@ class SettingsController extends AbstractController
             //New subject
             $subject = new Subject();
             $subject->setName($newSubject->getName());
-            $subject->setPerson($this->getUser());
+            $subject->addPerson($this->getUser());
 
             //Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
@@ -120,6 +120,8 @@ class SettingsController extends AbstractController
             $set = new Set();
             $set->setName($data->getName());
             $set->setType('Organisation');
+            $set->addPerson($this->getUser());
+            #TODO: Improvement ^.
 
             //Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
@@ -147,7 +149,7 @@ class SettingsController extends AbstractController
     /**
      * @Route("/settings/subject/{id}", name="settings-subject")
      */
-    public function subject($id, Request $request, SubjectRepository $subjectRepository){
+    public function subject($id, Request $request, SubjectRepository $subjectRepository): \Symfony\Component\HttpFoundation\Response{
         
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -199,7 +201,7 @@ class SettingsController extends AbstractController
     /**
      * @Route("/settings/topic/{id}", name="settings-topic")
      */
-    public function topic($id, Request $request, TopicRepository $topicRepository)
+    public function topic($id, Request $request, TopicRepository $topicRepository): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -245,7 +247,7 @@ class SettingsController extends AbstractController
     /**
      * @Route("/settings/set/{id}", name="settings-set")
      */
-    public function set($id, Request $request, SetRepository $setRepository)
+    public function set($id, Request $request, SetRepository $setRepository): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

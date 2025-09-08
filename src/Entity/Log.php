@@ -29,8 +29,8 @@ class Log
     private $operation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="log", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * One log have one person.
+     * @ORM\OneToOne(targetEntity=Person::class)
      */
     private $person;    
 
@@ -84,27 +84,28 @@ class Log
     }
 
     /**
-     * Set userId
+     * Get person
      *
-     * @param integer $userId
-     *
-     * @return Log
+     * @return Person
      */
-    public function setUserId($userId)
+    
+    public function getPerson(): ?Person
     {
-        $this->userId = $userId;
-
-        return $this;
+        return $this->person;
     }
 
     /**
-     * Get userId
+     * Set person
      *
-     * @return int
+     * @param Person $person
+     *
+     * @return Log
      */
-    public function getUserId()
+    public function setPerson($person): self
     {
-        return $this->userId;
+        $this->person = $person;
+
+        return $this;
     }
 
     /**
@@ -153,18 +154,6 @@ class Log
     public function getResult()
     {
         return $this->result;
-    }
-
-    public function getPerson(): ?Person
-    {
-        return $this->person;
-    }
-
-    public function setPerson(?Person $person): self
-    {
-        $this->person = $person;
-
-        return $this;
     }
 }
 

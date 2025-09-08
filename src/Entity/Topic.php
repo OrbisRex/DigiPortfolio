@@ -36,8 +36,14 @@ class Topic
     private $description;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Person", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * One topic has many assignments.
+     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="topic")
+     */
+    private $assignments;
+
+    /**
+     * Many topics has one person.
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="topics")
      */
     private $person;
 

@@ -69,7 +69,7 @@ class CriterionRepository extends ServiceEntityRepository
             return null;
         }        
     }
-    
+
     public function findAllNames($owner, $criterionId = false)
     {
         $entityManager = $this->getEntityManager();

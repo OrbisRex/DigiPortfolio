@@ -38,16 +38,22 @@ class Set
     private $type;
 
     /**
+     * Many people can be in many sets.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="sets")
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="sets", cascade={"persist"}))
      */
     private $people;
+    
+    /**
+     * One set has many assignments.
+     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="set")
+     */
+    private $assignments;
 
     public function __construct()
     {
         $this->people = new ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -64,7 +70,7 @@ class Set
      *
      * @param string $name
      *
-     * @return Form
+     * @return Set
      */
     public function setName($name)
     {

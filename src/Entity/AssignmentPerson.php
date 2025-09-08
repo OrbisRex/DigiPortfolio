@@ -22,17 +22,17 @@ class AssignmentPerson
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * Many people can have one assignment.
+     * @var Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="assignments")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
 
     /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="Assignment")
+     * Many assignments have one person.
+     * @var Assignment
+     * @ORM\ManyToOne(targetEntity="Assignment", inversedBy="people")
      * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id")
      */
     private $assignment;
@@ -54,7 +54,7 @@ class AssignmentPerson
      *
      * @param integer $assignment
      *
-     * @return AssignmentUser
+     * @return AssignmentPerson
      */
     public function setAssignment($assignment)
     {
@@ -66,7 +66,7 @@ class AssignmentPerson
     /**
      * Get assignment
      *
-     * @return int
+     * @return Assignment
      */
     public function getAssignment()
     {

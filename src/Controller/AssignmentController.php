@@ -123,7 +123,7 @@ class AssignmentController extends BasicController
     /**
     * @Route("/assignment", name="assignment")
     */
-    public function index(Request $request)
+    public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -180,7 +180,7 @@ class AssignmentController extends BasicController
     /**
      * @Route("/assignment/detail/{id}", name="assignment-detail")
      */
-    public function detail(int $id, Request $request) 
+    public function detail(int $id): \Symfony\Component\HttpFoundation\Response 
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_USER');

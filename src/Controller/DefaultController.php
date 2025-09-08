@@ -15,8 +15,8 @@ class DefaultController extends BasicController
     /**
      * @Route("/", name="home")
      */
-    public function indexAction(Request $request) {
-        
+    public function index(): \Symfony\Component\HttpFoundation\Response
+    {
         return $this->render('default/index.html.twig', array(
             'username' => NULL,
         ));

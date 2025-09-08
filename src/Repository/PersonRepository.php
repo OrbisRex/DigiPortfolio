@@ -18,7 +18,7 @@ class PersonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Person::class);
     }
-    
+
     public function findAllStudents()
     {
         $query = $this->getEntityManager()
@@ -35,7 +35,7 @@ class PersonRepository extends ServiceEntityRepository
             return null;
         }        
     }
-    
+
     public function findStudentsFromGroup($group)
     {
         $query = $this->getEntityManager()

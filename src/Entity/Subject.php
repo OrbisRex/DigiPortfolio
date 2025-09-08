@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,10 +31,17 @@ class Subject
     private $name;
     
     /**
-     * @ORM\ManyToOne(targetEntity=Person::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * Many people can have many subjects.
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="subjects", cascade={"persist"})
      */
-    private $person;    
+    private $people;
+
+    /**
+     * One subect has many assignments.
+     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="subject")
+     */
+    private $assignments;
 
     /**
      * One Subject has One Log.
@@ -41,6 +50,11 @@ class Subject
      */
     private $log;
     
+    public function __construct()
+    {
+        $this->people = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -88,16 +102,32 @@ class Subject
         return $this;
     }
 
-    public function getPerson(): ?Person
+    /**
+     * @return Collection|Person[]
+     */
+    public function getPeople(): Collection
     {
-        return $this->person;
+        return $this->people;
     }
 
-    public function setPerson(?Person $person): self
+    public function addPerson(Person $person): self
     {
-        $this->person = $person;
+        if (!$this->people->contains($person)) {
+            $this->people[] = $person;
+            $person->addSubject($this);
+        }
 
         return $this;
-    }   
+    }
+
+    public function removePerson(Person $person): self
+    {
+        if ($this->people->contains($person)) {
+            $this->people->removeElement($person);
+            $person->removeSubject($this);
+        }
+
+        return $this;
+    }
 }
 

@@ -45,25 +45,28 @@ class Submission
     private $text;
 
     /**
-     * @ORM\OneToMany(targetEntity=ResourceFile::class, mappedBy="submission")
+     * Many files can be in many submissions.
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="ResourceFile", inversedBy="submissions", cascade={"persist"})
      */
-    private $file;
+    private $files;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="owner", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
+     * Many people can be in many submissions.
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="submissions", cascade={"persist"})
      */
-    private $owner;
+    private $people;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Assignment::class, inversedBy="submission", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", nullable=false)
+     * One assignment can have many submissions.
+     * @ORM\ManyToOne(targetEntity=Assignment::class, inversedBy="submissions", cascade={"persist", "remove"})
      */
     private $assignment;
 
     /**
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="submission", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="submissions", cascade={"persist"})
      */
     private $criteria;
 
@@ -90,7 +93,8 @@ class Submission
 
     public function __construct()
     {
-        $this->file = new ArrayCollection();
+        $this->people = new ArrayCollection();
+        $this->files = new ArrayCollection();
         $this->criteria = new ArrayCollection();
     }
 
@@ -162,16 +166,15 @@ class Submission
     /**
      * @return Collection|ResourceFile[]
      */
-    public function getFile(): Collection
+    public function getFiles(): Collection
     {
-        return $this->file;
+        return $this->files;
     }
 
     public function addFile(ResourceFile $file): self
     {
-        if (!$this->file->contains($file)) {
-            $this->file[] = $file;
-            $file->setSubmission($this);
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
         }
 
         return $this;
@@ -179,25 +182,41 @@ class Submission
 
     public function removeFile(ResourceFile $file): self
     {
-        if ($this->file->contains($file)) {
-            $this->file->removeElement($file);
-            // set the owning side to null (unless already changed)
-            if ($file->getSubmission() === $this) {
-                $file->setSubmission(null);
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed) NOTE: Is it better then just remove???
+            if ($file->getSubmission($this) === $this) {
+                $file->addSubmission(null);
             }
         }
 
         return $this;
     }
 
-    public function getOwner(): ?Person
+    /**
+     * @return Collection|Person[]
+     */
+    public function getPeople(): Collection
     {
-        return $this->owner;
+        return $this->people;
     }
 
-    public function setOwner(Person $owner): self
+    public function addPerson(Person $person): self
     {
-        $this->owner = $owner;
+        if (!$this->people->contains($person)) {
+            $this->people[] = $person;
+            $person->addSubmission($this);
+        }
+
+        return $this;
+    }
+
+    public function removePerson(Person $person): self
+    {
+        if ($this->people->contains($person)) {
+            $this->people->removeElement($person);
+            $person->removeSubmission($this);
+        }
 
         return $this;
     }

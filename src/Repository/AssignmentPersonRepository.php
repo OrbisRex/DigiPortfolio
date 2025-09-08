@@ -45,7 +45,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
                 'SELECT ap '
               . 'FROM App:AssignmentPerson ap '
               . 'JOIN ap.assignment a '
-              . 'WHERE a.teacher = '.$userId.' '      
+              . 'WHERE ap.person = '.$userId.' '      
               . 'ORDER BY a.updatetime DESC'      
             )
             ->setMaxResults($number);
@@ -64,7 +64,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
                 'SELECT ap '
               . 'FROM App:AssignmentPerson ap '
               . 'JOIN ap.assignment a '
-              . 'WHERE a.teacher = '.$userId.' '      
+              . 'WHERE ap.person = '.$userId.' '      
               . 'ORDER BY a.updatetime DESC'      
             );
 
@@ -100,7 +100,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
                 'SELECT ap '
               . 'FROM App:AssignmentPerson ap '
               . 'JOIN ap.assignment a '
-              . 'WHERE a.teacher = '.$userId.' '      
+              . 'WHERE ap.person = '.$userId.' '      
               . 'AND a.subject = '.$subjectId.' '      
               . 'ORDER BY a.updatetime DESC'      
             );
@@ -118,7 +118,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
             ->createQuery(
                 'SELECT ap '
               . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
+              . 'JOIN ap.assignment a'
               . 'WHERE ap.person = '.$userId.' '      
               . 'AND a.subject = '.$subjectId.' '      
               . 'ORDER BY a.updatetime DESC'      
