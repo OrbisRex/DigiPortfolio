@@ -5,7 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Security\Core\Security;
 
@@ -38,7 +39,7 @@ class PersonController extends AbstractController
     /**
      * @Route("/person", name="person")
      */
-    public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): \Symfony\Component\HttpFoundation\Response
+    public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -66,7 +67,7 @@ class PersonController extends AbstractController
             PersonRepository $personRepository, 
             AssignmentPersonRepository $assignmentPersonRepository,
             SubmissionRepository $submissionRepository
-    ): \Symfony\Component\HttpFoundation\Response
+    ): Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -128,7 +129,7 @@ class PersonController extends AbstractController
     public function import(
         $id,
         CsvImporter $csvImporter, 
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         ResourceFileRepository $resourceFileRepository,
         PersonRepository $personRepository,
         SetRepository $setRepository
@@ -156,7 +157,7 @@ class PersonController extends AbstractController
                 $user->setEmail($person['email']);
                 // encode the plain password
                 $user->setPassword(
-                    $passwordEncoder->encodePassword(
+                    $passwordHasher->hashPassword(
                         $user,
                         $person['password'],
                     )

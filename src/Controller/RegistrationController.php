@@ -8,14 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         //Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -28,7 +28,7 @@ class RegistrationController extends AbstractController
 
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $passwordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )

@@ -25,7 +25,6 @@ class AssignmentPerson
      * Many people can have one assignment.
      * @var Person
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="assignments")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
 
@@ -33,7 +32,6 @@ class AssignmentPerson
      * Many assignments have one person.
      * @var Assignment
      * @ORM\ManyToOne(targetEntity="Assignment", inversedBy="people")
-     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id")
      */
     private $assignment;
 

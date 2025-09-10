@@ -29,6 +29,8 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: '/dashboard'
+                use_referer: true
             logout:
                 path:   app_logout
             # activate different ways to authenticate
@@ -54,14 +56,6 @@ security:
         - { path: ^/file, roles: ROLE_ADMIN }
         - { path: ^/settings, roles: ROLE_TEACHER }
     
-    encoders:
-        # use your user class name here
-        App\Entity\Person:
-            # Use native password encoder
-            # This value auto-selects the best possible hashing algorithm
-            # (i.e. Sodium when available).
-            algorithm: auto
-
 when@test:
     security:
         password_hashers:
