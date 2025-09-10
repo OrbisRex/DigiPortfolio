@@ -11,7 +11,7 @@ security:
                 # the class of the entity that represents users
                 class: 'App\Entity\Person'
                 # the property to query by - e.g. username, email, etc
-                property: 'username'
+                property: 'email'
                 # optional: if you're using multiple Doctrine entity
                 # managers, this option defines which one to use
                 # manager_name: 'customer'
@@ -24,9 +24,11 @@ security:
             #guard:
             #    authenticators:
             #        - App\Security\LoginFormAuthenticator
+            provider: app_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
+                enable_csrf: true
             logout:
                 path:   app_logout
             # activate different ways to authenticate
