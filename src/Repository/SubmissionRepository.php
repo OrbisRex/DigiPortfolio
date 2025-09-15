@@ -19,16 +19,17 @@ class SubmissionRepository extends ServiceEntityRepository
         parent::__construct($registry, Submission::class);
     }
 
-    public function findLastSubmissions($userId, $number)
+    public function findLastSubmissions($people, $number)
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT s '
-              . 'FROM App:Submission s '
-              . 'WHERE s.owner = '.$userId.' '      
-              . 'ORDER BY s.updatetime DESC'      
-            )
+
+        $query = $this->createQueryBuilder('s')
+            ->join('s.assignment', 'a')
+            ->where('s.people IN (?1)')
+            ->setParameters([1 => array_values($people)])
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
             ->setMaxResults($number);
+        ;
 
         try {
             return $query->getResult();
@@ -37,13 +38,13 @@ class SubmissionRepository extends ServiceEntityRepository
         }        
     }
 
-    public function findSubmissionBySet($setId, $userId)
+    public function findBySet($setId, $people)
     {
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
             ->where('a.set = ?1')
-            ->andWhere('s.owner = ?2')
-            ->setParameters([1 => $setId, 2 => $userId])
+            ->andWhere('s.people IN (?2)')
+            ->setParameters([1 => $setId, 2 => array_values($people)])
             ->orderBy('s.name', 'ASC')
             ->getQuery()
         ;
@@ -55,12 +56,12 @@ class SubmissionRepository extends ServiceEntityRepository
         }        
     }
 
-    public function findSubmissionByTeacher($userId)
+    public function findByPeople(array $people)
     {
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
-            ->andWhere('a.teacher = ?1')
-            ->setParameters([1 => $userId])
+            ->andWhere('a.people IN (:people)')
+            ->setParameters(['people', array_values($people)])
             ->orderBy('s.name', 'ASC')
             ->getQuery()
         ;

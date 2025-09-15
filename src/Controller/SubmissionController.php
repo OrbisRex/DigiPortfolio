@@ -134,7 +134,7 @@ class SubmissionController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         //Fetch last assignments
-        $submissions = $this->submissionRepository->findLastSubmissions($this->getUser()->getId(), 8);
+        $submissions = $this->submissionRepository->findLastSubmissions([$this->getUser()->getId()], 8);
         if(!$submissions) {
             $submissions = false;
         }
@@ -147,9 +147,7 @@ class SubmissionController extends AbstractController
         if (!$setId) {
             $set = null;
             if($this->isGranted('ROLE_TEACHER')){
-                $submissionsBySet[] = $this->submissionRepository->findSubmissionByTeacher($this->getUser()->getId());
-            } else {
-                $submissionsBySet[] = $this->submissionRepository->findByOwner($this->getUser()->getId());
+                $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()->getUserIdentifier()]);
             }
         } else {
             $set = $this->setRepository->find($setId);
@@ -159,10 +157,10 @@ class SubmissionController extends AbstractController
                 if($this->isGranted('ROLE_TEACHER')){
                     $people = $set->getPeople();
                     foreach($people as $person){
-                        $submissionsBySet[] = $this->submissionRepository->findByOwner($person);
+                        $submissionsBySet[] = $this->submissionRepository->findByPeople([$person]);
                     }
                 } else {
-                    $submissions = $this->submissionRepository->findSubmissionBySet($set, $this->getUser()->getId());
+                    $submissions = $this->submissionRepository->findBySet($set, $this->getUser()->getUserIdentifier());
                     if($submissions){
                         $submissionsBySet[] = $submissions;
                     } else {
