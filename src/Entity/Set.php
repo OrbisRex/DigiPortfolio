@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\SetRepository;
+use Assignment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Set.
  */
 #[ORM\Table(name: 'set')]
-#[ORM\Entity(repositoryClass: \App\Repository\SetRepository::class)]
+#[ORM\Entity(repositoryClass: SetRepository::class)]
 class Set
 {
     /**
@@ -44,7 +46,7 @@ class Set
     /**
      * One set has many assignments.
      */
-    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'set')]
+    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'set')]
     private $assignments;
 
     /**

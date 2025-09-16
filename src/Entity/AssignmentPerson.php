@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\AssignmentPersonRepository;
+use Assignment;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AssignmentPerson.
  */
 #[ORM\Table(name: 'assignment_person')]
-#[ORM\Entity(repositoryClass: \App\Repository\AssignmentPersonRepository::class)]
+#[ORM\Entity(repositoryClass: AssignmentPersonRepository::class)]
 class AssignmentPerson
 {
     /**
@@ -32,7 +34,7 @@ class AssignmentPerson
      *
      * @var Assignment
      */
-    #[ORM\ManyToOne(targetEntity: \Assignment::class, inversedBy: 'people')]
+    #[ORM\ManyToOne(targetEntity: Assignment::class, inversedBy: 'people')]
     private $assignment;
 
     /**

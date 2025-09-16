@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\NoResultException;
 use App\Entity\ResourceFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -35,7 +36,7 @@ class ResourceFileRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -56,7 +57,7 @@ class ResourceFileRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }

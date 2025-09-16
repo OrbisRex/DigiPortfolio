@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\NoResultException;
 use App\Entity\Criterion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,7 +31,7 @@ class CriterionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -46,7 +47,7 @@ class CriterionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -64,7 +65,7 @@ class CriterionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -94,7 +95,7 @@ class CriterionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }

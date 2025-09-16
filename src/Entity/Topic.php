@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\TopicRepository;
+use Assignment;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Topic.
  */
 #[ORM\Table(name: 'topic')]
-#[ORM\Entity(repositoryClass: \App\Repository\TopicRepository::class)]
+#[ORM\Entity(repositoryClass: TopicRepository::class)]
 class Topic
 {
     /**
@@ -34,7 +36,7 @@ class Topic
     /**
      * One topic has many assignments.
      */
-    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'topic')]
+    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'topic')]
     private $assignments;
 
     /**

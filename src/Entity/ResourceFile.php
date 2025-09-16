@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use App\Repository\ResourceFileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -186,16 +188,16 @@ class ResourceFile
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatetime = new \DateTimeImmutable();
+            $this->updatetime = new DateTimeImmutable();
         }
     }
 
-    public function getUpdatetime(): ?\DateTimeInterface
+    public function getUpdatetime(): ?DateTimeInterface
     {
         return $this->updatetime;
     }
 
-    public function setUpdatetime(\DateTimeInterface $updatetime): self
+    public function setUpdatetime(DateTimeInterface $updatetime): self
     {
         $this->updatetime = $updatetime;
 

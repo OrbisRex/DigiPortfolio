@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\LogRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Log.
  */
 #[ORM\Table(name: 'log')]
-#[ORM\Entity(repositoryClass: \App\Repository\LogRepository::class)]
+#[ORM\Entity(repositoryClass: LogRepository::class)]
 class Log
 {
     /**
@@ -32,7 +34,7 @@ class Log
     private $person;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     #[ORM\Column(name: 'timestamp', type: 'datetime')]
     private $timestamp;
@@ -100,7 +102,7 @@ class Log
     /**
      * Set timestamp.
      *
-     * @param \DateTime $timestamp
+     * @param DateTime $timestamp
      *
      * @return Log
      */
@@ -114,7 +116,7 @@ class Log
     /**
      * Get timestamp.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimestamp()
     {

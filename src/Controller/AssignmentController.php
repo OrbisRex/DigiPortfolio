@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
+use DateTime;
 use App\Entity\Assignment;
 use App\Entity\AssignmentPerson;
 // Forms
@@ -31,8 +34,8 @@ class AssignmentController extends BasicController
     {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment', name: 'assignment')]
-    public function index(Request $request): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/assignment', name: 'assignment')]
+    public function index(Request $request): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -85,8 +88,8 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
-    public function detail(int $id): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
+    public function detail(int $id): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -115,7 +118,7 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/new', name: 'new-assignment')]
+    #[Route(path: '/assignment/new', name: 'new-assignment')]
     public function new(Request $request)
     {
         // Check access
@@ -132,7 +135,7 @@ class AssignmentController extends BasicController
             // $topic = $this->findById($entityManager, 'App:Topic', $data['topic']);
 
             // Current time
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
 
             // Create new Assignment
             $assignment = new Assignment();
@@ -176,7 +179,7 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
+    #[Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
     public function edit(int $id, Request $request)
     {
         // Check access
@@ -200,7 +203,7 @@ class AssignmentController extends BasicController
             // $topic = $this->topicRepository->find($data->getTopic());
 
             // Current time
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
 
             // Update Assignment
             $data->setName($data->getName());

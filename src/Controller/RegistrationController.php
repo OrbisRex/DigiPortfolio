@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Person;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,7 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/register', name: 'app_register')]
+    #[Route(path: '/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         // Check access

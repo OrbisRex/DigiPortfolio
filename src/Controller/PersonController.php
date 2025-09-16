@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Person;
 use App\Entity\Set;
 use App\Form\ProfileFormType;
@@ -27,7 +29,7 @@ class PersonController extends AbstractController
     {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/person', name: 'person')]
+    #[Route(path: '/person', name: 'person')]
     public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): Response
     {
         // Check access
@@ -47,7 +49,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/person/profile/{id}', name: 'person-profile')]
+    #[Route(path: '/person/profile/{id}', name: 'person-profile')]
     public function profile(
         $id,
         Request $request,
@@ -106,7 +108,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/person/import/{id}', name: 'import-person')]
+    #[Route(path: '/person/import/{id}', name: 'import-person')]
     public function import(
         $id,
         CsvImporter $csvImporter,
@@ -114,7 +116,7 @@ class PersonController extends AbstractController
         ResourceFileRepository $resourceFileRepository,
         PersonRepository $personRepository,
         SetRepository $setRepository,
-    ): \Symfony\Component\HttpFoundation\RedirectResponse {
+    ): RedirectResponse {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
         $newUserCount = 0;

@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\CommentRepository;
+use DateTimeInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Comment.
  */
 #[ORM\Table(name: 'comment')]
-#[ORM\Entity(repositoryClass: \App\Repository\CommentRepository::class)]
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
     /**
@@ -40,7 +43,7 @@ class Comment
     private $submission;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     #[ORM\Column(name: 'createtime', type: 'datetime')]
     private $createtime;
@@ -103,12 +106,12 @@ class Comment
         return $this->type;
     }
 
-    public function getCreatetime(): ?\DateTimeInterface
+    public function getCreatetime(): ?DateTimeInterface
     {
         return $this->createtime;
     }
 
-    public function setCreatetime(\DateTimeInterface $createtime): self
+    public function setCreatetime(DateTimeInterface $createtime): self
     {
         $this->createtime = $createtime;
 

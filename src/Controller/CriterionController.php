@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Criterion;
 use App\Entity\Descriptor;
 use App\Form\CriterionFormType;
@@ -15,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CriterionController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion', name: 'criterion')]
-    public function index(CriterionRepository $criterionRepository): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/criterion', name: 'criterion')]
+    public function index(CriterionRepository $criterionRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -30,7 +32,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/new', name: 'new-criterion')]
+    #[Route(path: '/criterion/new', name: 'new-criterion')]
     public function new(Request $request)
     {
         // Check access
@@ -66,7 +68,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
+    #[Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
     public function edit($id, Request $request, CriterionRepository $criterionRepository)
     {
         // Check access
@@ -107,7 +109,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/add', name: 'add-criterion')]
+    #[Route(path: '/criterion/add', name: 'add-criterion')]
     public function add(Request $request)
     {
         // Check access

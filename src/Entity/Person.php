@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\PersonRepository;
+use AssignmentPerson;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: 'person')]
-#[ORM\Entity(repositoryClass: \App\Repository\PersonRepository::class)]
+#[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Person implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -75,7 +77,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'assignment')]
+    #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'assignment')]
     private $assignments;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use App\Repository\SubmissionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -251,24 +252,24 @@ class Submission
         return $this;
     }
 
-    public function getUpdatetime(): ?\DateTimeInterface
+    public function getUpdatetime(): ?DateTimeInterface
     {
         return $this->updatetime;
     }
 
-    public function setUpdatetime(\DateTimeInterface $updatetime): self
+    public function setUpdatetime(DateTimeInterface $updatetime): self
     {
         $this->updatetime = $updatetime;
 
         return $this;
     }
 
-    public function getCreatetime(): ?\DateTimeInterface
+    public function getCreatetime(): ?DateTimeInterface
     {
         return $this->createtime;
     }
 
-    public function setCreatetime(\DateTimeInterface $createtime): self
+    public function setCreatetime(DateTimeInterface $createtime): self
     {
         $this->createtime = $createtime;
 

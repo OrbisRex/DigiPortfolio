@@ -15,15 +15,15 @@ return RectorConfig::configure()
         __DIR__.'/tests',
     ])
     ->withSets([
-        LevelSetList::UP_TO_PHP_84,
         SymfonySetList::SYMFONY_64,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
+    ->withImportNames()
     // uncomment to reach your current PHP version
-    // ->withPhpSets()
+    ->withPhpSets()
     ->withTypeCoverageLevel(0)
     ->withDeadCodeLevel(0)
     ->withCodeQualityLevel(0);

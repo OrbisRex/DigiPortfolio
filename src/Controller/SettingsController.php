@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Set;
 use App\Entity\Subject;
 use App\Entity\Topic;
@@ -21,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SettingsController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings', name: 'settings')]
+    #[Route(path: '/settings', name: 'settings')]
     public function index(
         Request $request,
         SubjectRepository $subjectRepository,
@@ -136,8 +138,8 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/subject/{id}', name: 'settings-subject')]
-    public function subject($id, Request $request, SubjectRepository $subjectRepository): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/settings/subject/{id}', name: 'settings-subject')]
+    public function subject($id, Request $request, SubjectRepository $subjectRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -182,8 +184,8 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/topic/{id}', name: 'settings-topic')]
-    public function topic($id, Request $request, TopicRepository $topicRepository): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/settings/topic/{id}', name: 'settings-topic')]
+    public function topic($id, Request $request, TopicRepository $topicRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -222,8 +224,8 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/set/{id}', name: 'settings-set')]
-    public function set($id, Request $request, SetRepository $setRepository): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/settings/set/{id}', name: 'settings-set')]
+    public function set($id, Request $request, SetRepository $setRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

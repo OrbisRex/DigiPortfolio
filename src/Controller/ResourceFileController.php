@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
+use DateTimeImmutable;
 use App\Entity\ResourceFile;
 use App\Form\FileFormType;
 use App\Repository\ResourceFileRepository;
@@ -15,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ResourceFileController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/file', name: 'file')]
-    public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/file', name: 'file')]
+    public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -50,7 +53,7 @@ class ResourceFileController extends AbstractController
                     $file->setSize($fileSize);
                     $file->setType($fileMimeType);
                     $file->setOwner($this->getUser());
-                    $file->setUpdatetime(new \DateTimeImmutable());
+                    $file->setUpdatetime(new DateTimeImmutable());
 
                     // Save data to the DB.
                     $entityManager->persist($file);

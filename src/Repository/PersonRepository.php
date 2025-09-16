@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\NoResultException;
 use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,7 +32,7 @@ class PersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -48,7 +49,7 @@ class PersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }

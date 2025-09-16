@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\AssignmentRepository;
+use Subject;
+use Topic;
+use AssignmentPerson;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Assignment.
  */
 #[ORM\Table(name: 'assignment')]
-#[ORM\Entity(repositoryClass: \App\Repository\AssignmentRepository::class)]
+#[ORM\Entity(repositoryClass: AssignmentRepository::class)]
 class Assignment
 {
     /**
@@ -37,14 +42,14 @@ class Assignment
      * Many Assignments has one Subject.
      */
     #[ORM\JoinColumn(name: 'subject_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Subject::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private $subject;
 
     /**
      * Many Assignments has one Topic.
      */
     #[ORM\JoinColumn(name: 'topic_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Topic::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Topic::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private $topic;
 
     /**
@@ -59,7 +64,7 @@ class Assignment
      *
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'person')]
+    #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'person')]
     private $people;
 
     /**
@@ -69,7 +74,7 @@ class Assignment
     private $note;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     #[ORM\Column(name: 'updatetime', type: 'datetime')]
     private $updatetime;
@@ -270,7 +275,7 @@ class Assignment
     /**
      * Get updatetime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatetime()
     {

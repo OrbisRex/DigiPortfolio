@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\CriterionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Criteria.
  */
 #[ORM\Table(name: 'criterion')]
-#[ORM\Entity(repositoryClass: \App\Repository\CriterionRepository::class)]
+#[ORM\Entity(repositoryClass: CriterionRepository::class)]
 class Criterion
 {
     /**

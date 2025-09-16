@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Description of DefaultController.
  *
@@ -9,8 +12,8 @@ namespace App\Controller;
  */
 class DefaultController extends BasicController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/', name: 'home')]
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/', name: 'home')]
+    public function index(): Response
     {
         return $this->render('default/index.html.twig', [
             'username' => null,

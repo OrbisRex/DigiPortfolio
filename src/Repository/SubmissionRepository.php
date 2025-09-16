@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\NoResultException;
 use App\Entity\Submission;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +34,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -56,7 +57,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -73,7 +74,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException) {
+        } catch (NoResultException) {
             return null;
         }
     }

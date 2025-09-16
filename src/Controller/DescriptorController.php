@@ -26,6 +26,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Descriptor;
 use App\Form\DescriptorFormType;
 // Entities
@@ -46,8 +48,8 @@ class DescriptorController extends BasicController
     {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor', name: 'descriptor')]
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/descriptor', name: 'descriptor')]
+    public function index(): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -64,7 +66,7 @@ class DescriptorController extends BasicController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor/new', name: 'new-descriptor')]
+    #[Route(path: '/descriptor/new', name: 'new-descriptor')]
     public function new(Request $request)
     {
         // Check access
@@ -136,7 +138,7 @@ class DescriptorController extends BasicController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
+    #[Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
     public function edit(int $criterionId, int $id, Request $request)
     {
         // Check access

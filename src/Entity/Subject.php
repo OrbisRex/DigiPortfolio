@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\SubjectRepository;
+use Assignment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Subject.
  */
 #[ORM\Table(name: 'subject')]
-#[ORM\Entity(repositoryClass: \App\Repository\SubjectRepository::class)]
+#[ORM\Entity(repositoryClass: SubjectRepository::class)]
 class Subject
 {
     /**
@@ -38,7 +40,7 @@ class Subject
     /**
      * One subect has many assignments.
      */
-    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'subject')]
+    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'subject')]
     private $assignments;
 
     /**

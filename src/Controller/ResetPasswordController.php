@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Person;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
@@ -28,7 +29,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Display & process form to request a password reset.
      */
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/reset-password', name: 'app_forgot_password_request')]
+    #[Route(path: '/reset-password', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -49,7 +50,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Confirmation page after a user has requested a password reset.
      */
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/reset-password/check-email', name: 'app_check_email')]
+    #[Route(path: '/reset-password/check-email', name: 'app_check_email')]
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
@@ -65,7 +66,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/reset-password/reset/{token}', name: 'app_reset_password')]
+    #[Route(path: '/reset-password/reset/{token}', name: 'app_reset_password')]
     public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, ?string $token = null): Response
     {
         if ($token) {

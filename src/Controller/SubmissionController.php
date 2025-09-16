@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
+use DateTime;
+use DateTimeImmutable;
 use App\Entity\Comment;
 use App\Entity\Feedback;
 use App\Entity\Log;
@@ -40,8 +44,8 @@ class SubmissionController extends AbstractController
     {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission', name: 'submission')]
-    public function index(Request $request): \Symfony\Component\HttpFoundation\Response
+    #[Route(path: '/submission', name: 'submission')]
+    public function index(Request $request): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -91,7 +95,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/detail/{id}', name: 'submission-detail')]
+    #[Route(path: '/submission/detail/{id}', name: 'submission-detail')]
     public function detail($id, Request $request)
     {
         // Check access
@@ -142,7 +146,7 @@ class SubmissionController extends AbstractController
             $data = $form->getData();
 
             // Current timestemp
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
 
             // $comment->setText($data->getComment());
             // $comment->setType('submission');
@@ -185,7 +189,7 @@ class SubmissionController extends AbstractController
             $data = $formComment->getData();
 
             // Current timestemp
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
 
             // Create new Comment
             $comment = new Comment();
@@ -215,7 +219,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/new', name: 'new-submission')]
+    #[Route(path: '/submission/new', name: 'new-submission')]
     public function new(Request $request)
     {
         // Check access
@@ -253,7 +257,7 @@ class SubmissionController extends AbstractController
             $data = $form->getData();
 
             // Current time
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
 
             // Create new Submission
             $submission = new Submission();
@@ -304,7 +308,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/edit/{id}', name: 'edit-submission')]
+    #[Route(path: '/submission/edit/{id}', name: 'edit-submission')]
     public function edit(int $id, Request $request)
     {
         // Check access
@@ -344,7 +348,7 @@ class SubmissionController extends AbstractController
             $data = $form->getData();
 
             // Current time and new version
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
             $version = $data->getVersion() + 1;
 
             $data->setName($data->getName());
@@ -414,7 +418,7 @@ class SubmissionController extends AbstractController
             $file->setSize($fileSize);
             $file->setType($fileMimeType);
             $file->setOwner($this->getUser());
-            $file->setUpdatetime(new \DateTimeImmutable());
+            $file->setUpdatetime(new DateTimeImmutable());
 
             $file->setSubmission($submission);
 

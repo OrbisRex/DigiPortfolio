@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\DescriptorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Descriptor.
  */
 #[ORM\Table(name: 'descriptor')]
-#[ORM\Entity(repositoryClass: \App\Repository\DescriptorRepository::class)]
+#[ORM\Entity(repositoryClass: DescriptorRepository::class)]
 class Descriptor
 {
     /**
