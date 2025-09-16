@@ -6,33 +6,31 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AssignmentPerson
- *
- * @ORM\Table(name="assignment_person")
- * @ORM\Entity(repositoryClass="App\Repository\AssignmentPersonRepository")
  */
+#[ORM\Table(name: 'assignment_person')]
+#[ORM\Entity(repositoryClass: \App\Repository\AssignmentPersonRepository::class)]
 class AssignmentPerson
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * Many people can have one assignment.
      * @var Person
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="assignments")
      */
+    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'assignments')]
     private $person;
 
     /**
      * Many assignments have one person.
      * @var Assignment
-     * @ORM\ManyToOne(targetEntity="Assignment", inversedBy="people")
      */
+    #[ORM\ManyToOne(targetEntity: \Assignment::class, inversedBy: 'people')]
     private $assignment;
 
 

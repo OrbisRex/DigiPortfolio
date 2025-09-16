@@ -36,9 +36,7 @@ class PersonController extends AbstractController
         $this->security = $security;
     }
 
-    /**
-     * @Route("/person", name="person")
-     */
+    #[Route(path: '/person', name: 'person')]
     public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): Response
     {
         //Check access
@@ -58,9 +56,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/person/profile/{id}", name="person-profile")
-     */
+    #[Route(path: '/person/profile/{id}', name: 'person-profile')]
     public function profile(
             $id, 
             Request $request, 
@@ -123,9 +119,7 @@ class PersonController extends AbstractController
         ]);
     }
     
-    /**
-     * @Route("/person/import/{id}", name="import-person")
-     */
+    #[Route(path: '/person/import/{id}', name: 'import-person')]
     public function import(
         $id,
         CsvImporter $csvImporter, 

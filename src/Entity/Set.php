@@ -8,53 +8,49 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Set
- *
- * @ORM\Table(name="set")
- * @ORM\Entity(repositoryClass="App\Repository\SetRepository")
  */
+#[ORM\Table(name: 'set')]
+#[ORM\Entity(repositoryClass: \App\Repository\SetRepository::class)]
 class Set
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255)
      */
+    #[ORM\Column(name: 'type', type: 'string', length: 255)]
     private $type;
 
     /**
      * Many people can be in many sets.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="sets", cascade={"persist"}))
      */
+    #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'sets', cascade: ['persist'])]
     private $people;
     
     /**
      * One set has many assignments.
-     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="set")
      */
+    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'set')]
     private $assignments;
 
     /**
      * One Topic has One Log.
-     * @ORM\OneToOne(targetEntity="Log")
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Log::class)]
     private $log;
 
     public function __construct()

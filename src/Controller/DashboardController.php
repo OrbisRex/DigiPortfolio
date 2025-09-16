@@ -7,9 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
-    /**
-     * @Route("/dashboard", name="dashboard")
-     */
+    #[Route(path: '/dashboard', name: 'dashboard')]
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
         //Check access

@@ -8,62 +8,59 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Criteria
- *
- * @ORM\Table(name="criterion")
- * @ORM\Entity(repositoryClass="App\Repository\CriterionRepository")
  */
+#[ORM\Table(name: 'criterion')]
+#[ORM\Entity(repositoryClass: \App\Repository\CriterionRepository::class)]
 class Criterion
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 100)]
     private $name;
 
     /**
      * Criteria have many descriptors.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="criteria", cascade={"persist"})
-     * @ORM\JoinTable(name="criteria_descriptors")
      */
+    #[ORM\JoinTable(name: 'criteria_descriptors')]
+    #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'criteria', cascade: ['persist'])]
     private $descriptors;
 
     /**
      * One Criterion has One Person.
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="criterion")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'criterion')]
     private $author;
     
     /**
      * One Criterion has One Log.
-     * @ORM\OneToOne(targetEntity="Log")
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Log::class)]
     private $log;
 
     /**
      * Criteria have many assignments.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Assignment", mappedBy="criteria")
      */
+    #[ORM\ManyToMany(targetEntity: \Assignment::class, mappedBy: 'criteria')]
     private $assignments;
 
     /**
      * Many Criteria have Many submissions.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Submission", mappedBy="criteria")
      */
+    #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'criteria')]
     private $submissions;
 
     public function __construct()

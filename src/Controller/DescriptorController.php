@@ -55,9 +55,7 @@ class DescriptorController extends BasicController
         $this->criterionRepository = $criterionRepository;
     }
     
-    /**
-     * @Route("/descriptor", name="descriptor")
-     */
+    #[Route(path: '/descriptor', name: 'descriptor')]
     public function index(): \Symfony\Component\HttpFoundation\Response 
     {
         //Check access
@@ -77,9 +75,7 @@ class DescriptorController extends BasicController
         ]);
     }
 
-    /**
-     * @Route("/descriptor/new", name="new-descriptor")
-     */
+    #[Route(path: '/descriptor/new', name: 'new-descriptor')]
     public function new(Request $request)
     {     
 
@@ -157,9 +153,7 @@ class DescriptorController extends BasicController
         ));
     }
 
-    /**
-     * @Route("/descriptor/edit/{criterionId}/{id}", name="edit-descriptor")
-     */
+    #[Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
     public function edit(int $criterionId, int $id, Request $request)
     {     
         //Check access

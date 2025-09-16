@@ -8,87 +8,83 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Assignment
- *
- * @ORM\Table(name="assignment")
- * @ORM\Entity(repositoryClass="App\Repository\AssignmentRepository")
  */
+#[ORM\Table(name: 'assignment')]
+#[ORM\Entity(repositoryClass: \App\Repository\AssignmentRepository::class)]
 class Assignment
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
+    #[ORM\Column(name: 'state', type: 'string', length: 100, nullable: true)]
     private $state;
     
     /**
      * Many Assignments has one Subject.
-     * @ORM\ManyToOne(targetEntity="Subject", inversedBy="assignments", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="subject_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'subject_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Subject::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private $subject;
 
     /**
      * Many Assignments has one Topic.
-     * @ORM\ManyToOne(targetEntity="Topic", inversedBy="assignments", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="topic_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'topic_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Topic::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private $topic;
 
     /**
      * Many Assignments has one set.
-     * @ORM\ManyToOne(targetEntity="Set", inversedBy="assignments", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="set_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'set_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Set::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private $set;
 
     /**
      * One assignment can have many people.
      * @var Collection
-     * @ORM\OneToMany(targetEntity="AssignmentPerson", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'person')]
     private $people;    
 
     /**
      * @var string
-     * @ORM\Column(name="note", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'note', type: 'string', length: 255, nullable: true)]
     private $note;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="updatetime", type="datetime")
      */
+    #[ORM\Column(name: 'updatetime', type: 'datetime')]
     private $updatetime;
 
     /**
      * Assignment has many criteria.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="assignments", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'assignments', cascade: ['persist'])]
     private $criteria;
 
     /**
      * One assignment can have many submissions.
      * @var Collection
-     * @ORM\OneToMany(targetEntity=Submission::class, mappedBy="assignment", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: Submission::class, mappedBy: 'assignment', cascade: ['persist', 'remove'])]
     private $submissions;
 
     public function __construct()

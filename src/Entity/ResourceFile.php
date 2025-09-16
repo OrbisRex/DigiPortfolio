@@ -9,66 +9,48 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * @ORM\Entity(repositoryClass=ResourceFileRepository::class)
- */
+#[ORM\Entity(repositoryClass: ResourceFileRepository::class)]
 class ResourceFile
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $size;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $type;
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private $meta = [];
 
     /**
      * One file can have one owner.
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="resourceFiles")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'resourceFiles')]
     private $owner;
 
     /**
      * Many file can be in many submissions.
-     * @var Collection 
-     * @ORM\ManyToMany(targetEntity="Submission", mappedBy="files", cascade={"persist"})
+     * @var Collection
      */
+    #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'files', cascade: ['persist'])]
     private $submissions;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $path;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Log::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private $log;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $updatetime;
 
     /**

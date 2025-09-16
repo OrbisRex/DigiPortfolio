@@ -7,88 +7,66 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=SubmissionRepository::class)
- */
+#[ORM\Entity(repositoryClass: SubmissionRepository::class)]
 class Submission
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $note;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $version;
 
-    /**
-     * @ORM\Column(type="string", length=1024, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private $link;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $text;
 
     /**
      * Many files can be in many submissions.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="ResourceFile", inversedBy="submissions", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: \ResourceFile::class, inversedBy: 'submissions', cascade: ['persist'])]
     private $files;
 
     /**
      * Many people can be in many submissions.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="submissions", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'submissions', cascade: ['persist'])]
     private $people;
 
     /**
      * One assignment can have many submissions.
-     * @ORM\ManyToOne(targetEntity=Assignment::class, inversedBy="submissions", cascade={"persist", "remove"})
      */
+    #[ORM\ManyToOne(targetEntity: Assignment::class, inversedBy: 'submissions', cascade: ['persist', 'remove'])]
     private $assignment;
 
     /**
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="submissions", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'submissions', cascade: ['persist'])]
     private $criteria;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Log::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private $log;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $updatetime;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $createtime;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Feedback::class, mappedBy="submission", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Feedback::class, mappedBy: 'submission', cascade: ['persist', 'remove'])]
     private $feedback;
 
     public function __construct()

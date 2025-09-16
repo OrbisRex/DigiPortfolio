@@ -6,52 +6,48 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Topic
- *
- * @ORM\Table(name="topic")
- * @ORM\Entity(repositoryClass="App\Repository\TopicRepository")
  */
+#[ORM\Table(name: 'topic')]
+#[ORM\Entity(repositoryClass: \App\Repository\TopicRepository::class)]
 class Topic
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
     private $description;
     
     /**
      * One topic has many assignments.
-     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="topic")
      */
+    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'topic')]
     private $assignments;
 
     /**
      * Many topics has one person.
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="topics")
      */
+    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'topics')]
     private $person;
 
     /**
      * One Topic has One Log.
-     * @ORM\OneToOne(targetEntity="Log")
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Log::class)]
     private $log;
     
     /**

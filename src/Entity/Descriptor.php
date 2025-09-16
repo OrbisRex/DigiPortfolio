@@ -8,68 +8,62 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Descriptor
- *
- * @ORM\Table(name="descriptor")
- * @ORM\Entity(repositoryClass="App\Repository\DescriptorRepository")
  */
+#[ORM\Table(name: 'descriptor')]
+#[ORM\Entity(repositoryClass: \App\Repository\DescriptorRepository::class)]
 class Descriptor
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 100)]
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255)
      */
+    #[ORM\Column(name: 'description', type: 'string', length: 255)]
     private $description;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=100)
      */
+    #[ORM\Column(name: 'type', type: 'string', length: 100)]
     private $type;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="weight", type="integer")
      */
+    #[ORM\Column(name: 'weight', type: 'integer')]
     private $weight;
 
     /**
      * Descriptors have many criteria.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Descriptor", mappedBy="descriptors")
      */
+    #[ORM\ManyToMany(targetEntity: \Descriptor::class, mappedBy: 'descriptors')]
     private $criteria;
 
     /**
      * One Descriptor has One Person.
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="descriptor")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'descriptor')]
     private $author;
     
     /**
      * One Descriptor has One Log.
-     * @ORM\OneToOne(targetEntity="Log")
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Log::class)]
     private $log;
 
     public function __construct()

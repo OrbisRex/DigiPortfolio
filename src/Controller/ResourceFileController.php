@@ -18,9 +18,7 @@ use App\Form\FileFormType;
 
 class ResourceFileController extends AbstractController
 {
-    /**
-     * @Route("/file", name="file")
-     */
+    #[Route(path: '/file', name: 'file')]
     public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader): \Symfony\Component\HttpFoundation\Response
     {
         //Check access

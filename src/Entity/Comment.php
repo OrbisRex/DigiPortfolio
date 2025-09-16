@@ -6,52 +6,43 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Comment
- *
- * @ORM\Table(name="comment")
- * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
+#[ORM\Table(name: 'comment')]
+#[ORM\Entity(repositoryClass: \App\Repository\CommentRepository::class)]
 class Comment
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="text", type="text")
      */
+    #[ORM\Column(name: 'text', type: 'text')]
     private $text;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=100)
      */
+    #[ORM\Column(name: 'type', type: 'string', length: 100)]
     private $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="Comment", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
-     */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
     private $owner;    
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Submission", inversedBy="Comment", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id")
-     */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Submission::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
     private $submission;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="createtime", type="datetime")
      */
+    #[ORM\Column(name: 'createtime', type: 'datetime')]
     private $createtime;
 
 

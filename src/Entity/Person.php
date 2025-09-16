@@ -9,93 +9,81 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
- */
+#[ORM\Table(name: 'person')]
+#[ORM\Entity(repositoryClass: \App\Repository\PersonRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Person implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private $name;
 
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
+    #[ORM\Column(type: 'smallint', nullable: true)]
     private $disabled;
 
     /**
      * Many people can organise many sets (co-leading).
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Set", mappedBy="people", cascade={"persist"})
-     * @ORM\JoinTable(name="person_set")
      */
+    #[ORM\JoinTable(name: 'person_set')]
+    #[ORM\ManyToMany(targetEntity: \Set::class, mappedBy: 'people', cascade: ['persist'])]
     private $sets;
 
     /**
      * Many people can have many subjects (co-teaching).
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Subject", mappedBy="people")
      */
+    #[ORM\ManyToMany(targetEntity: \Subject::class, mappedBy: 'people')]
     private $subjects;
 
     /**
      * One person can have many topics (author).
      * @var Collection
-     * @ORM\OneToMany(targetEntity="Topic", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \Topic::class, mappedBy: 'person')]
     private $topics;
 
     /**
      * One peron can have multiple files.
      * @var Collection
-     * @ORM\OneToMany(targetEntity="ResourceFile", mappedBy="owner")
      */
+    #[ORM\OneToMany(targetEntity: \ResourceFile::class, mappedBy: 'owner')]
     private $resourceFiles;
 
     /**
      * One person can be part of many assignments (teaher and students).
      * @var Collection
-     * @ORM\OneToMany(targetEntity="AssignmentPerson", mappedBy="assignment")
      */
+    #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'assignment')]
     private $assignments;
 
     /**
      * Many persons can create many submissions (sharing).
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Submission", mappedBy="people")
      */
+    #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'people')]
     private $submissions;
     
     /**
      * One Person has One Log.
-     * @ORM\OneToOne(targetEntity=Log::class)
      */
+    #[ORM\OneToOne(targetEntity: Log::class)]
     private $log;
 
     public function __construct()

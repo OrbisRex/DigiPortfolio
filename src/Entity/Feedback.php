@@ -7,58 +7,38 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=FeedbackRepository::class)
- */
+#[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 class Feedback
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $note;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="owner", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'owner', cascade: ['persist', 'remove'])]
     private $owner;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Submission::class, inversedBy="feedback", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Submission::class, inversedBy: 'feedback', cascade: ['persist', 'remove'])]
     private $submission;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Descriptor::class)
-     */
+    #[ORM\ManyToMany(targetEntity: Descriptor::class)]
     private $descriptors;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Log::class, cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private $log;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $version;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $createtime;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $updatetime;
 
     public function __construct()

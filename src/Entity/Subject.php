@@ -8,46 +8,43 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Subject
- *
- * @ORM\Table(name="subject")
- * @ORM\Entity(repositoryClass="App\Repository\SubjectRepository")
  */
+#[ORM\Table(name: 'subject')]
+#[ORM\Entity(repositoryClass: \App\Repository\SubjectRepository::class)]
 class Subject
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100, unique=true)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 100, unique: true)]
     private $name;
     
     /**
      * Many people can have many subjects.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="subjects", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'subjects', cascade: ['persist'])]
     private $people;
 
     /**
      * One subect has many assignments.
-     * @ORM\OneToMany(targetEntity="Assignment", mappedBy="subject")
      */
+    #[ORM\OneToMany(targetEntity: \Assignment::class, mappedBy: 'subject')]
     private $assignments;
 
     /**
      * One Subject has One Log.
-     * @ORM\OneToOne(targetEntity=Log::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private $log;
     
     public function __construct()

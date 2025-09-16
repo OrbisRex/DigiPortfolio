@@ -22,5 +22,11 @@ pg_ctl start
 symfony server:start --port 8080
 
 ## Dev notes
-Run Unit tests:
+### Run Unit tests:
 php vendor/bin/phpunit
+
+### Rector code:
+composer required rector/rector --dev
+./vendor/bin/rector (Initiates rector.php with rules.)
+./vendor/bin/rector --version
+./vendor/bin/rector

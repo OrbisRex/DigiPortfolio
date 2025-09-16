@@ -6,46 +6,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Log
- *
- * @ORM\Table(name="log")
- * @ORM\Entity(repositoryClass="App\Repository\LogRepository")
  */
+#[ORM\Table(name: 'log')]
+#[ORM\Entity(repositoryClass: \App\Repository\LogRepository::class)]
 class Log
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="operation", type="string", length=255)
      */
+    #[ORM\Column(name: 'operation', type: 'string', length: 255)]
     private $operation;
 
     /**
      * One log have one person.
-     * @ORM\OneToOne(targetEntity=Person::class)
      */
+    #[ORM\OneToOne(targetEntity: Person::class)]
     private $person;    
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="timestamp", type="datetime")
      */
+    #[ORM\Column(name: 'timestamp', type: 'datetime')]
     private $timestamp;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="result", type="string", length=100)
      */
+    #[ORM\Column(name: 'result', type: 'string', length: 100)]
     private $result;
 
 

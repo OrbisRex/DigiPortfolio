@@ -19,9 +19,7 @@ use App\Form\CriterionFormType;
 
 class CriterionController extends AbstractController
 {
-    /**
-     * @Route("/criterion", name="criterion")
-     */
+    #[Route(path: '/criterion', name: 'criterion')]
     public function index(CriterionRepository $criterionRepository): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
@@ -36,9 +34,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/criterion/new", name="new-criterion")
-     */
+    #[Route(path: '/criterion/new', name: 'new-criterion')]
     public function new(Request $request)
     {
         //Check access
@@ -75,9 +71,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/criterion/edit/{id}", name="edit-criterion")
-     */
+    #[Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
     public function edit($id, Request $request, CriterionRepository $criterionRepository)
     {
         //Check access
@@ -121,9 +115,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/criterion/add", name="add-criterion")
-     */
+    #[Route(path: '/criterion/add', name: 'add-criterion')]
     public function add(Request $request)
     {
         //Check access

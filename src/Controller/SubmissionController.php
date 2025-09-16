@@ -125,9 +125,7 @@ class SubmissionController extends AbstractController
         $this->fileUploader = $fileUploader;
     }
 
-    /**
-     * @Route("/submission", name="submission")
-     */
+    #[Route(path: '/submission', name: 'submission')]
     public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
@@ -178,9 +176,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/submission/detail/{id}", name="submission-detail")
-     */
+    #[Route(path: '/submission/detail/{id}', name: 'submission-detail')]
     public function detail($id, Request $request)
     {
         //Check access
@@ -306,10 +302,7 @@ class SubmissionController extends AbstractController
         ]);
     }
     
-    /**
-     * @Route("/submission/new", name="new-submission")
-     * 
-     */
+    #[Route(path: '/submission/new', name: 'new-submission')]
     public function new(Request $request)
     {     
         //Check access
@@ -400,10 +393,7 @@ class SubmissionController extends AbstractController
         ));
     }
 
-    /**
-     * @Route("/submission/edit/{id}", name="edit-submission")
-     * 
-     */
+    #[Route(path: '/submission/edit/{id}', name: 'edit-submission')]
     public function edit(int $id, Request $request)
     {     
         //Check access

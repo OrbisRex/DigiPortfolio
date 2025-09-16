@@ -96,9 +96,7 @@ class AssignmentController extends BasicController
         $this->personRepository = $personRepository;
     }
 
-    /**
-    * @Route("/assignment", name="assignment")
-    */
+    #[Route(path: '/assignment', name: 'assignment')]
     public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         //Check access
@@ -153,9 +151,7 @@ class AssignmentController extends BasicController
     }
 
     
-    /**
-     * @Route("/assignment/detail/{id}", name="assignment-detail")
-     */
+    #[Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
     public function detail(int $id): \Symfony\Component\HttpFoundation\Response 
     {
         //Check access
@@ -190,10 +186,7 @@ class AssignmentController extends BasicController
     }
 
     
-    /**
-     * @Route("/assignment/new", name="new-assignment")
-     * 
-     */
+    #[Route(path: '/assignment/new', name: 'new-assignment')]
     public function new(Request $request)
     {     
         //Check access
@@ -258,10 +251,7 @@ class AssignmentController extends BasicController
     }
     
     
-    /**
-     * @Route("/assignment/edit/{id}", name="edit-assignment")
-     * 
-     */
+    #[Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
     public function edit(int $id, Request $request)
     {     
         //Check access
