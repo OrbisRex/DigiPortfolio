@@ -52,18 +52,18 @@ class Descriptor
     private $weight;
 
     /**
+     * Descriptors have many criteria.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="descriptors", cascade={"persist"})
-     * @ORM\JoinTable(name="criteria_descriptors")
+     * @ORM\ManyToMany(targetEntity="Descriptor", mappedBy="descriptors")
      */
     private $criteria;
 
     /**
      * One Descriptor has One Person.
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="Descriptor", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="descriptor")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
-    private $person;
+    private $author;
     
     /**
      * One Descriptor has One Log.
@@ -222,14 +222,14 @@ class Descriptor
         return $this;
     }
 
-    public function getPerson(): ?Person
+    public function getAuthor(): ?Person
     {
-        return $this->person;
+        return $this->author;
     }
 
-    public function setPerson(?Person $person): self
+    public function setAuthor(?Person $author): self
     {
-        $this->person = $person;
+        $this->author = $author;
 
         return $this;
     }   

@@ -78,6 +78,7 @@ class Assignment
     private $updatetime;
 
     /**
+     * Assignment has many criteria.
      * @var Collection
      * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="assignments", cascade={"persist"})
      */

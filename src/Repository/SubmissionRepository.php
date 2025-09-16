@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Submission;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Parameter;
+
 
 /**
  * @method Submission|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,13 +22,13 @@ class SubmissionRepository extends ServiceEntityRepository
         parent::__construct($registry, Submission::class);
     }
 
-    public function findLastSubmissions($people, $number)
+    public function findLastSubmissions($person, $number)
     {
 
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
-            ->where('s.people IN (?1)')
-            ->setParameters([1 => array_values($people)])
+            ->where('s.people = ?1')
+            ->setParameter(1, $person)
             ->orderBy('s.name', 'ASC')
             ->getQuery()
             ->setMaxResults($number);
@@ -44,7 +47,11 @@ class SubmissionRepository extends ServiceEntityRepository
             ->join('s.assignment', 'a')
             ->where('a.set = ?1')
             ->andWhere('s.people IN (?2)')
-            ->setParameters([1 => $setId, 2 => array_values($people)])
+            ->setParameters(
+                new ArrayCollection([
+                new Parameter('1', $setId),
+                new Parameter('2', array_values($people))
+                ]))
             ->orderBy('s.name', 'ASC')
             ->getQuery()
         ;
@@ -60,8 +67,8 @@ class SubmissionRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
-            ->andWhere('a.people IN (:people)')
-            ->setParameters(['people', array_values($people)])
+            ->where('a.people IN (:people)')
+            ->setParameter('people', array_values($people))
             ->orderBy('s.name', 'ASC')
             ->getQuery()
         ;

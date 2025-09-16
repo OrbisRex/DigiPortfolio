@@ -31,18 +31,19 @@ class Criterion
     private $name;
 
     /**
-     * Many Criteria have Many Descriptors.
+     * Criteria have many descriptors.
      * @var Collection
-     * @ORM\ManyToMany(targetEntity="Descriptor", mappedBy="criteria")
+     * @ORM\ManyToMany(targetEntity="Criterion", inversedBy="criteria", cascade={"persist"})
+     * @ORM\JoinTable(name="criteria_descriptors")
      */
     private $descriptors;
 
     /**
      * One Criterion has One Person.
-     * @ORM\OneToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="criterion")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
-    private $person;
+    private $author;
     
     /**
      * One Criterion has One Log.
@@ -52,7 +53,7 @@ class Criterion
     private $log;
 
     /**
-     * Many Criteria have Many assignments.
+     * Criteria have many assignments.
      * @var Collection
      * @ORM\ManyToMany(targetEntity="Assignment", mappedBy="criteria")
      */
@@ -119,14 +120,14 @@ class Criterion
         return $this;
     }
 
-    public function getPerson(): ?Person
+    public function getAuthor(): ?Person
     {
-        return $this->person;
+        return $this->author;
     }
 
-    public function setPerson(?Person $person): self
+    public function setAuthor(?Person $author): self
     {
-        $this->person = $person;
+        $this->person = $author;
 
         return $this;
     }

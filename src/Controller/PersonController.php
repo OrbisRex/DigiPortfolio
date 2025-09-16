@@ -84,7 +84,7 @@ class PersonController extends AbstractController
         $assignments = $assignmentPersonRepository->findByPerson($user->getId());
 
         //Find all submissions for user
-        $submissions = $submissionRepository->findByPeople($user->getId());
+        $submissions = $submissionRepository->findByPeople([$user->getId()]);
 
         //Edit User Profile
         $form = $this->createForm(ProfileFormType::class, $user);

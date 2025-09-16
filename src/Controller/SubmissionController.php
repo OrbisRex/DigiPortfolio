@@ -134,7 +134,7 @@ class SubmissionController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         //Fetch last assignments
-        $submissions = $this->submissionRepository->findLastSubmissions([$this->getUser()->getId()], 8);
+        $submissions = $this->submissionRepository->findLastSubmissions($this->getUser(), 8);
         if(!$submissions) {
             $submissions = false;
         }
