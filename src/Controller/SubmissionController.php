@@ -37,7 +37,7 @@ use App\Repository\ResourceFileRepository;
 /**
  * Description of SubmissionController
  *
- * @author David Yilma
+ * @author David Ehrlich
  */
 class SubmissionController extends AbstractController
 {

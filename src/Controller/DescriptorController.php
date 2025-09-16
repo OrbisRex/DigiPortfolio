@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 David Yilma.
+ * Copyright 2017 David Ehrlich.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ use App\Repository\CriterionRepository;
 /**
  * Description of DescriptorController
  *
- * @author David Yilma
+ * @author David Ehrlich
  */
 class DescriptorController extends BasicController
 {

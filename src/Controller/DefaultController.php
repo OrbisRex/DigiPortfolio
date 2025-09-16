@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Description of DefaultController
  *
- * @author David Yilma
+ * @author David Ehrlich
  */
 class DefaultController extends BasicController
 {
     /**
-     * @Route("/", name="home")
+     * [Route("/", name="home")]
      */
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
