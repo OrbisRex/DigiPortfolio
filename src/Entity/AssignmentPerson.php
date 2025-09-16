@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\AssignmentPersonRepository;
-use Assignment;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Assignment;
+
+use App\Repository\AssignmentPersonRepository;
 
 /**
  * AssignmentPerson.
@@ -16,26 +18,26 @@ class AssignmentPerson
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * Many people can have one assignment.
      *
      * @var Person
      */
-    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'assignments')]
-    private $person;
+    #[ORM\ManyToOne(inversedBy: 'assignments')]
+    private ?Person $person = null;
 
     /**
      * Many assignments have one person.
      *
      * @var Assignment
      */
-    #[ORM\ManyToOne(targetEntity: Assignment::class, inversedBy: 'people')]
-    private $assignment;
+    #[ORM\ManyToOne(inversedBy: 'people')]
+    private ?Assignment $assignment = null;
 
     /**
      * Get id.

@@ -17,36 +17,36 @@ class Comment
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'text', type: 'text')]
-    private $text;
+    #[ORM\Column(type: 'text')]
+    private ?string $text = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'type', type: 'string', length: 100)]
-    private $type;
+    #[ORM\Column(length: 100)]
+    private ?string $type = null;
 
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
-    private $owner;
+    #[ORM\ManyToOne(inversedBy: 'Comment', cascade: ['persist', 'remove'])]
+    private ?Person $owner = null;
 
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Submission::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
-    private $submission;
+    #[ORM\ManyToOne(inversedBy: 'Comment', cascade: ['persist', 'remove'])]
+    private ?Submission $submission = null;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
-    #[ORM\Column(name: 'createtime', type: 'datetime')]
-    private $createtime;
+    #[ORM\Column()]
+    private ?DateTimeInterface $createtime = null;
 
     /**
      * Get id.

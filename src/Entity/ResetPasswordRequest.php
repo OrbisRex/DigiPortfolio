@@ -13,13 +13,13 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     use ResetPasswordRequestTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column()]
+    private ?int $id = null;
 
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Person::class)]
-    private $user;
+    #[ORM\ManyToOne()]
+    private ?Person $user = null;
 
     public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {

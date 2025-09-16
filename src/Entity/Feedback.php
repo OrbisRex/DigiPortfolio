@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use DateTimeInterface;
+use DateTime;
 use App\Repository\FeedbackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,35 +12,35 @@ use Doctrine\ORM\Mapping as ORM;
 class Feedback
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $note;
+    #[ORM\Column(type: 'text')]
+    private ?string $note = null;
 
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'owner', cascade: ['persist', 'remove'])]
-    private $owner;
+    #[ORM\ManyToOne(inversedBy: 'owner', cascade: ['persist', 'remove'])]
+    private ?Person $owner = null;
 
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OneToOne(targetEntity: Submission::class, inversedBy: 'feedback', cascade: ['persist', 'remove'])]
     private $submission;
 
-    #[ORM\ManyToMany(targetEntity: Descriptor::class)]
-    private $descriptors;
+    #[ORM\ManyToMany(targetEntity: Descriptor::class, inversedBy: 'descriptors', cascade: ['persist'])]
+    private Collection $descriptors;
 
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
-    private $log;
+    private ?int $log = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $version;
+    #[ORM\Column()]
+    private ?int $version = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private $createtime;
+    #[ORM\Column()]
+    private ?DateTime $createtime = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private $updatetime;
+    #[ORM\Column()]
+    private ?DateTime $updatetime = null;
 
     public function __construct()
     {

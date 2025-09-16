@@ -4,38 +4,41 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use App\Repository\ResourceFileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 
+use App\Entity\Person;
+
+use App\Repository\ResourceFileRepository;
+
 #[ORM\Entity(repositoryClass: ResourceFileRepository::class)]
 class ResourceFile
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'integer')]
-    private $size;
+    #[ORM\Column()]
+    private ?int $size = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $type;
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private $meta = [];
+    private array $meta = [];
 
     /**
      * One file can have one owner.
      */
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'resourceFiles')]
-    private $owner;
+    #[ORM\ManyToOne(inversedBy: 'resourceFiles')]
+    private ?Person $owner = null;
 
     /**
      * Many file can be in many submissions.
@@ -43,17 +46,17 @@ class ResourceFile
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'files', cascade: ['persist'])]
-    private $submissions;
+    private Collection $submissions;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $path;
+    #[ORM\Column(length: 255)]
+    private ?string $path = null;
 
     #[ORM\JoinColumn(nullable: true)]
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
-    private $log;
+    private ?int $log = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $updatetime;
+    private ?DateTimeInterface $updatetime = null;
 
     /**
      * @var File|null

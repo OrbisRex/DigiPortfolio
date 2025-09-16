@@ -2,9 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\TopicRepository;
-use Assignment;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Assignment;
+
+use App\Repository\TopicRepository;
+use PHPStan\Collectors\CollectedData;
 
 /**
  * Topic.
@@ -16,41 +21,46 @@ class Topic
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
-    private $name;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
-    private $description;
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
 
     /**
      * One topic has many assignments.
      */
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'topic')]
-    private $assignments;
+    private Collection $assignments;
 
     /**
      * Many topics has one person.
      */
-    #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'topics')]
-    private $person;
+    #[ORM\ManyToOne(inversedBy: 'topics')]
+    private ?Person $person = null;
 
     /**
      * One Topic has One Log.
      */
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Log::class)]
-    private $log;
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
+    private ?int $log = null;
+
+    public function __construct()
+    {
+        $this->assignments = new ArrayCollection();
+    }
 
     /**
      * Get id.

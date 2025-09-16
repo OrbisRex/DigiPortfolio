@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SetRepository;
-use Assignment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Assignment;
+
+use App\Repository\SetRepository;
 
 /**
  * Set.
@@ -18,22 +20,22 @@ class Set
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
-    private $name;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'type', type: 'string', length: 255)]
-    private $type;
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
 
     /**
      * Many people can be in many sets.
@@ -41,24 +43,25 @@ class Set
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'sets', cascade: ['persist'])]
-    private $people;
+    private Collection $people;
 
     /**
      * One set has many assignments.
      */
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'set')]
-    private $assignments;
+    private Collection $assignments;
 
     /**
      * One Topic has One Log.
      */
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Log::class)]
-    private $log;
+    #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
+    private ?int $log = null;
 
     public function __construct()
     {
         $this->people = new ArrayCollection();
+        $this->assignments = new ArrayCollection();
     }
 
     /**

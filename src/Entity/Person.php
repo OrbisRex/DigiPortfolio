@@ -16,13 +16,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Person implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    private const ROLE_USER = 'ROLE_USER';
+    private const ROLE_STUDENT = 'ROLE_STUDENT';
+    private const ROLE_TEACHER = 'ROLE_TEACHER';
+    private const ROLE_ADMIN = 'ROLE_ADMIN';
+    
+    
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column()]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
@@ -33,11 +39,11 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
-    private $name;
+    #[ORM\Column(length: 150)]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'smallint', nullable: true)]
-    private $disabled;
+    #[ORM\Column(type: 'smallint')]
+    private ?int $disabled = null;
 
     /**
      * Many people can organise many sets (co-leading).
@@ -45,32 +51,32 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection
      */
     #[ORM\JoinTable(name: 'person_set')]
-    #[ORM\ManyToMany(targetEntity: \Set::class, mappedBy: 'people', cascade: ['persist'])]
-    private $sets;
+    #[ORM\ManyToMany(targetEntity: Set::class, mappedBy: 'people', cascade: ['persist'])]
+    private Collection $sets;
 
     /**
      * Many people can have many subjects (co-teaching).
      *
      * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Subject::class, mappedBy: 'people')]
-    private $subjects;
+    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'people')]
+    private Collection $subjects;
 
     /**
      * One person can have many topics (author).
      *
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: \Topic::class, mappedBy: 'person')]
-    private $topics;
+    #[ORM\OneToMany(targetEntity: Topic::class, mappedBy: 'person')]
+    private Collection $topics;
 
     /**
      * One peron can have multiple files.
      *
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: \ResourceFile::class, mappedBy: 'owner')]
-    private $resourceFiles;
+    #[ORM\OneToMany(targetEntity: ResourceFile::class, mappedBy: 'owner')]
+    private Collection $resourceFiles;
 
     /**
      * One person can be part of many assignments (teaher and students).
@@ -78,21 +84,21 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'assignment')]
-    private $assignments;
+    private Collection $assignments;
 
     /**
      * Many persons can create many submissions (sharing).
      *
      * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'people')]
-    private $submissions;
+    #[ORM\ManyToMany(targetEntity: Submission::class, mappedBy: 'people')]
+    private Collection $submissions;
 
     /**
      * One Person has One Log.
      */
-    #[ORM\OneToOne(targetEntity: Log::class)]
-    private $log;
+    #[ORM\OneToOne(targetEntity: Log::class,)]
+    private ?int $log = null;
 
     public function __construct()
     {
@@ -147,7 +153,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = $this->roles;
         // guarantee every user at least has ROLE_USER
         // $roles = [];
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }

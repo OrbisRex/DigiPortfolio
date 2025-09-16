@@ -119,14 +119,14 @@ class CriterionRepository extends ServiceEntityRepository
                 }
             }
         } else {
-            $criterionNames = $this->findAllNames($owner, $criteriaId);
+            $criterionNames = $this->findAllNames($owner, $criterionId);
 
             if (!$criterionNames) {
                 $descriptors = false;
             } else {
                 foreach ($criterionNames as $name) {
                     $criteriaData = $this->findBy([
-                        'criteria' => $criteriaId, 'name' => $name['name'],
+                        'criteria' => $criterionId, 'name' => $name['name'],
                     ]);
 
                     $criteria[$name['name']] = $criteriaData;

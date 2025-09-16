@@ -21,6 +21,7 @@ return RectorConfig::configure()
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
+    // use use statements instead FQN
     ->withImportNames()
     // uncomment to reach your current PHP version
     ->withPhpSets()

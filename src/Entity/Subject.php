@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SubjectRepository;
-use Assignment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Assignment;
+
+use App\Repository\SubjectRepository;
 
 /**
  * Subject.
@@ -18,16 +20,16 @@ class Subject
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 100, unique: true)]
-    private $name;
+    #[ORM\Column(length: 100, unique: true)]
+    private ?string $name = null;
 
     /**
      * Many people can have many subjects.
@@ -35,24 +37,25 @@ class Subject
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'subjects', cascade: ['persist'])]
-    private $people;
+    private Collection $people;
 
     /**
      * One subect has many assignments.
      */
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'subject')]
-    private $assignments;
+    private Collection $assignments;
 
     /**
      * One Subject has One Log.
      */
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
-    private $log;
+    private ?int $log = null;
 
     public function __construct()
     {
         $this->people = new ArrayCollection();
+        $this->assignments = new ArrayCollection();
     }
 
     /**

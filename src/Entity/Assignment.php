@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\AssignmentRepository;
-use Subject;
-use Topic;
-use AssignmentPerson;
 use DateTime;
+use App\Repository\AssignmentRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Subject;
+use App\Entity\Topic;
+use App\Entity\AssignmentPerson;
 
 /**
  * Assignment.
@@ -21,43 +23,43 @@ class Assignment
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    private $name;
+    #[ORM\Column(length: 255, nullable: false)]
+    private ?string $name = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'state', type: 'string', length: 100, nullable: true)]
-    private $state;
+    #[ORM\Column(length: 100)]
+    private ?string $state = null;
 
     /**
      * Many Assignments has one Subject.
      */
     #[ORM\JoinColumn(name: 'subject_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: Subject::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
-    private $subject;
+    #[ORM\ManyToOne(inversedBy: 'subjects', cascade: ['persist', 'remove'])]
+    private ?Subject $subject = null;
 
     /**
      * Many Assignments has one Topic.
      */
     #[ORM\JoinColumn(name: 'topic_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: Topic::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
-    private $topic;
+    #[ORM\ManyToOne(inversedBy: 'topics', cascade: ['persist', 'remove'])]
+    private ?Topic $topic = null;
 
     /**
      * Many Assignments has one set.
      */
     #[ORM\JoinColumn(name: 'set_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Set::class, inversedBy: 'assignments', cascade: ['persist', 'remove'])]
-    private $set;
+    #[ORM\ManyToOne(inversedBy: 'assignments', cascade: ['persist', 'remove'])]
+    private ?Set $set = null;
 
     /**
      * One assignment can have many people.
@@ -65,19 +67,19 @@ class Assignment
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'person')]
-    private $people;
+    private Collection $people;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'note', type: 'string', length: 255, nullable: true)]
-    private $note;
+    #[ORM\Column(length: 255)]
+    private ?string $note = null;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
-    #[ORM\Column(name: 'updatetime', type: 'datetime')]
-    private $updatetime;
+    #[ORM\Column()]
+    private ?DateTimeInterface $updatetime = null;
 
     /**
      * Assignment has many criteria.
@@ -85,7 +87,7 @@ class Assignment
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'assignments', cascade: ['persist'])]
-    private $criteria;
+    private Collection $criteria;
 
     /**
      * One assignment can have many submissions.
@@ -93,7 +95,7 @@ class Assignment
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: Submission::class, mappedBy: 'assignment', cascade: ['persist', 'remove'])]
-    private $submissions;
+    private Collection $submissions;
 
     public function __construct()
     {
@@ -275,9 +277,8 @@ class Assignment
     /**
      * Get updatetime.
      *
-     * @return DateTime
      */
-    public function getUpdatetime()
+    public function getUpdatetime(): ?DateTimeInterface
     {
         return $this->updatetime;
     }
@@ -286,10 +287,8 @@ class Assignment
      * Set updatetime.
      *
      * @param string $updatetime
-     *
-     * @return Assignment
      */
-    public function setUpdatetime($updatetime)
+    public function setUpdatetime(DateTimeInterface $updatetime): self
     {
         $this->updatetime = $updatetime;
 

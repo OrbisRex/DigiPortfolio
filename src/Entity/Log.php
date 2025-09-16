@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\LogRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,34 +17,34 @@ class Log
     /**
      * @var int
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'operation', type: 'string', length: 255)]
-    private $operation;
+    #[ORM\Column(length: 255)]
+    private ?string $operation = null;
 
     /**
      * One log have one person.
      */
-    #[ORM\OneToOne(targetEntity: Person::class)]
-    private $person;
+    #[ORM\OneToOne()]
+    private ?Person $person = null;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
-    #[ORM\Column(name: 'timestamp', type: 'datetime')]
-    private $timestamp;
+    #[ORM\Column()]
+    private ?DateTimeInterface $timestamp = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'result', type: 'string', length: 100)]
-    private $result;
+    #[ORM\Column(length: 100)]
+    private ?string $result = null;
 
     /**
      * Get id.
@@ -102,11 +103,8 @@ class Log
     /**
      * Set timestamp.
      *
-     * @param DateTime $timestamp
-     *
-     * @return Log
      */
-    public function setTimestamp($timestamp)
+    public function setTimestamp(DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
 
@@ -118,7 +116,7 @@ class Log
      *
      * @return DateTime
      */
-    public function getTimestamp()
+    public function getTimestamp(): ?DateTimeInterface
     {
         return $this->timestamp;
     }
