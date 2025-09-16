@@ -4,19 +4,16 @@ namespace App\Form;
 
 use App\Entity\Person;
 use App\Entity\Set;
-
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-//Form types
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+// Form types
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
-//Symfony Validators
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+// Symfony Validators
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -51,7 +48,7 @@ class ProfileFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('roles', ChoiceType::class,[
+            ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
                     'User' => 'ROLE_USER',
@@ -62,20 +59,20 @@ class ProfileFormType extends AbstractType
                 'placeholder' => 'Roles',
             ])
             ->add('sets', EntityType::class, [
-                    'class' => Set::class,
-                    'choice_label' => 'name',
-                    'multiple' => true,
-                    'required' => false,
-                    'placeholder' => 'Sets',
+                'class' => Set::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false,
+                'placeholder' => 'Sets',
             ])
-            ->add('disabled', ChoiceType::class,[
+            ->add('disabled', ChoiceType::class, [
                 'choices' => [
                     'Enabled' => false,
                     'Disabled' => true,
                 ],
                 'label' => false,
             ])
-            ->add('save', SubmitType::class, array('label' => 'Save'))
+            ->add('save', SubmitType::class, ['label' => 'Save'])
         ;
     }
 

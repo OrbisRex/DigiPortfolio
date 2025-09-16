@@ -2,51 +2,48 @@
 
 namespace App\Form;
 
+use App\Entity\Descriptor;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+// Entities
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+// Form types
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-//Entities
-use App\Entity\Descriptor;
-
-//Form types
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class DescriptorFormType extends AbstractType
 {
     private $levelChoices;
-    
+
     public function __construct()
     {
         $this->levelChoices = ['Level - Basic' => 'basic', 'Level - Standard' => 'standard', 'Level - Advanced' => 'advanced', 'Level - Master' => 'master'];
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => FALSE, 
+                'label' => false,
                 'attr' => ['placeholder' => 'Name'],
                 'data' => $options['name'],
             ])
             ->add('description', TextareaType::class, [
-                'label' => FALSE,
+                'label' => false,
                 'attr' => ['placeholder' => 'Description'],
                 'data' => $options['descriptor'],
             ])
             ->add('type', ChoiceType::class, [
                 'choices' => $this->levelChoices,
                 'preferred_choices' => $this->swichLevelChoice($options['level_choice']),
-                'label' => FALSE
+                'label' => false,
             ])
             ->add('weight', ChoiceType::class, [
                 'choices' => ['Relevance - Normal' => 1, 'Relevance - Important' => 2, 'Relevance - Very Important' => 3],
                 'preferred_choices' => [1],
-                'label' => FALSE
+                'label' => false,
             ])
             ->add('add', SubmitType::class, ['label' => 'Save'])
         ;
@@ -61,10 +58,10 @@ class DescriptorFormType extends AbstractType
             'name' => null,
         ]);
     }
-    
+
     private function swichLevelChoice($level)
     {
-        switch ($level){
+        switch ($level) {
             case 'basic':
                 $currentLevel = ['standard'];
                 break;
@@ -80,7 +77,7 @@ class DescriptorFormType extends AbstractType
             default:
                 $currentLevel = ['basic'];
         }
-        
+
         return $currentLevel;
     }
 }

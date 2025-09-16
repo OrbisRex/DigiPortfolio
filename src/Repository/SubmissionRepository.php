@@ -5,9 +5,8 @@ namespace App\Repository;
 use App\Entity\Submission;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Parameter;
-
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Submission|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,7 +23,6 @@ class SubmissionRepository extends ServiceEntityRepository
 
     public function findLastSubmissions($person, $number)
     {
-
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
             ->where('s.people = ?1')
@@ -32,13 +30,12 @@ class SubmissionRepository extends ServiceEntityRepository
             ->orderBy('s.name', 'ASC')
             ->getQuery()
             ->setMaxResults($number);
-        ;
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findBySet($setId, $people)
@@ -49,9 +46,10 @@ class SubmissionRepository extends ServiceEntityRepository
             ->andWhere('s.people IN (?2)')
             ->setParameters(
                 new ArrayCollection([
-                new Parameter('1', $setId),
-                new Parameter('2', array_values($people))
-                ]))
+                    new Parameter('1', $setId),
+                    new Parameter('2', array_values($people)),
+                ])
+            )
             ->orderBy('s.name', 'ASC')
             ->getQuery()
         ;
@@ -59,8 +57,8 @@ class SubmissionRepository extends ServiceEntityRepository
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findByPeople(array $people)
@@ -76,8 +74,8 @@ class SubmissionRepository extends ServiceEntityRepository
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     // /**

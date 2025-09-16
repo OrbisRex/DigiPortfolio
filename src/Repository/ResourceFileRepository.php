@@ -24,10 +24,10 @@ class ResourceFileRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT f '
-              . 'FROM App:ResourceFile f '
-              . 'WHERE f.owner = :owner '
-              . 'AND f.type LIKE :type '
-              . 'ORDER BY f.updatetime DESC'      
+              .'FROM App:ResourceFile f '
+              .'WHERE f.owner = :owner '
+              .'AND f.type LIKE :type '
+              .'ORDER BY f.updatetime DESC'
             )
             ->setParameter('owner', $owner)
             ->setParameter('type', $type)
@@ -36,8 +36,8 @@ class ResourceFileRepository extends ServiceEntityRepository
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findOtherFilesThen($type, $owner, $limit = 100)
@@ -45,10 +45,10 @@ class ResourceFileRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT f '
-              . 'FROM App:ResourceFile f '
-              . 'WHERE f.owner = :owner '
-              . 'AND f.type NOT LIKE :type '
-              . 'ORDER BY f.updatetime DESC'      
+              .'FROM App:ResourceFile f '
+              .'WHERE f.owner = :owner '
+              .'AND f.type NOT LIKE :type '
+              .'ORDER BY f.updatetime DESC'
             )
             ->setParameter('owner', $owner)
             ->setParameter('type', $type)
@@ -57,8 +57,8 @@ class ResourceFileRepository extends ServiceEntityRepository
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     // /**

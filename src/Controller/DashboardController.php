@@ -10,7 +10,7 @@ class DashboardController extends AbstractController
     #[Route(path: '/dashboard', name: 'dashboard')]
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         return $this->render('dashboard/index.html.twig', [

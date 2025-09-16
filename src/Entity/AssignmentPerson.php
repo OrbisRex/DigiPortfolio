@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AssignmentPerson
+ * AssignmentPerson.
  */
 #[ORM\Table(name: 'assignment_person')]
 #[ORM\Entity(repositoryClass: \App\Repository\AssignmentPersonRepository::class)]
@@ -21,6 +21,7 @@ class AssignmentPerson
 
     /**
      * Many people can have one assignment.
+     *
      * @var Person
      */
     #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'assignments')]
@@ -28,14 +29,14 @@ class AssignmentPerson
 
     /**
      * Many assignments have one person.
+     *
      * @var Assignment
      */
     #[ORM\ManyToOne(targetEntity: \Assignment::class, inversedBy: 'people')]
     private $assignment;
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -44,11 +45,10 @@ class AssignmentPerson
         return $this->id;
     }
 
-
     /**
-     * Set assignment
+     * Set assignment.
      *
-     * @param integer $assignment
+     * @param int $assignment
      *
      * @return AssignmentPerson
      */
@@ -60,7 +60,7 @@ class AssignmentPerson
     }
 
     /**
-     * Get assignment
+     * Get assignment.
      *
      * @return Assignment
      */
@@ -81,4 +81,3 @@ class AssignmentPerson
         return $this;
     }
 }
-

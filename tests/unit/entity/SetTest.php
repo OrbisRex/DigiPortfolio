@@ -2,9 +2,9 @@
 
 namespace App\Tests\Unit\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Entity\Person;
 use App\Entity\Set;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SetTest extends KernelTestCase
 {
@@ -19,7 +19,7 @@ class SetTest extends KernelTestCase
         $this->person->setEmail('jane@myemail.com');
         $this->person->setRoles(['ROLE_USER', 'ROLE_STUDENT']);
 
-        $this->set = new set();
+        $this->set = new Set();
         $this->set->setName('Year 6');
         $this->set->setType('Year group');
         $this->set->addPerson($this->person);
@@ -31,8 +31,8 @@ class SetTest extends KernelTestCase
         self::assertSame('Year 6', $this->set->getName());
         self::assertInstanceOf(Person::class, $this->set->getPeople()->first());
         self::assertContains(
-            'ROLE_STUDENT', 
-            $this->set->getPeople()->first()->getRoles(), 
+            'ROLE_STUDENT',
+            $this->set->getPeople()->first()->getRoles(),
             'User for subject must be at least ROLE_STUDENT.'
         );
         self::assertSame(null, $this->set->getLog());

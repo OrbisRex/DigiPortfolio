@@ -2,9 +2,9 @@
 
 namespace App\Tests\Unit\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Entity\Person;
 use App\Entity\Subject;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SubjectTest extends KernelTestCase
 {
@@ -30,8 +30,8 @@ class SubjectTest extends KernelTestCase
         self::assertSame('English', $this->subject->getName());
         self::assertInstanceOf(Person::class, $this->subject->getPeople()->first());
         self::assertContains(
-            'ROLE_STUDENT', 
-            $this->subject->getPeople()->first()->getRoles(), 
+            'ROLE_STUDENT',
+            $this->subject->getPeople()->first()->getRoles(),
             'User for subject must be at least ROLE_STUDENT.'
         );
         self::assertSame(null, $this->subject->getLog());

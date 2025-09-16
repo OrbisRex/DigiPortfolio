@@ -39,6 +39,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Many people can organise many sets (co-leading).
+     *
      * @var Collection
      */
     #[ORM\JoinTable(name: 'person_set')]
@@ -47,6 +48,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Many people can have many subjects (co-teaching).
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Subject::class, mappedBy: 'people')]
@@ -54,6 +56,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * One person can have many topics (author).
+     *
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: \Topic::class, mappedBy: 'person')]
@@ -61,6 +64,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * One peron can have multiple files.
+     *
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: \ResourceFile::class, mappedBy: 'owner')]
@@ -68,6 +72,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * One person can be part of many assignments (teaher and students).
+     *
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'assignment')]
@@ -75,11 +80,12 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Many persons can create many submissions (sharing).
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'people')]
     private $submissions;
-    
+
     /**
      * One Person has One Log.
      */
@@ -114,7 +120,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Deprecated - remove in Symfony 6
+     * Deprecated - remove in Symfony 6.
      */
     public function getUsername(): string
     {
@@ -123,7 +129,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * A visual identifier that represents this user.
-     * 
+     *
      * @see UserInterface
      */
     public function getUserIdentifier(): string

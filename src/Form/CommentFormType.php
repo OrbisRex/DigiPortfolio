@@ -4,12 +4,11 @@ namespace App\Form;
 
 use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+// Form types
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-//Form types
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CommentFormType extends AbstractType
 {
@@ -17,12 +16,12 @@ class CommentFormType extends AbstractType
     {
         $builder
             ->add('text', TextareaType::class, [
-                    'label' => FALSE,
-                    'attr' => array('placeholder' => 'Comment'),
-                    'required' => false,
+                'label' => false,
+                'attr' => ['placeholder' => 'Comment'],
+                'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                    'label' => 'Save',
+                'label' => 'Save',
             ])
         ;
     }

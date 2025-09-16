@@ -24,15 +24,15 @@ class CriterionRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT c.name, c.descriptors '
-              . 'FROM App:Criterion c '
-              . 'WHERE c.assignment = '.$assignmentId.' '      
+              .'FROM App:Criterion c '
+              .'WHERE c.assignment = '.$assignmentId.' '
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
 
     public function findCriteriaForAssignment($assignmentId)
@@ -40,56 +40,55 @@ class CriterionRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT c.name '
-              . 'FROM App:Criterion c '
-              . 'WHERE c.assignment = '.$assignmentId.' '      
+              .'FROM App:Criterion c '
+              .'WHERE c.assignment = '.$assignmentId.' '
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
-
 
     public function findNames($assignmentId)
     {
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT c.name '
-              . 'FROM App:Criterion c '
-              . 'WHERE c.assignment = '.$assignmentId.' '      
-              . 'GROUP BY c.name '      
-              . 'ORDER BY c.name'      
+              .'FROM App:Criterion c '
+              .'WHERE c.assignment = '.$assignmentId.' '
+              .'GROUP BY c.name '
+              .'ORDER BY c.name'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
 
     public function findAllNames($owner, $criterionId = false)
     {
         $entityManager = $this->getEntityManager();
-        if($criterionId){
+        if ($criterionId) {
             $query = $entityManager->createQuery(
-                    'SELECT d.name '
-                  . 'FROM App:Criterion d '
-                  . 'WHERE d.person = App:Person '
-                  . 'AND d.criterion = '.$criterionId.' ' 
-                  . 'GROUP BY d.name '      
-                  . 'ORDER BY d.name'      
-                );
+                'SELECT d.name '
+                  .'FROM App:Criterion d '
+                  .'WHERE d.person = App:Person '
+                  .'AND d.criterion = '.$criterionId.' '
+                  .'GROUP BY d.name '
+                  .'ORDER BY d.name'
+            );
         } else {
             $query = $entityManager->createQuery(
-                    'SELECT d.name '
-                  . 'FROM App:Criterion d '
-                  . 'WHERE d.person = :personId '
-                  . 'GROUP BY d.name '      
-                  . 'ORDER BY d.name'      
-                );
+                'SELECT d.name '
+                  .'FROM App:Criterion d '
+                  .'WHERE d.person = :personId '
+                  .'GROUP BY d.name '
+                  .'ORDER BY d.name'
+            );
             $query->setParameter('personId', $owner);
         }
 
@@ -97,42 +96,41 @@ class CriterionRepository extends ServiceEntityRepository
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
-
 
     public function groupCriteriaByName($owner, $criterionId = false)
     {
-        if (!$criterionId){
+        if (!$criterionId) {
             $criterionNames = $this->findAllNames($owner);
 
-            if(!$criterionNames) {
-                $criteria = FALSE;
+            if (!$criterionNames) {
+                $criteria = false;
             } else {
                 dump($criterionNames);
-                foreach($criterionNames as $name) {
+                foreach ($criterionNames as $name) {
                     $criteriaData = $this->findBy(['name' => $name['name']]);
                     dump($criteriaData);
-                    //$descriptors[$name['name']] = $descriptorsData;
-                    foreach($criteriaData as $criterion){
+                    // $descriptors[$name['name']] = $descriptorsData;
+                    foreach ($criteriaData as $criterion) {
                         $criteria[$name['name']] = [$criterion->getName() => $criterion];
                     }
                 }
-            } 
+            }
         } else {
             $criterionNames = $this->findAllNames($owner, $criteriaId);
 
-            if(!$criterionNames) {
-                $descriptors = FALSE;
+            if (!$criterionNames) {
+                $descriptors = false;
             } else {
-                foreach($criterionNames as $name) {
+                foreach ($criterionNames as $name) {
                     $criteriaData = $this->findBy([
-                        'criteria' => $criteriaId, 'name' => $name['name']
+                        'criteria' => $criteriaId, 'name' => $name['name'],
                     ]);
 
                     $criteria[$name['name']] = $criteriaData;
                 }
-            } 
+            }
         }
 
         return $criteria;

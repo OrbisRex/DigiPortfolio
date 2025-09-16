@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Log
+ * Log.
  */
 #[ORM\Table(name: 'log')]
 #[ORM\Entity(repositoryClass: \App\Repository\LogRepository::class)]
@@ -29,7 +29,7 @@ class Log
      * One log have one person.
      */
     #[ORM\OneToOne(targetEntity: Person::class)]
-    private $person;    
+    private $person;
 
     /**
      * @var \DateTime
@@ -43,9 +43,8 @@ class Log
     #[ORM\Column(name: 'result', type: 'string', length: 100)]
     private $result;
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -55,7 +54,7 @@ class Log
     }
 
     /**
-     * Set operation
+     * Set operation.
      *
      * @param string $operation
      *
@@ -69,7 +68,7 @@ class Log
     }
 
     /**
-     * Get operation
+     * Get operation.
      *
      * @return string
      */
@@ -79,22 +78,17 @@ class Log
     }
 
     /**
-     * Get person
-     *
-     * @return Person
+     * Get person.
      */
-    
     public function getPerson(): ?Person
     {
         return $this->person;
     }
 
     /**
-     * Set person
+     * Set person.
      *
      * @param Person $person
-     *
-     * @return Log
      */
     public function setPerson($person): self
     {
@@ -104,7 +98,7 @@ class Log
     }
 
     /**
-     * Set timestamp
+     * Set timestamp.
      *
      * @param \DateTime $timestamp
      *
@@ -118,7 +112,7 @@ class Log
     }
 
     /**
-     * Get timestamp
+     * Get timestamp.
      *
      * @return \DateTime
      */
@@ -128,7 +122,7 @@ class Log
     }
 
     /**
-     * Set result
+     * Set result.
      *
      * @param string $result
      *
@@ -142,7 +136,7 @@ class Log
     }
 
     /**
-     * Get result
+     * Get result.
      *
      * @return string
      */
@@ -151,4 +145,3 @@ class Log
         return $this->result;
     }
 }
-

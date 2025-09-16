@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Assignment
+ * Assignment.
  */
 #[ORM\Table(name: 'assignment')]
 #[ORM\Entity(repositoryClass: \App\Repository\AssignmentRepository::class)]
@@ -32,7 +32,7 @@ class Assignment
      */
     #[ORM\Column(name: 'state', type: 'string', length: 100, nullable: true)]
     private $state;
-    
+
     /**
      * Many Assignments has one Subject.
      */
@@ -56,10 +56,11 @@ class Assignment
 
     /**
      * One assignment can have many people.
+     *
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: \AssignmentPerson::class, mappedBy: 'person')]
-    private $people;    
+    private $people;
 
     /**
      * @var string
@@ -75,6 +76,7 @@ class Assignment
 
     /**
      * Assignment has many criteria.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'assignments', cascade: ['persist'])]
@@ -82,6 +84,7 @@ class Assignment
 
     /**
      * One assignment can have many submissions.
+     *
      * @var Collection
      */
     #[ORM\OneToMany(targetEntity: Submission::class, mappedBy: 'assignment', cascade: ['persist', 'remove'])]
@@ -95,7 +98,7 @@ class Assignment
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -103,9 +106,9 @@ class Assignment
     {
         return $this->id;
     }
-    
+
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -119,7 +122,7 @@ class Assignment
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -129,7 +132,7 @@ class Assignment
     }
 
     /**
-     * Set state
+     * Set state.
      *
      * @param string $state
      *
@@ -143,7 +146,7 @@ class Assignment
     }
 
     /**
-     * Get state
+     * Get state.
      *
      * @return string
      */
@@ -151,9 +154,9 @@ class Assignment
     {
         return $this->state;
     }
-    
+
     /**
-     * Set subject
+     * Set subject.
      *
      * @param string $subject
      *
@@ -165,19 +168,19 @@ class Assignment
 
         return $this;
     }
-    
+
     /**
-     * Get subject
+     * Get subject.
      *
      * @return string
      */
     public function getSubject()
     {
         return $this->subject;
-    }    
+    }
 
     /**
-     * Set topic
+     * Set topic.
      *
      * @param string $topic
      *
@@ -188,17 +191,17 @@ class Assignment
         $this->topic = $topic;
 
         return $this;
-    }    
-    
+    }
+
     /**
-     * Get topic
+     * Get topic.
      *
      * @return string
      */
     public function getTopic()
     {
         return $this->topic;
-    }  
+    }
 
     public function getSet(): ?Set
     {
@@ -241,17 +244,17 @@ class Assignment
     }
 
     /**
-     * Get note
+     * Get note.
      *
      * @return string
      */
     public function getNote()
     {
         return $this->note;
-    }    
-    
+    }
+
     /**
-     * Set note
+     * Set note.
      *
      * @param string $note
      *
@@ -262,10 +265,10 @@ class Assignment
         $this->note = $note;
 
         return $this;
-    }    
+    }
 
     /**
-     * Get updatetime
+     * Get updatetime.
      *
      * @return \DateTime
      */
@@ -275,7 +278,7 @@ class Assignment
     }
 
     /**
-     * Set updatetime
+     * Set updatetime.
      *
      * @param string $updatetime
      *
@@ -286,8 +289,8 @@ class Assignment
         $this->updatetime = $updatetime;
 
         return $this;
-    }    
-    
+    }
+
     /**
      * @return Collection|Criterion[]
      */
@@ -355,6 +358,5 @@ class Assignment
         }
 
         return $this;
-    }    
+    }
 }
-

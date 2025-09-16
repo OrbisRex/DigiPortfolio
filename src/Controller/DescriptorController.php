@@ -26,21 +26,18 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-
-//Entities
 use App\Entity\Descriptor;
-
-//Forms
 use App\Form\DescriptorFormType;
-
-//Repositories
-use App\Repository\DescriptorRepository;
+// Entities
 use App\Repository\CriterionRepository;
+// Forms
+use App\Repository\DescriptorRepository;
+// Repositories
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of DescriptorController
+ * Description of DescriptorController.
  *
  * @author David Ehrlich
  */
@@ -48,26 +45,24 @@ class DescriptorController extends BasicController
 {
     private $descriptorRepository;
     private $criterionRepository;
-    
+
     public function __construct(DescriptorRepository $descriptorRepository, CriterionRepository $criterionRepository)
     {
         $this->descriptorRepository = $descriptorRepository;
         $this->criterionRepository = $criterionRepository;
     }
-    
+
     #[Route(path: '/descriptor', name: 'descriptor')]
-    public function index(): \Symfony\Component\HttpFoundation\Response 
+    public function index(): \Symfony\Component\HttpFoundation\Response
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        //List descriptor
+        // List descriptor
         $descriptors = $this->descriptorRepository->findByPerson($this->getUser());
 
-        if(!$descriptors) {
-            throw $this->createNotFoundException(
-                'No Descriptor found.'
-            );
+        if (!$descriptors) {
+            throw $this->createNotFoundException('No Descriptor found.');
         }
 
         return $this->render('descriptor/index.html.twig', [
@@ -77,56 +72,50 @@ class DescriptorController extends BasicController
 
     #[Route(path: '/descriptor/new', name: 'new-descriptor')]
     public function new(Request $request)
-    {     
-
-        //Check access
+    {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        //Keep a track with new criterion
+        // Keep a track with new criterion
         $criterionId = $request->query->get('criterionId');
 
-        if(!$criterionId) {
-            throw $this->createNotFoundException(
-                'No Criterion ID found.'
-            );
+        if (!$criterionId) {
+            throw $this->createNotFoundException('No Criterion ID found.');
         }
-        
-        //Fetch criterion data
+
+        // Fetch criterion data
         $criterion = $this->criterionRepository->find($criterionId);
-        if(!$criterion) {
-            throw $this->createNotFoundException(
-                'No Criteria found.'
-            );
+        if (!$criterion) {
+            throw $this->createNotFoundException('No Criteria found.');
         }
-        
-        //Read level for descriptor
+
+        // Read level for descriptor
         $level = $request->query->get('level');
 
         $descriptorId = $request->query->get('descriptorId');
 
-        if($descriptorId) {
+        if ($descriptorId) {
             $description = $this->descriptorRepository->find($descriptorId)->getDescription();
             $name = $this->descriptorRepository->find($descriptorId)->getName();
         } else {
             $description = null;
             $name = null;
         }
-        
-        //New Descriptor Form
+
+        // New Descriptor Form
         $form = $this->createForm(DescriptorFormType::class, null, [
             'level_choice' => $level,
             'descriptor' => $description,
-            'name' => $name
+            'name' => $name,
         ]);
 
         $form->handleRequest($request);
-        
-        //Process Sing In form
-        if($form->isSubmitted() && $form->isValid()) 
-        {
+
+        // Process Sing In form
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            
-            //Create new Criteria
+
+            // Create new Criteria
             $descriptor = new Descriptor();
             $descriptor->setName($data->getName());
             $descriptor->setDescription($data->getDescription());
@@ -134,79 +123,75 @@ class DescriptorController extends BasicController
             $descriptor->setWeight($data->getWeight());
             $descriptor->setPerson($this->getUser());
             $descriptor->addCriterion($criterion);
-            
-            //Doctrine Entity Manager
+
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($descriptor);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
             $this->addFlash('success', 'Descriptor has been saved.');
-            
-            return $this->redirectToRoute('new-descriptor', ['criterionId' => $criterion->getId(), 'descriptorId' => $descriptor->getId(), 'level' => $data->getType()]);            
-        }        
-        
-        return $this->render('descriptor/new.html.twig', array(
+
+            return $this->redirectToRoute('new-descriptor', ['criterionId' => $criterion->getId(), 'descriptorId' => $descriptor->getId(), 'level' => $data->getType()]);
+        }
+
+        return $this->render('descriptor/new.html.twig', [
             'criterion' => $criterion,
             'form' => $form->createView(),
-            'error' => FALSE,
-        ));
+            'error' => false,
+        ]);
     }
 
     #[Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
     public function edit(int $criterionId, int $id, Request $request)
-    {     
-        //Check access
+    {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        if(!$criterionId && !$id) {
-            throw $this->createNotFoundException(
-                'No Criterion or Descriptor ID found.'
-            );
+        if (!$criterionId && !$id) {
+            throw $this->createNotFoundException('No Criterion or Descriptor ID found.');
         }
 
-        //Fetch related criterion
+        // Fetch related criterion
         $criterion = $this->criterionRepository->find($criterionId);
 
-        //Fetch descriptor
+        // Fetch descriptor
         $descriptor = $this->descriptorRepository->find($id);
 
-        //Descriptor Form
+        // Descriptor Form
         $form = $this->createForm(DescriptorFormType::class, $descriptor, [
             'name' => $descriptor->getName(),
             'descriptor' => $descriptor->getDescription(),
             'level_choice' => $descriptor->getType(),
         ]);
         $form->handleRequest($request);
-        
-        //Process Sing In form
-        if($form->isSubmitted() && $form->isValid()) 
-        {
+
+        // Process Sing In form
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            
+
             $descriptor->setName($data->getName());
             $descriptor->setDescription($data->getDescription());
             $descriptor->setType($data->getType());
             $descriptor->setWeight($data->getWeight());
             $descriptor->setPerson($this->getUser());
-            //$descriptor->addCriteria($criteria);
-            
-            //Doctrine Entity Manager
+            // $descriptor->addCriteria($criteria);
+
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($descriptor);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
-            
-            return $this->redirectToRoute('edit-descriptor', array('criterionId' => $criterionId, 'id' => $id));
-        }        
-        
-        return $this->render('descriptor/edit.html.twig', array(
+
+            return $this->redirectToRoute('edit-descriptor', ['criterionId' => $criterionId, 'id' => $id]);
+        }
+
+        return $this->render('descriptor/edit.html.twig', [
             'criterion' => $criterion,
             'descriptor' => $descriptor,
             'form' => $form->createView(),
-            'error' => FALSE,
-        ));
+            'error' => false,
+        ]);
     }
-    
 }

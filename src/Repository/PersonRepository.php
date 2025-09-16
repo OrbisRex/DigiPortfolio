@@ -24,16 +24,16 @@ class PersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT p '
-              . 'FROM App:Person p '
-              . 'WHERE JSON_GET_TEXT(p.roles, 1) = \'ROLE_STUDENT\' '     
-              . 'ORDER BY p.name'
+              .'FROM App:Person p '
+              .'WHERE JSON_GET_TEXT(p.roles, 1) = \'ROLE_STUDENT\' '
+              .'ORDER BY p.name'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
 
     public function findStudentsFromGroup($group)
@@ -41,16 +41,16 @@ class PersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT p '
-              . 'FROM App:Person u '
-              . 'WHERE JSON_GET_TEXT(p.roles, 1) = \'ROLE_STUDENT\' AND p.set = '.$group.' '
-              . 'ORDER BY p.name'
+              .'FROM App:Person u '
+              .'WHERE JSON_GET_TEXT(p.roles, 1) = \'ROLE_STUDENT\' AND p.set = '.$group.' '
+              .'ORDER BY p.name'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
-        }        
+        }
     }
 
     // /**

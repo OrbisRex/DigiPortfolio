@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Topic
+ * Topic.
  */
 #[ORM\Table(name: 'topic')]
 #[ORM\Entity(repositoryClass: \App\Repository\TopicRepository::class)]
@@ -30,7 +30,7 @@ class Topic
      */
     #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
     private $description;
-    
+
     /**
      * One topic has many assignments.
      */
@@ -49,9 +49,9 @@ class Topic
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
     #[ORM\OneToOne(targetEntity: \Log::class)]
     private $log;
-    
+
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -61,7 +61,7 @@ class Topic
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -75,7 +75,7 @@ class Topic
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class Topic
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -99,7 +99,7 @@ class Topic
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -118,7 +118,8 @@ class Topic
         $this->person = $person;
 
         return $this;
-    }   
+    }
+
     public function getLog(): ?Log
     {
         return $this->log;
@@ -131,4 +132,3 @@ class Topic
         return $this;
     }
 }
-

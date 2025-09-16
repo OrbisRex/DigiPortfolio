@@ -2,26 +2,23 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-
-//Entities
+use App\Entity\Set;
 use App\Entity\Subject;
 use App\Entity\Topic;
-use App\Entity\Set;
-
-//Forms
-use App\Form\SubjectFormType;
-use App\Form\TopicFormType;
-use App\Form\SetFormType;
+// Entities
 use App\Form\SetEmbededFormType;
-
-//Repositories
-use App\Repository\SubjectRepository;
-use App\Repository\TopicRepository;
-use App\Repository\SetRepository;
+use App\Form\SetFormType;
+use App\Form\SubjectFormType;
+// Forms
+use App\Form\TopicFormType;
 use App\Repository\CriterionRepository;
+use App\Repository\SetRepository;
+use App\Repository\SubjectRepository;
+// Repositories
+use App\Repository\TopicRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SettingsController extends AbstractController
 {
@@ -31,107 +28,103 @@ class SettingsController extends AbstractController
         SubjectRepository $subjectRepository,
         TopicRepository $topicRepository,
         SetRepository $setRepository,
-        CriterionRepository $criterionRepository
-    )
-    {
-        //Check access
+        CriterionRepository $criterionRepository,
+    ) {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        //SUBJECTS///////////////////
-        //Generate subject buttons            
+        // SUBJECTS///////////////////
+        // Generate subject buttons
         $subjects = $subjectRepository->findAll();
 
-        //New Subject Form
+        // New Subject Form
         $formSubject = $this->createForm(SubjectFormType::class);
         $formSubject->handleRequest($request);
-        //dump($formSubject);
+        // dump($formSubject);
 
-        //Process Subject form
-        if($formSubject->isSubmitted() && $formSubject->isValid()) 
-        {
+        // Process Subject form
+        if ($formSubject->isSubmitted() && $formSubject->isValid()) {
             $newSubject = $formSubject->getData();
-            //dump($newSubject);
+            // dump($newSubject);
 
-            //New subject
+            // New subject
             $subject = new Subject();
             $subject->setName($newSubject->getName());
             $subject->addPerson($this->getUser());
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($subject);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.'); 
+            $this->addFlash('notice', 'Item has been saved.');
 
-            //Redirect to Settings Page 
-            return $this->redirectToRoute('settings', ['_fragment' => 'subject']);            
-        }                
+            // Redirect to Settings Page
+            return $this->redirectToRoute('settings', ['_fragment' => 'subject']);
+        }
 
-        //TOPICS///////////////////
-        //Generate topic buttons
+        // TOPICS///////////////////
+        // Generate topic buttons
         $topics = $topicRepository->findAll();
 
-        //New Topic Form
+        // New Topic Form
         $formTopic = $this->createForm(TopicFormType::class);
         $formTopic->handleRequest($request);
-        //dump($formTopic);
-            
-        //Process Topic form
-        if($formTopic->isSubmitted() && $formTopic->isValid()) 
-        {
+        // dump($formTopic);
+
+        // Process Topic form
+        if ($formTopic->isSubmitted() && $formTopic->isValid()) {
             $newTopic = $formTopic->getData();
 
-            //New Topic
+            // New Topic
             $topic = new Topic();
             $topic->setName($newTopic->getName());
             $topic->setPerson($this->getUser());
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($topic);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.'); 
+            $this->addFlash('notice', 'Item has been saved.');
 
-            //Redirect to Settings Page 
-            return $this->redirectToRoute('settings', ['_fragment' => 'topic']);            
-        }     
-        
-        //SETS///////////////////
-        //Generate set buttons          
+            // Redirect to Settings Page
+            return $this->redirectToRoute('settings', ['_fragment' => 'topic']);
+        }
+
+        // SETS///////////////////
+        // Generate set buttons
         $sets = $setRepository->findAll();
 
-        //New Set
+        // New Set
         $formSet = $this->createForm(SetEmbededFormType::class);
         $formSet->handleRequest($request);
-        //dump($formTopic);
-            
-        //Process form
-        if($formSet->isSubmitted() && $formSet->isValid()) 
-        {
+        // dump($formTopic);
+
+        // Process form
+        if ($formSet->isSubmitted() && $formSet->isValid()) {
             $data = $formSet->getData();
 
-            //New Set
+            // New Set
             $set = new Set();
             $set->setName($data->getName());
             $set->setType('Organisation');
             $set->addPerson($this->getUser());
-            #TODO: Improvement ^.
+            // TODO: Improvement ^.
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($set);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.'); 
+            $this->addFlash('notice', 'Item has been saved.');
 
-            //Redirect to Settings Page 
-            return $this->redirectToRoute('settings', ['_fragment' => 'set']);            
-        }     
+            // Redirect to Settings Page
+            return $this->redirectToRoute('settings', ['_fragment' => 'set']);
+        }
 
         return $this->render('settings/index.html.twig', [
             'subjects' => $subjects,
@@ -140,145 +133,134 @@ class SettingsController extends AbstractController
             'formSubject' => $formSubject->createView(),
             'formTopic' => $formTopic->createView(),
             'formSet' => $formSet->createView(),
-            'error' => FALSE,
+            'error' => false,
         ]);
     }
-    
+
     #[Route(path: '/settings/subject/{id}', name: 'settings-subject')]
-    public function subject($id, Request $request, SubjectRepository $subjectRepository): \Symfony\Component\HttpFoundation\Response{
-        
-        //Check access
+    public function subject($id, Request $request, SubjectRepository $subjectRepository): \Symfony\Component\HttpFoundation\Response
+    {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
         $subject = $subjectRepository->find($id);
 
         if (!$subject) {
-            throw $this->createNotFoundException(
-            'No subject found for id '.$id
-            );
+            throw $this->createNotFoundException('No subject found for id '.$id);
         }
-        
-        //New Subject Form
+
+        // New Subject Form
         $formSubject = $this->createForm(SubjectFormType::class, $subject);
         $formSubject->handleRequest($request);
-        //dump($formSubject);
+        // dump($formSubject);
 
-        //Process Subject form
-        if($formSubject->isSubmitted() && $formSubject->isValid()) 
-        {
+        // Process Subject form
+        if ($formSubject->isSubmitted() && $formSubject->isValid()) {
             $newSubject = $formSubject->getData();
-            //dump($newSubject);
+            // dump($newSubject);
 
             $subject->setName($newSubject->getName());
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($subject);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.'); 
+            $this->addFlash('notice', 'Item has been saved.');
 
             return $this->render('settings/subject.html.twig', [
                 'subject' => $subject,
                 'formSubject' => $formSubject->createView(),
-                'error' => FALSE,
+                'error' => false,
             ]);
-        }                
+        }
 
         return $this->render('settings/subject.html.twig', [
             'subject' => $subject,
             'formSubject' => $formSubject->createView(),
-            'error' => FALSE,
+            'error' => false,
         ]);
     }
-    
-    
+
     #[Route(path: '/settings/topic/{id}', name: 'settings-topic')]
     public function topic($id, Request $request, TopicRepository $topicRepository): \Symfony\Component\HttpFoundation\Response
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
         $topic = $topicRepository->find($id);
 
         if (!$topic) {
-            throw $this->createNotFoundException(
-            'No topic found for id '.$id
-            );
+            throw $this->createNotFoundException('No topic found for id '.$id);
         }
-        
-        //New Subject Form
+
+        // New Subject Form
         $formTopic = $this->createForm(TopicFormType::class, $topic);
         $formTopic->handleRequest($request);
-        //dump($formSubject);
+        // dump($formSubject);
 
-        //Process Subject form
-        if($formTopic->isSubmitted() && $formTopic->isValid()) 
-        {
+        // Process Subject form
+        if ($formTopic->isSubmitted() && $formTopic->isValid()) {
             $newTopic = $formTopic->getData();
-            //dump($newSubject);
+            // dump($newSubject);
 
             $topic->setName($newTopic->getName());
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($topic);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.'); 
-        }                
+            $this->addFlash('notice', 'Item has been saved.');
+        }
 
         return $this->render('settings/topic.html.twig', [
             'topic' => $topic,
             'formTopic' => $formTopic->createView(),
-            'error' => FALSE,
+            'error' => false,
         ]);
     }
-    
-    
+
     #[Route(path: '/settings/set/{id}', name: 'settings-set')]
     public function set($id, Request $request, SetRepository $setRepository): \Symfony\Component\HttpFoundation\Response
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
         $set = $setRepository->find($id);
         $members = $set->getPeople();
 
         if (!$set) {
-            throw $this->createNotFoundException(
-            'No set found for id '.$id
-            );
+            throw $this->createNotFoundException('No set found for id '.$id);
         }
-        
+
         $form = $this->createForm(SetFormType::class, $set);
         $form->handleRequest($request);
 
-        //Process Form form
-        if($form->isSubmitted() && $form->isValid()) 
-        {
+        // Process Form form
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            //dump($newSubject);
+            // dump($newSubject);
 
             $set->setName($data->getName());
-            //People are automaticaly updated
+            // People are automaticaly updated
 
-            //Doctrine Entity Manager
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->persist($set);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.'); 
-        }                
+            $this->addFlash('success', 'Item has been saved.');
+        }
 
         return $this->render('settings/set.html.twig', [
             'set' => $set,
             'members' => $members,
             'form' => $form->createView(),
-            'error' => FALSE,
+            'error' => false,
         ]);
-    }    
+    }
 }

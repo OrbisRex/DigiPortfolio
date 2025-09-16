@@ -2,46 +2,42 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use App\Service\FileUploader;
-
-//Entities
-use App\Entity\Submission;
-use App\Entity\ResourceFile;
-use App\Entity\Feedback;
 use App\Entity\Comment;
+use App\Entity\Feedback;
 use App\Entity\Log;
-
-//Forms
-use App\Form\SubmissionFormType;
-use App\Form\FeedbackFormType;
+use App\Entity\ResourceFile;
+// Entities
+use App\Entity\Submission;
 use App\Form\CommentFormType;
-
-//Repositories
-use App\Repository\SubmissionRepository;
-use App\Repository\SubjectRepository;
-use App\Repository\TopicRepository;
-use App\Repository\CriterionRepository;
-use App\Repository\DescriptorRepository;
-use App\Repository\AssignmentRepository;
+use App\Form\FeedbackFormType;
+use App\Form\SubmissionFormType;
 use App\Repository\AssignmentPersonRepository;
+// Forms
+use App\Repository\AssignmentRepository;
 use App\Repository\CommentRepository;
-use App\Repository\SetRepository;
-use App\Repository\PersonRepository;
+use App\Repository\CriterionRepository;
+// Repositories
+use App\Repository\DescriptorRepository;
 use App\Repository\FeedbackRepository;
+use App\Repository\PersonRepository;
 use App\Repository\ResourceFileRepository;
+use App\Repository\SetRepository;
+use App\Repository\SubjectRepository;
+use App\Repository\SubmissionRepository;
+use App\Repository\TopicRepository;
+use App\Service\FileUploader;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of SubmissionController
+ * Description of SubmissionController.
  *
  * @author David Ehrlich
  */
 class SubmissionController extends AbstractController
 {
-     /**
+    /**
      * @var SubmissionRepository
      */
     private $submissionRepository;
@@ -71,45 +67,44 @@ class SubmissionController extends AbstractController
     private $assignmentPersonRepository;
     /**
      * @var CommentRepository
-     */    
+     */
     private $commentRepository;
     /**
      * @var SetRepository
-     */    
+     */
     private $setRepository;
     /**
      * @var PersonRepository
-     */    
+     */
     private $personRepository;
     /**
      * @var ResourceFileRepository
-     */    
+     */
     private $resourceFileRepository;
     /**
      * @var FeedbackRepository
-     */    
+     */
     private $feedbackRepository;
     /**
      * @var FileUploader
-     */    
+     */
     private $fileUploader;
-    
+
     public function __construct(
-            SubmissionRepository $submissionRepository,
-            SubjectRepository $subjectRepository,
-            TopicRepository $topicRepository,
-            CriterionRepository $criterionRepository,
-            DescriptorRepository $descriptorRepository,
-            AssignmentRepository $assignmentRepository,
-            AssignmentPersonRepository $assignmentPersonRepository,
-            CommentRepository $commentRepository,
-            SetRepository $setRepository,
-            PersonRepository $personRepository,
-            FeedbackRepository $feedbackRepository,
-            ResourceFileRepository $resourceFileRepository,
-            FileUploader $fileUploader
-    )
-    {
+        SubmissionRepository $submissionRepository,
+        SubjectRepository $subjectRepository,
+        TopicRepository $topicRepository,
+        CriterionRepository $criterionRepository,
+        DescriptorRepository $descriptorRepository,
+        AssignmentRepository $assignmentRepository,
+        AssignmentPersonRepository $assignmentPersonRepository,
+        CommentRepository $commentRepository,
+        SetRepository $setRepository,
+        PersonRepository $personRepository,
+        FeedbackRepository $feedbackRepository,
+        ResourceFileRepository $resourceFileRepository,
+        FileUploader $fileUploader,
+    ) {
         $this->submissionRepository = $submissionRepository;
         $this->subjectRepository = $subjectRepository;
         $this->topicRepository = $topicRepository;
@@ -128,46 +123,46 @@ class SubmissionController extends AbstractController
     #[Route(path: '/submission', name: 'submission')]
     public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        //Fetch last assignments
+        // Fetch last assignments
         $submissions = $this->submissionRepository->findLastSubmissions($this->getUser(), 8);
-        if(!$submissions) {
+        if (!$submissions) {
             $submissions = false;
         }
 
-        //Generate set buttons
+        // Generate set buttons
         $sets = $this->setRepository->findAll();
-        
-        //Fetch submissions by a Set
+
+        // Fetch submissions by a Set
         $setId = $request->query->get('setId');
         if (!$setId) {
             $set = null;
-            if($this->isGranted('ROLE_TEACHER')){
+            if ($this->isGranted('ROLE_TEACHER')) {
                 $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()->getUserIdentifier()]);
             }
         } else {
             $set = $this->setRepository->find($setId);
-            if(!$set) {
+            if (!$set) {
                 $submissionsBySet = null;
             } else {
-                if($this->isGranted('ROLE_TEACHER')){
+                if ($this->isGranted('ROLE_TEACHER')) {
                     $people = $set->getPeople();
-                    foreach($people as $person){
+                    foreach ($people as $person) {
                         $submissionsBySet[] = $this->submissionRepository->findByPeople([$person]);
                     }
                 } else {
                     $submissions = $this->submissionRepository->findBySet($set, $this->getUser()->getUserIdentifier());
-                    if($submissions){
+                    if ($submissions) {
                         $submissionsBySet[] = $submissions;
                     } else {
                         $submissionsBySet = null;
                     }
                 }
-            }            
+            }
         }
-        
+
         return $this->render('submission/index.html.twig', [
             'submissions' => $submissions,
             'currentSet' => $set,
@@ -179,55 +174,54 @@ class SubmissionController extends AbstractController
     #[Route(path: '/submission/detail/{id}', name: 'submission-detail')]
     public function detail($id, Request $request)
     {
-        //Check access
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $criteriaDescriptors = array();
-        
-        //Fetch submission
+        $criteriaDescriptors = [];
+
+        // Fetch submission
         $submission = $this->submissionRepository->find($id);
-        if(!$submission) {
+        if (!$submission) {
             $submission = false;
         }
 
-        //Submission Files
+        // Submission Files
         $files = $this->resourceFileRepository->findBy(['submission' => $id], ['updatetime' => 'DESC']);
-        if(!$files) {
-            $files = FALSE;
+        if (!$files) {
+            $files = false;
         }
-        
-        //Submission Comments
+
+        // Submission Comments
         $comments = $this->commentRepository->findBy(['submission' => $id], ['createtime' => 'DESC']);
-        if(!$comments) {
-            $comments = FALSE;
+        if (!$comments) {
+            $comments = false;
         }
-        
-        //Fetch Criteria
+
+        // Fetch Criteria
         $criteria = $this->criterionRepository->findAll();
-        foreach($criteria as $criterion){
-            foreach($criterion->getDescriptors() as $descriptor){
+        foreach ($criteria as $criterion) {
+            foreach ($criterion->getDescriptors() as $descriptor) {
                 $criteriaDescriptors[$criterion->getName()][$descriptor->getId()] = $descriptor;
             }
         }
 
-        //Feedback
+        // Feedback
         $feedback = $this->feedbackRepository->findOneBy(['submission' => $id]);
-        if(!$feedback){
+        if (!$feedback) {
             $feedback = new Feedback();
         }
         $form = $this->createForm(FeedbackFormType::class, $feedback, [
             'criteria' => $criteriaDescriptors,
         ]);
         $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid()) 
-        {
-            //Doctrine Entity Manager
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
 
             $data = $form->getData();
 
-            //Current timestemp
+            // Current timestemp
             $now = new \DateTime('now');
 
             // $comment->setText($data->getComment());
@@ -237,44 +231,43 @@ class SubmissionController extends AbstractController
             $feedback->setCreatetime($now);
             $feedback->setOwner($this->getUser());
 
-            //Set Log Data
+            // Set Log Data
             $log = new Log();
-            $log->setOperation('New Feedback for the submission id ' . $id);
+            $log->setOperation('New Feedback for the submission id '.$id);
             $log->setPerson($this->getUser());
             $log->setResult('Success');
             $log->setTimestamp($now);
 
-            //Add log record to Feedback
+            // Add log record to Feedback
             $feedback->setLog($log);
 
             $entityManager->persist($feedback);
             $entityManager->persist($log);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.'); 
+            $this->addFlash('success', 'Item has been saved.');
 
-            //Redirect to add descriptor 
-            return $this->redirectToRoute('submission-detail', ['id' => $id]);            
-        }        
+            // Redirect to add descriptor
+            return $this->redirectToRoute('submission-detail', ['id' => $id]);
+        }
 
-        //Comment
+        // Comment
         $formComment = $this->createForm(CommentFormType::class);
         $formComment->handleRequest($request);
 
-        //Process Comment
-        if($formComment->isSubmitted() && $formComment->isValid()) 
-        {
-            //Doctrine Entity Manager
+        // Process Comment
+        if ($formComment->isSubmitted() && $formComment->isValid()) {
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
 
             $data = $formComment->getData();
 
-            //Current timestemp
+            // Current timestemp
             $now = new \DateTime('now');
 
-            //Create new Comment
+            // Create new Comment
             $comment = new Comment();
             $comment->setText($data->getText());
             $comment->setType('submission');
@@ -284,14 +277,14 @@ class SubmissionController extends AbstractController
 
             $entityManager->persist($comment);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.'); 
+            $this->addFlash('success', 'Item has been saved.');
 
-            //Redirect to add descriptor 
-            return $this->redirectToRoute('submission-detail', ['id' => $id]);            
-        }        
+            // Redirect to add descriptor
+            return $this->redirectToRoute('submission-detail', ['id' => $id]);
+        }
 
         return $this->render('submission/detail.html.twig', [
             'form' => $form->createView(),
@@ -301,29 +294,29 @@ class SubmissionController extends AbstractController
             'comments' => $comments,
         ]);
     }
-    
+
     #[Route(path: '/submission/new', name: 'new-submission')]
     public function new(Request $request)
-    {     
-        //Check access
+    {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
         $assignments = [];
-        
-        //Check access for owner
-        if($this->isGranted('ROLE_TEACHER')){
+
+        // Check access for owner
+        if ($this->isGranted('ROLE_TEACHER')) {
             $disabled = false;
             $assignments = $this->assignmentRepository->findAll();
         } else {
             $disabled = true;
             $personAssignments = $this->assignmentPersonRepository->findAssignmentsByStudent($this->getUser()->getId());
-            foreach($personAssignments as $personAssignment) {
+            foreach ($personAssignments as $personAssignment) {
                 $assignments[] = $personAssignment->getAssignment();
             }
         }
-        
+
         $students = $this->personRepository->findAllStudents();
-        
-        //New Submission Form
+
+        // New Submission Form
         $form = $this->createForm(SubmissionFormType::class, null, [
             'assignments' => $assignments,
             'students' => $students,
@@ -331,19 +324,18 @@ class SubmissionController extends AbstractController
             'selected_user' => $this->getUser(),
         ]);
         $form->handleRequest($request);
-        
-        //Process form
-        if($form->isSubmitted() && $form->isValid()) 
-        {
-            //Doctrine Entity Manager
+
+        // Process form
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
 
             $data = $form->getData();
-            
-            //Current time
+
+            // Current time
             $now = new \DateTime('now');
-            
-            //Create new Submission
+
+            // Create new Submission
             $submission = new Submission();
             $submission->setName($data->getName());
             $submission->setNote($data->getNote());
@@ -352,90 +344,86 @@ class SubmissionController extends AbstractController
             $submission->setAssignment($data->getAssignment());
             $submission->setVersion(1);
             $submission->setCreatetime($now);
-            if($data->getOwner()){
-                $submission->setOwner($data->getOwner());                
+            if ($data->getOwner()) {
+                $submission->setOwner($data->getOwner());
             } else {
                 $submission->setOwner($this->getUser());
             }
-            
-            //Save enclosed files
+
+            // Save enclosed files
             $files = $request->files->get('submission_form')['files'];
-            foreach($files as $index => $fileData)
-            {
+            foreach ($files as $index => $fileData) {
                 $this->saveFile($fileData, $submission, $entityManager, $index);
             }
 
-            //Set Log Data
+            // Set Log Data
             $log = new Log();
             $log->setOperation('New Submission '.$data->getName());
             $log->setPerson($this->getUser());
             $log->setResult('Success');
             $log->setTimestamp($now);
-            
-            //Add log record to submission
+
+            // Add log record to submission
             $submission->setLog($log);
-            
+
             $entityManager->persist($submission);
             $entityManager->persist($log);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
-            
-            $this->addFlash('success', 'Item has been saved.'); 
 
-            //Redirect to add descriptor 
-            return $this->redirectToRoute('submission');            
-        }        
-        
-        return $this->render('submission/new.html.twig', array(
+            $this->addFlash('success', 'Item has been saved.');
+
+            // Redirect to add descriptor
+            return $this->redirectToRoute('submission');
+        }
+
+        return $this->render('submission/new.html.twig', [
             'form' => $form->createView(),
-            'error' => FALSE,
-        ));
+            'error' => false,
+        ]);
     }
 
     #[Route(path: '/submission/edit/{id}', name: 'edit-submission')]
     public function edit(int $id, Request $request)
-    {     
-        //Check access
+    {
+        // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        if(!$id) {
-            throw $this->createNotFoundException(
-                'No Submission ID found.'
-            );
+        if (!$id) {
+            throw $this->createNotFoundException('No Submission ID found.');
         }
-        
-        //Check access for owner
-        if($this->isGranted('ROLE_TEACHER')){
+
+        // Check access for owner
+        if ($this->isGranted('ROLE_TEACHER')) {
             $disabled = false;
         } else {
             $disabled = true;
         }
 
         $submission = $this->submissionRepository->find($id);
-        
-        //Submission Files
+
+        // Submission Files
         $files = $this->resourceFileRepository->findBy(['submission' => $id], ['updatetime' => 'DESC']);
-        if(!$files) {
-            $files = FALSE;
+        if (!$files) {
+            $files = false;
         }
 
-        //Submission Form
+        // Submission Form
         $form = $this->createForm(SubmissionFormType::class, null, [
             'disabled_owner' => $disabled,
             'selected_user' => $this->getUser(),
         ]);
         $form->handleRequest($request);
-        
-        //Process the form
-        if($form->isSubmitted() && $form->isValid()) 
-        {
-            //Doctrine Entity Manager
+
+        // Process the form
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Doctrine Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
 
             $data = $form->getData();
 
-            //Current time and new version
+            // Current time and new version
             $now = new \DateTime('now');
             $version = $data->getVersion() + 1;
 
@@ -446,63 +434,62 @@ class SubmissionController extends AbstractController
             $data->setAssignment($data->getAssignment());
             $data->setVersion($version);
             $data->setUpdatetime($now);
-            if($data->getOwner()){
-                $data->setOwner($data->getOwner());                
+            if ($data->getOwner()) {
+                $data->setOwner($data->getOwner());
             } else {
                 $data->setOwner($this->getUser());
             }
 
-            //Save enclosed files
+            // Save enclosed files
             $files = $request->files->get('submission_form')['files'];
-            foreach($files as $index => $fileData)
-            {
+            foreach ($files as $index => $fileData) {
                 $this->saveFile($fileData, $data, $entityManager, $index);
             }
 
-            //Set Log Data
+            // Set Log Data
             $log = new Log();
             $log->setOperation('Edit Submission '.$data->getName());
             $log->setPerson($this->getUser());
             $log->setResult('Success');
             $log->setTimestamp($now);
 
-            //Add log record to submission
+            // Add log record to submission
             $data->setLog($log);
 
             $entityManager->persist($data);
             $entityManager->persist($log);
 
-            //Save data to the DB.
+            // Save data to the DB.
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.'); 
-            
-            //Redirect to assignment detail 
-            return $this->redirectToRoute('submission-detail', ['id' => $id]);            
-        }        
-        
-        return $this->render('submission/edit.html.twig', array(
+            $this->addFlash('success', 'Item has been saved.');
+
+            // Redirect to assignment detail
+            return $this->redirectToRoute('submission-detail', ['id' => $id]);
+        }
+
+        return $this->render('submission/edit.html.twig', [
             'submission' => $submission,
             'files' => $files,
             'form' => $form->createView(),
-            'error' => FALSE,
-        ));
+            'error' => false,
+        ]);
     }
 
-    private function saveFile($fileData, $submission, $entityManager, $index = false) {
-        if($fileData)
-        {
-            //Index number for friendly filename
-            $index =+ 1;
-            //Read file data for DB
+    private function saveFile($fileData, $submission, $entityManager, $index = false)
+    {
+        if ($fileData) {
+            // Index number for friendly filename
+            $index = +1;
+            // Read file data for DB
             $fileSize = $fileData->getSize();
             $fileMimeType = $fileData->getMimeType();
-            //Save file into file system
+            // Save file into file system
             $fileName = $this->fileUploader->upload($fileData);
             $filePath = $this->getParameter('app.targetDirectory').'/'.$fileName;
-            //Save data into DB
+            // Save data into DB
             $file = new ResourceFile();
-            $file->setName($submission->getName()." ".$index);
+            $file->setName($submission->getName().' '.$index);
             $file->setPath($filePath);
             $file->setSize($fileSize);
             $file->setType($fileMimeType);

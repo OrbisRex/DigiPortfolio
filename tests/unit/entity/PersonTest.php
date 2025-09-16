@@ -2,8 +2,8 @@
 
 namespace App\Tests\Unit\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Entity\Person;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PersonTest extends KernelTestCase
 {
@@ -25,8 +25,8 @@ class PersonTest extends KernelTestCase
         self::assertSame('admin@myemail.com', $this->person->getEmail());
         self::assertSame('Hello', $this->person->getPassword());
         self::assertContains(
-            'ROLE_USER', 
-            $this->person->getRoles(), 
+            'ROLE_USER',
+            $this->person->getRoles(),
             'Every user must have ROLE_USER.'
         );
     }

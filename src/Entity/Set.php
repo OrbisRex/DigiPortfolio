@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Set
+ * Set.
  */
 #[ORM\Table(name: 'set')]
 #[ORM\Entity(repositoryClass: \App\Repository\SetRepository::class)]
@@ -35,11 +35,12 @@ class Set
 
     /**
      * Many people can be in many sets.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'sets', cascade: ['persist'])]
     private $people;
-    
+
     /**
      * One set has many assignments.
      */
@@ -59,7 +60,7 @@ class Set
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -69,7 +70,7 @@ class Set
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -83,7 +84,7 @@ class Set
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -131,7 +132,7 @@ class Set
 
         return $this;
     }
-    
+
     public function getLog(): ?Log
     {
         return $this->log;
@@ -144,4 +145,3 @@ class Set
         return $this;
     }
 }
-

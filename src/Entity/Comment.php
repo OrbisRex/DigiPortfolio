@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Comment
+ * Comment.
  */
 #[ORM\Table(name: 'comment')]
 #[ORM\Entity(repositoryClass: \App\Repository\CommentRepository::class)]
@@ -33,7 +33,7 @@ class Comment
 
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
-    private $owner;    
+    private $owner;
 
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Submission::class, inversedBy: 'Comment', cascade: ['persist', 'remove'])]
@@ -45,9 +45,8 @@ class Comment
     #[ORM\Column(name: 'createtime', type: 'datetime')]
     private $createtime;
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -57,7 +56,7 @@ class Comment
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
      *
@@ -71,7 +70,7 @@ class Comment
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
@@ -81,7 +80,7 @@ class Comment
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -95,7 +94,7 @@ class Comment
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -138,7 +137,5 @@ class Comment
         $this->submission = $submission;
 
         return $this;
-    }    
-    
+    }
 }
-

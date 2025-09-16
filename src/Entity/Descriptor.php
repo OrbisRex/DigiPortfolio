@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Descriptor
+ * Descriptor.
  */
 #[ORM\Table(name: 'descriptor')]
 #[ORM\Entity(repositoryClass: \App\Repository\DescriptorRepository::class)]
@@ -47,6 +47,7 @@ class Descriptor
 
     /**
      * Descriptors have many criteria.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Descriptor::class, mappedBy: 'descriptors')]
@@ -58,7 +59,7 @@ class Descriptor
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'descriptor')]
     private $author;
-    
+
     /**
      * One Descriptor has One Log.
      */
@@ -71,9 +72,8 @@ class Descriptor
         $this->criteria = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -83,7 +83,7 @@ class Descriptor
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -97,7 +97,7 @@ class Descriptor
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -107,7 +107,7 @@ class Descriptor
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -121,7 +121,7 @@ class Descriptor
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -131,7 +131,7 @@ class Descriptor
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -145,7 +145,7 @@ class Descriptor
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -155,9 +155,9 @@ class Descriptor
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
-     * @param integer $weight
+     * @param int $weight
      *
      * @return Descriptor
      */
@@ -169,7 +169,7 @@ class Descriptor
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return int
      */
@@ -226,7 +226,5 @@ class Descriptor
         $this->author = $author;
 
         return $this;
-    }   
-
+    }
 }
-

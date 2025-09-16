@@ -6,119 +6,108 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Description of BasicController
+ * Description of BasicController.
  *
  * @author David Ehrlich
  */
-class BasicController extends AbstractController {
-       
+class BasicController extends AbstractController
+{
     protected function findById($em, $entity, $id)
     {
-        //Fetch data
+        // Fetch data
         $data = $em->getRepository($entity)->find($id);
 
-        if(!$data) {
-            throw $this->createNotFoundException(
-                'No data found for '.$entity.'.'
-            );
+        if (!$data) {
+            throw $this->createNotFoundException('No data found for '.$entity.'.');
         }
-        
+
         return $data;
     }
-    
+
     /**
-     * Create a list of choices
+     * Create a list of choices.
      */
-    protected function createChoiceList($entityRepository, $search = FALSE)
+    protected function createChoiceList($entityRepository, $search = false)
     {
-        if($search) {
-            //Fetch selected data
+        if ($search) {
+            // Fetch selected data
             $items = $entityRepository->findBy($search);
         } else {
-            //Fetch All data
+            // Fetch All data
             $items = $entityRepository->findAll();
         }
 
-        if(!$items) {
-            $choiceList = array('Unspecified' => 0);
+        if (!$items) {
+            $choiceList = ['Unspecified' => 0];
         }
-        
-        foreach($items as $item) {
+
+        foreach ($items as $item) {
             $choiceList[$item->getName()] = $item->getId();
         }
 
         return $choiceList;
     }
-    
-    /*Deprecated*/
+
+    /* Deprecated */
     protected function readSession(Request $request, $parameter)
     {
-        //Cookies
-        $userSession = ($request->cookies->has($parameter)) ? $request->cookies->get($parameter) : FALSE;
-        
-        //GET
-        if(!$userSession)
-        {
-            $userSession = ($request->query->has($parameter)) ? $request->query->get($parameter) : FALSE ;
+        // Cookies
+        $userSession = ($request->cookies->has($parameter)) ? $request->cookies->get($parameter) : false;
+
+        // GET
+        if (!$userSession) {
+            $userSession = ($request->query->has($parameter)) ? $request->query->get($parameter) : false;
         }
-        
-        //SESSION
-        if(!$userSession)
-        {
-            $userSession = ($request->getSession()->has($parameter)) ? $request->getSession()->get($parameter) : FALSE ;
+
+        // SESSION
+        if (!$userSession) {
+            $userSession = ($request->getSession()->has($parameter)) ? $request->getSession()->get($parameter) : false;
         }
-        
+
         return $userSession;
     }
-    
+
     protected function readUserCookie(Request $request)
     {
-        
-        if($request->cookies->has('user'))
-        {
+        if ($request->cookies->has('user')) {
             return $request->cookies->get('user');
-        }
-        else
-        {
-            return FALSE;
+        } else {
+            return false;
         }
     }
 
     /**
-     * Find user in DB
+     * Find user in DB.
      */
-    protected function findUser($username, $password, $token = NULL)
+    protected function findUser($username, $password, $token = null)
     {
         $user = $this->getDoctrine()->getRepository('App:User')->findOneBy(
-                array('username' => $username, 'password' => $password)
+            ['username' => $username, 'password' => $password]
         );
-        
+
         return $user;
     }
-    
+
     protected function isUserOnline($token)
     {
-        if($token) 
-        {
+        if ($token) {
             $user = $this->getDoctrine()->getRepository('App:User')->findOneBy(
-                    array('token' => $token)
+                ['token' => $token]
             );
-            
-            return ($user) ? $user : FALSE;
-        } 
-        else
-        {
-            return FALSE;
+
+            return ($user) ? $user : false;
+        } else {
+            return false;
         }
     }
-    
+
     protected function secondsToString($timeTotal)
     {
         $hrs = floor($timeTotal / 3600);
         $min = floor($timeTotal / 60 % 60);
         $sec = floor($timeTotal % 60);
         $hoursTotal = sprintf('%02d:%02d:%02d', $hrs, $min, $sec);
-        
-        return $hoursTotal;        
+
+        return $hoursTotal;
     }
 }

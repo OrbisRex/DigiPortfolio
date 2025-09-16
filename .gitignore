@@ -20,7 +20,7 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
-###> tools/php-cs-fixer ###
-/tools/php-cs-fixer/vendor/
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
 /.php-cs-fixer.cache
-###< tools/php-cs-fixer ###
+###< friendsofphp/php-cs-fixer ###

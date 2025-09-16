@@ -4,11 +4,10 @@ namespace App\Form;
 
 use App\Entity\ResourceFile;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileFormType extends AbstractType
 {
@@ -19,7 +18,7 @@ class FileFormType extends AbstractType
                 'multiple' => true,
                 'mapped' => false,
             ])
-            ->add('save', SubmitType::class, array('label' => 'Save'))
+            ->add('save', SubmitType::class, ['label' => 'Save'])
         ;
     }
 

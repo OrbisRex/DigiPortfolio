@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Criteria
+ * Criteria.
  */
 #[ORM\Table(name: 'criterion')]
 #[ORM\Entity(repositoryClass: \App\Repository\CriterionRepository::class)]
@@ -29,6 +29,7 @@ class Criterion
 
     /**
      * Criteria have many descriptors.
+     *
      * @var Collection
      */
     #[ORM\JoinTable(name: 'criteria_descriptors')]
@@ -41,7 +42,7 @@ class Criterion
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Person::class, inversedBy: 'criterion')]
     private $author;
-    
+
     /**
      * One Criterion has One Log.
      */
@@ -51,6 +52,7 @@ class Criterion
 
     /**
      * Criteria have many assignments.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Assignment::class, mappedBy: 'criteria')]
@@ -58,6 +60,7 @@ class Criterion
 
     /**
      * Many Criteria have Many submissions.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'criteria')]
@@ -70,9 +73,8 @@ class Criterion
         $this->submissions = new ArrayCollection();
     }
 
-    
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -82,7 +84,7 @@ class Criterion
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -96,7 +98,7 @@ class Criterion
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */

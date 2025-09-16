@@ -2,16 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Criteria;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+// Entities
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+// Form types
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-//Entities
-use App\Entity\Criteria;
-
-//Form types
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AddCriteriaFormType extends AbstractType
 {
@@ -20,11 +18,11 @@ class AddCriteriaFormType extends AbstractType
         dump($options);
         $builder
             ->add('criteria', EntityType::class, [
-                    'class' => Criteria::class,
-                    'choice_label' => 'criteria',
-                    'multiple' => true,
+                'class' => Criteria::class,
+                'choice_label' => 'criteria',
+                'multiple' => true,
             ])
-            ->add('save', SubmitType::class, array('label' => 'Save'))
+            ->add('save', SubmitType::class, ['label' => 'Save'])
         ;
     }
 

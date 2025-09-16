@@ -24,18 +24,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'ORDER BY a.updatetime DESC'
             )
             ->setMaxResults($number);
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findLastAssignmentsByTeacher($userId, $number)
@@ -43,18 +43,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'ORDER BY a.updatetime DESC'
             )
             ->setMaxResults($number);
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByTeacher($userId)
@@ -62,17 +62,17 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByStudent($userId)
@@ -80,17 +80,17 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByTeacherForSubject($userId, $subjectId)
@@ -98,18 +98,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'AND a.subject = '.$subjectId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'AND a.subject = '.$subjectId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByStudentBySubject($userId, $subjectId)
@@ -117,18 +117,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a'
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'AND a.subject = '.$subjectId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a'
+              .'WHERE ap.person = '.$userId.' '
+              .'AND a.subject = '.$subjectId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByStudentForTopic($userId, $topicId)
@@ -136,18 +136,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE ap.person = '.$userId.' '      
-              . 'AND a.topic = '.$topicId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE ap.person = '.$userId.' '
+              .'AND a.topic = '.$topicId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     public function findAssignmentsByTeacherForTopic($userId, $topicId)
@@ -155,18 +155,18 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT ap '
-              . 'FROM App:AssignmentPerson ap '
-              . 'JOIN ap.assignment a '
-              . 'WHERE a.teacher = '.$userId.' '      
-              . 'AND a.topic = '.$topicId.' '      
-              . 'ORDER BY a.updatetime DESC'      
+              .'FROM App:AssignmentPerson ap '
+              .'JOIN ap.assignment a '
+              .'WHERE a.teacher = '.$userId.' '
+              .'AND a.topic = '.$topicId.' '
+              .'ORDER BY a.updatetime DESC'
             );
 
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return NULL;
-        }        
+            return null;
+        }
     }
 
     // /**

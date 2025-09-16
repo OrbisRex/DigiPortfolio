@@ -32,6 +32,7 @@ class Submission
 
     /**
      * Many files can be in many submissions.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \ResourceFile::class, inversedBy: 'submissions', cascade: ['persist'])]
@@ -39,6 +40,7 @@ class Submission
 
     /**
      * Many people can be in many submissions.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'submissions', cascade: ['persist'])]

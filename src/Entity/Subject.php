@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Subject
+ * Subject.
  */
 #[ORM\Table(name: 'subject')]
 #[ORM\Entity(repositoryClass: \App\Repository\SubjectRepository::class)]
@@ -26,9 +26,10 @@ class Subject
      */
     #[ORM\Column(name: 'name', type: 'string', length: 100, unique: true)]
     private $name;
-    
+
     /**
      * Many people can have many subjects.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'subjects', cascade: ['persist'])]
@@ -46,14 +47,14 @@ class Subject
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private $log;
-    
+
     public function __construct()
     {
         $this->people = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -63,7 +64,7 @@ class Subject
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -77,7 +78,7 @@ class Subject
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -85,7 +86,6 @@ class Subject
     {
         return $this->name;
     }
-
 
     public function getLog(): ?Log
     {
@@ -127,4 +127,3 @@ class Subject
         return $this;
     }
 }
-

@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ResourceFileRepository::class)]
 class ResourceFile
@@ -38,6 +37,7 @@ class ResourceFile
 
     /**
      * Many file can be in many submissions.
+     *
      * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'files', cascade: ['persist'])]
@@ -54,7 +54,6 @@ class ResourceFile
     private $updatetime;
 
     /**
-     * 
      * @var File|null
      */
     private $file;
@@ -179,7 +178,7 @@ class ResourceFile
     {
         return $this->file;
     }
-   
+
     public function setFile(?File $file = null): void
     {
         $this->file = $file;
@@ -190,7 +189,7 @@ class ResourceFile
             $this->updatetime = new \DateTimeImmutable();
         }
     }
-    
+
     public function getUpdatetime(): ?\DateTimeInterface
     {
         return $this->updatetime;

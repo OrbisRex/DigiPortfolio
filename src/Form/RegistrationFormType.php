@@ -4,17 +4,16 @@ namespace App\Form;
 
 use App\Entity\Person;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+// Form types
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
-//Form types
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -46,7 +45,7 @@ class RegistrationFormType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'label' => 'Agree Terms',
-                'label_attr' => ['class'=>'inline'],
+                'label_attr' => ['class' => 'inline'],
                 'attr' => ['class' => 'inline'],
                 'constraints' => [
                     new IsTrue([
@@ -54,7 +53,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('save', SubmitType::class, array('label' => 'Register'))
+            ->add('save', SubmitType::class, ['label' => 'Register'])
         ;
     }
 
