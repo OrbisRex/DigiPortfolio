@@ -23,7 +23,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -144,7 +144,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles[] = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles = [];
+        //$roles = [];
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -275,8 +275,8 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addTopic(Topic $topic): self
     {
-        if (!$this->sets->contains($$topic)) {
-            $this->sets[] = $$topic;
+        if (!$this->sets->contains(${$topic})) {
+            $this->sets[] = ${$topic};
         }
 
         return $this;

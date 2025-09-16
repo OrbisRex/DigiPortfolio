@@ -43,13 +43,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DescriptorController extends BasicController
 {
-    private $descriptorRepository;
-    private $criterionRepository;
-
-    public function __construct(DescriptorRepository $descriptorRepository, CriterionRepository $criterionRepository)
+    public function __construct(private DescriptorRepository $descriptorRepository, private CriterionRepository $criterionRepository)
     {
-        $this->descriptorRepository = $descriptorRepository;
-        $this->criterionRepository = $criterionRepository;
     }
 
     #[Route(path: '/descriptor', name: 'descriptor')]

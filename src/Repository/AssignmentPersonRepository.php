@@ -33,7 +33,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -52,7 +52,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -70,7 +70,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -88,7 +88,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -107,7 +107,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -126,7 +126,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -145,7 +145,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -164,7 +164,7 @@ class AssignmentPersonRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }

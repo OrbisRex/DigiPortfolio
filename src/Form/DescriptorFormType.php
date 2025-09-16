@@ -61,22 +61,13 @@ class DescriptorFormType extends AbstractType
 
     private function swichLevelChoice($level)
     {
-        switch ($level) {
-            case 'basic':
-                $currentLevel = ['standard'];
-                break;
-            case 'standard':
-                $currentLevel = ['advanced'];
-                break;
-            case 'advanced':
-                $currentLevel = ['master'];
-                break;
-            case 'master':
-                $currentLevel = ['basic'];
-                break;
-            default:
-                $currentLevel = ['basic'];
-        }
+        $currentLevel = match ($level) {
+            'basic' => ['standard'],
+            'standard' => ['advanced'],
+            'advanced' => ['master'],
+            'master' => ['basic'],
+            default => ['basic'],
+        };
 
         return $currentLevel;
     }

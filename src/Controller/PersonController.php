@@ -24,11 +24,8 @@ use Symfony\Component\Security\Core\Security;
 
 class PersonController extends AbstractController
 {
-    private $security;
-
-    public function __construct(Security $security)
+    public function __construct(private Security $security)
     {
-        $this->security = $security;
     }
 
     #[Route(path: '/person', name: 'person')]

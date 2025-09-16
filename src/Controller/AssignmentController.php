@@ -28,63 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AssignmentController extends BasicController
 {
-    /**
-     * @var AssignmentRepository
-     */
-    private $assignmentRepository;
-    /**
-     * @var SubjectRepository
-     */
-    private $subjectRepository;
-    /**
-     * @var CriterionRepository
-     */
-    private $criterionRepository;
-    /**
-     * @var DescriptorRepository
-     */
-    private $descriptorRepository;
-    /**
-     * @var TopicRepository
-     */
-    private $topicRepository;
-    /**
-     * @var AssignmentPersonRepository
-     */
-    private $assignmentPersonRepository;
-    /**
-     * @var CommentRepository
-     */
-    private $commentRepository;
-    /**
-     * @var SetRepository
-     */
-    private $setRepository;
-    /**
-     * @var PersonRepository
-     */
-    private $personRepository;
-
-    public function __construct(
-        AssignmentRepository $assignmentRepository,
-        SubjectRepository $subjectRepository,
-        TopicRepository $topicRepository,
-        CriterionRepository $criterionRepository,
-        DescriptorRepository $descriptorRepository,
-        AssignmentPersonRepository $assignmentPersonRepository,
-        CommentRepository $commentRepository,
-        SetRepository $setRepository,
-        PersonRepository $personRepository,
-    ) {
-        $this->assignmentRepository = $assignmentRepository;
-        $this->subjectRepository = $subjectRepository;
-        $this->topicRepository = $topicRepository;
-        $this->criterionRepository = $criterionRepository;
-        $this->descriptorRepository = $descriptorRepository;
-        $this->assignmentPersonRepository = $assignmentPersonRepository;
-        $this->commentRepository = $commentRepository;
-        $this->setRepository = $setRepository;
-        $this->personRepository = $personRepository;
+    public function __construct(private AssignmentRepository $assignmentRepository, private SubjectRepository $subjectRepository, private TopicRepository $topicRepository, private CriterionRepository $criterionRepository, private DescriptorRepository $descriptorRepository, private AssignmentPersonRepository $assignmentPersonRepository, private CommentRepository $commentRepository, private SetRepository $setRepository, private PersonRepository $personRepository)
+    {
     }
 
     #[Route(path: '/assignment', name: 'assignment')]

@@ -6,13 +6,11 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class CsvImporter
 {
-    private $targetDirectory;
     private $data;
     private $rowNumber;
 
-    public function __construct($targetDirectory)
+    public function __construct(private $targetDirectory)
     {
-        $this->targetDirectory = $targetDirectory;
         $this->data = [];
         $this->rowNumber = 0;
     }

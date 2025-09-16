@@ -33,7 +33,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -56,7 +56,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }
@@ -73,7 +73,7 @@ class SubmissionRepository extends ServiceEntityRepository
 
         try {
             return $query->getResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException) {
             return null;
         }
     }

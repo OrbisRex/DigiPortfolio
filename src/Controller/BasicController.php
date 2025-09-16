@@ -95,7 +95,7 @@ class BasicController extends AbstractController
                 ['token' => $token]
             );
 
-            return ($user) ? $user : false;
+            return $user ?: false;
         } else {
             return false;
         }

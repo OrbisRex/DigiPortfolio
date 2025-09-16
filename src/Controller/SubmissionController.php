@@ -37,87 +37,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SubmissionController extends AbstractController
 {
-    /**
-     * @var SubmissionRepository
-     */
-    private $submissionRepository;
-    /**
-     * @var SubjectRepository
-     */
-    private $subjectRepository;
-    /**
-     * @var CriterionRepository
-     */
-    private $criterionRepository;
-    /**
-     * @var DescriptorRepository
-     */
-    private $descriptorRepository;
-    /**
-     * @var TopicRepository
-     */
-    private $topicRepository;
-    /**
-     * @var AssignmentRepository
-     */
-    private $assignmentRepository;
-    /**
-     * @var AssignmentPersonRepository
-     */
-    private $assignmentPersonRepository;
-    /**
-     * @var CommentRepository
-     */
-    private $commentRepository;
-    /**
-     * @var SetRepository
-     */
-    private $setRepository;
-    /**
-     * @var PersonRepository
-     */
-    private $personRepository;
-    /**
-     * @var ResourceFileRepository
-     */
-    private $resourceFileRepository;
-    /**
-     * @var FeedbackRepository
-     */
-    private $feedbackRepository;
-    /**
-     * @var FileUploader
-     */
-    private $fileUploader;
-
-    public function __construct(
-        SubmissionRepository $submissionRepository,
-        SubjectRepository $subjectRepository,
-        TopicRepository $topicRepository,
-        CriterionRepository $criterionRepository,
-        DescriptorRepository $descriptorRepository,
-        AssignmentRepository $assignmentRepository,
-        AssignmentPersonRepository $assignmentPersonRepository,
-        CommentRepository $commentRepository,
-        SetRepository $setRepository,
-        PersonRepository $personRepository,
-        FeedbackRepository $feedbackRepository,
-        ResourceFileRepository $resourceFileRepository,
-        FileUploader $fileUploader,
-    ) {
-        $this->submissionRepository = $submissionRepository;
-        $this->subjectRepository = $subjectRepository;
-        $this->topicRepository = $topicRepository;
-        $this->criterionRepository = $criterionRepository;
-        $this->descriptorRepository = $descriptorRepository;
-        $this->assignmentRepository = $assignmentRepository;
-        $this->assignmentPersonRepository = $assignmentPersonRepository;
-        $this->commentRepository = $commentRepository;
-        $this->setRepository = $setRepository;
-        $this->personRepository = $personRepository;
-        $this->feedbackRepository = $feedbackRepository;
-        $this->resourceFileRepository = $resourceFileRepository;
-        $this->fileUploader = $fileUploader;
+    public function __construct(private SubmissionRepository $submissionRepository, private SubjectRepository $subjectRepository, private TopicRepository $topicRepository, private CriterionRepository $criterionRepository, private DescriptorRepository $descriptorRepository, private AssignmentRepository $assignmentRepository, private AssignmentPersonRepository $assignmentPersonRepository, private CommentRepository $commentRepository, private SetRepository $setRepository, private PersonRepository $personRepository, private FeedbackRepository $feedbackRepository, private ResourceFileRepository $resourceFileRepository, private FileUploader $fileUploader)
+    {
     }
 
     #[Route(path: '/submission', name: 'submission')]
