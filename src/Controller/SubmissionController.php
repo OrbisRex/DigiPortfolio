@@ -36,7 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SubmissionController extends AbstractController
 {
-    public function __construct(private SubmissionRepository $submissionRepository, private SubjectRepository $subjectRepository, private TopicRepository $topicRepository, private CriterionRepository $criterionRepository, private DescriptorRepository $descriptorRepository, private AssignmentRepository $assignmentRepository, private AssignmentPersonRepository $assignmentPersonRepository, private CommentRepository $commentRepository, private SetRepository $setRepository, private PersonRepository $personRepository, private FeedbackRepository $feedbackRepository, private ResourceFileRepository $resourceFileRepository, private FileUploader $fileUploader)
+    public function __construct(private readonly SubmissionRepository $submissionRepository, private readonly SubjectRepository $subjectRepository, private readonly TopicRepository $topicRepository, private readonly CriterionRepository $criterionRepository, private readonly DescriptorRepository $descriptorRepository, private readonly AssignmentRepository $assignmentRepository, private readonly AssignmentPersonRepository $assignmentPersonRepository, private readonly CommentRepository $commentRepository, private readonly SetRepository $setRepository, private readonly PersonRepository $personRepository, private readonly FeedbackRepository $feedbackRepository, private readonly ResourceFileRepository $resourceFileRepository, private readonly FileUploader $fileUploader)
     {
     }
 

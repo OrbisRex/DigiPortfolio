@@ -42,7 +42,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DescriptorController extends BasicController
 {
-    public function __construct(private DescriptorRepository $descriptorRepository, private CriterionRepository $criterionRepository)
+    public function __construct(private readonly DescriptorRepository $descriptorRepository, private readonly CriterionRepository $criterionRepository)
     {
     }
 

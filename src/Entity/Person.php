@@ -29,7 +29,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null The hashed password
      */
     #[ORM\Column(type: 'string')]
-    private ?string $password;
+    private ?string $password = null;
 
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private $name;

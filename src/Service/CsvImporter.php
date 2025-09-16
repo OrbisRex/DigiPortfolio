@@ -26,7 +26,7 @@ class CsvImporter
                 }
 
                 foreach ($header as $column => $heading) {
-                    $row_new[strtolower($heading)] = $row[$column];
+                    $row_new[strtolower((string) $heading)] = $row[$column];
                 }
                 $this->data[] = $row_new;
                 ++$this->rowNumber;

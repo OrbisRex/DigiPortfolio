@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AssignmentController extends BasicController
 {
-    public function __construct(private AssignmentRepository $assignmentRepository, private SubjectRepository $subjectRepository, private TopicRepository $topicRepository, private CriterionRepository $criterionRepository, private DescriptorRepository $descriptorRepository, private AssignmentPersonRepository $assignmentPersonRepository, private CommentRepository $commentRepository, private SetRepository $setRepository, private PersonRepository $personRepository)
+    public function __construct(private readonly AssignmentRepository $assignmentRepository, private readonly SubjectRepository $subjectRepository, private readonly TopicRepository $topicRepository, private readonly CriterionRepository $criterionRepository, private readonly DescriptorRepository $descriptorRepository, private readonly AssignmentPersonRepository $assignmentPersonRepository, private readonly CommentRepository $commentRepository, private readonly SetRepository $setRepository, private readonly PersonRepository $personRepository)
     {
     }
 

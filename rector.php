@@ -15,7 +15,7 @@ return RectorConfig::configure()
         __DIR__.'/tests',
     ])
     ->withSets([
-        // LevelSetList::UP_TO_PHP_84,
+        LevelSetList::UP_TO_PHP_84,
         SymfonySetList::SYMFONY_64,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
