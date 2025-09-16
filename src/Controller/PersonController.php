@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 class PersonController extends AbstractController
@@ -28,7 +27,7 @@ class PersonController extends AbstractController
     {
     }
 
-    #[Route(path: '/person', name: 'person')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/person', name: 'person')]
     public function index(PersonRepository $personRepository, ResourceFileRepository $resourceFileRepository): Response
     {
         // Check access
@@ -48,7 +47,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/person/profile/{id}', name: 'person-profile')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/person/profile/{id}', name: 'person-profile')]
     public function profile(
         $id,
         Request $request,
@@ -107,7 +106,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/person/import/{id}', name: 'import-person')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/person/import/{id}', name: 'import-person')]
     public function import(
         $id,
         CsvImporter $csvImporter,

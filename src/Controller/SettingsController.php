@@ -18,11 +18,10 @@ use App\Repository\SubjectRepository;
 use App\Repository\TopicRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class SettingsController extends AbstractController
 {
-    #[Route(path: '/settings', name: 'settings')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings', name: 'settings')]
     public function index(
         Request $request,
         SubjectRepository $subjectRepository,
@@ -137,7 +136,7 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/settings/subject/{id}', name: 'settings-subject')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/subject/{id}', name: 'settings-subject')]
     public function subject($id, Request $request, SubjectRepository $subjectRepository): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -183,7 +182,7 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/settings/topic/{id}', name: 'settings-topic')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/topic/{id}', name: 'settings-topic')]
     public function topic($id, Request $request, TopicRepository $topicRepository): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -223,7 +222,7 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/settings/set/{id}', name: 'settings-set')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/settings/set/{id}', name: 'settings-set')]
     public function set($id, Request $request, SetRepository $setRepository): \Symfony\Component\HttpFoundation\Response
     {
         // Check access

@@ -28,7 +28,6 @@ use App\Repository\TopicRepository;
 use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of SubmissionController.
@@ -41,7 +40,7 @@ class SubmissionController extends AbstractController
     {
     }
 
-    #[Route(path: '/submission', name: 'submission')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission', name: 'submission')]
     public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -92,7 +91,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/submission/detail/{id}', name: 'submission-detail')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/detail/{id}', name: 'submission-detail')]
     public function detail($id, Request $request)
     {
         // Check access
@@ -216,7 +215,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/submission/new', name: 'new-submission')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/new', name: 'new-submission')]
     public function new(Request $request)
     {
         // Check access
@@ -305,7 +304,7 @@ class SubmissionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/submission/edit/{id}', name: 'edit-submission')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/submission/edit/{id}', name: 'edit-submission')]
     public function edit(int $id, Request $request)
     {
         // Check access

@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
-    #[Route(path: '/dashboard', name: 'dashboard')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/dashboard', name: 'dashboard')]
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
         // Check access

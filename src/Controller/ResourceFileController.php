@@ -10,12 +10,12 @@ use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // Repositories
 use Symfony\Component\HttpFoundation\Request;
+
 // Forms
-use Symfony\Component\Routing\Annotation\Route;
 
 class ResourceFileController extends AbstractController
 {
-    #[Route(path: '/file', name: 'file')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/file', name: 'file')]
     public function index(Request $request, ResourceFileRepository $resourceFileRepository, FileUploader $fileUploader): \Symfony\Component\HttpFoundation\Response
     {
         // Check access

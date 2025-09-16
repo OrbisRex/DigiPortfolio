@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-
 /**
  * Description of DefaultController.
  *
@@ -11,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends BasicController
 {
-    #[Route(path: '/', name: 'home')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/', name: 'home')]
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('default/index.html.twig', [

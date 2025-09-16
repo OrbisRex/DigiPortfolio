@@ -10,12 +10,12 @@ use App\Repository\CriterionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // Repositories
 use Symfony\Component\HttpFoundation\Request;
+
 // Forms
-use Symfony\Component\Routing\Annotation\Route;
 
 class CriterionController extends AbstractController
 {
-    #[Route(path: '/criterion', name: 'criterion')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion', name: 'criterion')]
     public function index(CriterionRepository $criterionRepository): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -30,7 +30,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/criterion/new', name: 'new-criterion')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/new', name: 'new-criterion')]
     public function new(Request $request)
     {
         // Check access
@@ -66,7 +66,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
     public function edit($id, Request $request, CriterionRepository $criterionRepository)
     {
         // Check access
@@ -107,7 +107,7 @@ class CriterionController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/criterion/add', name: 'add-criterion')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/criterion/add', name: 'add-criterion')]
     public function add(Request $request)
     {
         // Check access

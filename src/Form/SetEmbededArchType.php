@@ -23,7 +23,7 @@ class SetEmbededArchType extends AbstractType
                     'class' => Set::class,
                     'choice_label' => 'name',
                     'multiple' => true,
-                    'query_builder' => fn(FormRepositor $repo) => $repo->findAll(),
+                    'query_builder' => fn (FormRepositor $repo) => $repo->findAll(),
                 ]
             )
         ;

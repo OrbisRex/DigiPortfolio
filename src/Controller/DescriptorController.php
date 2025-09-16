@@ -34,7 +34,6 @@ use App\Repository\CriterionRepository;
 use App\Repository\DescriptorRepository;
 // Repositories
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of DescriptorController.
@@ -47,7 +46,7 @@ class DescriptorController extends BasicController
     {
     }
 
-    #[Route(path: '/descriptor', name: 'descriptor')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor', name: 'descriptor')]
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -65,7 +64,7 @@ class DescriptorController extends BasicController
         ]);
     }
 
-    #[Route(path: '/descriptor/new', name: 'new-descriptor')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor/new', name: 'new-descriptor')]
     public function new(Request $request)
     {
         // Check access
@@ -137,7 +136,7 @@ class DescriptorController extends BasicController
         ]);
     }
 
-    #[Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/descriptor/edit/{criterionId}/{id}', name: 'edit-descriptor')]
     public function edit(int $criterionId, int $id, Request $request)
     {
         // Check access

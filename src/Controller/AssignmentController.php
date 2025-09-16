@@ -19,7 +19,6 @@ use App\Repository\SetRepository;
 use App\Repository\SubjectRepository;
 use App\Repository\TopicRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of AssignmentController.
@@ -32,7 +31,7 @@ class AssignmentController extends BasicController
     {
     }
 
-    #[Route(path: '/assignment', name: 'assignment')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment', name: 'assignment')]
     public function index(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -86,7 +85,7 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
     public function detail(int $id): \Symfony\Component\HttpFoundation\Response
     {
         // Check access
@@ -116,7 +115,7 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[Route(path: '/assignment/new', name: 'new-assignment')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/new', name: 'new-assignment')]
     public function new(Request $request)
     {
         // Check access
@@ -177,7 +176,7 @@ class AssignmentController extends BasicController
         ]);
     }
 
-    #[Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
     public function edit(int $id, Request $request)
     {
         // Check access
