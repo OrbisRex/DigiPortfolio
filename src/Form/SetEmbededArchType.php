@@ -2,17 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Set;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Doctrine\Form\Type\TextType;
 use Symfony\Component\Form\AbstractType;
-// Form types
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use App\Entity\Set;
+use App\Repository\SetRepository;
 
 class SetEmbededArchType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('id', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Set']])
@@ -23,13 +24,13 @@ class SetEmbededArchType extends AbstractType
                     'class' => Set::class,
                     'choice_label' => 'name',
                     'multiple' => true,
-                    'query_builder' => fn (FormRepositor $repo) => $repo->findAll(),
+                    'query_builder' => fn (SetRepository $repo) => $repo->findAll(),
                 ]
             )
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Set::class,

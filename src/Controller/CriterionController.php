@@ -69,7 +69,7 @@ class CriterionController extends AbstractController
     }
 
     #[Route(path: '/criterion/edit/{id}', name: 'edit-criterion')]
-    public function edit($id, Request $request, CriterionRepository $criterionRepository)
+    public function edit(int $id, Request $request, CriterionRepository $criterionRepository)
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

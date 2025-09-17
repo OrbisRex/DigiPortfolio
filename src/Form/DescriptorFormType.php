@@ -22,7 +22,7 @@ class DescriptorFormType extends AbstractType
         $this->levelChoices = ['Level - Basic' => 'basic', 'Level - Standard' => 'standard', 'Level - Advanced' => 'advanced', 'Level - Master' => 'master'];
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', TextType::class, [
@@ -49,7 +49,7 @@ class DescriptorFormType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Descriptor::class,
@@ -59,7 +59,7 @@ class DescriptorFormType extends AbstractType
         ]);
     }
 
-    private function swichLevelChoice($level)
+    private function swichLevelChoice($level): array
     {
         $currentLevel = match ($level) {
             'basic' => ['standard'],

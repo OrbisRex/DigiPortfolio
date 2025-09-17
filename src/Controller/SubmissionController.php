@@ -96,7 +96,7 @@ class SubmissionController extends AbstractController
     }
 
     #[Route(path: '/submission/detail/{id}', name: 'submission-detail')]
-    public function detail($id, Request $request)
+    public function detail(int $id, Request $request)
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');

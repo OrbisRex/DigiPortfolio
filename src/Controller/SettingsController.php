@@ -139,7 +139,7 @@ class SettingsController extends AbstractController
     }
 
     #[Route(path: '/settings/subject/{id}', name: 'settings-subject')]
-    public function subject($id, Request $request, SubjectRepository $subjectRepository): Response
+    public function subject(int $id, Request $request, SubjectRepository $subjectRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -185,7 +185,7 @@ class SettingsController extends AbstractController
     }
 
     #[Route(path: '/settings/topic/{id}', name: 'settings-topic')]
-    public function topic($id, Request $request, TopicRepository $topicRepository): Response
+    public function topic(int $id, Request $request, TopicRepository $topicRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -225,7 +225,7 @@ class SettingsController extends AbstractController
     }
 
     #[Route(path: '/settings/set/{id}', name: 'settings-set')]
-    public function set($id, Request $request, SetRepository $setRepository): Response
+    public function set(int $id, Request $request, SetRepository $setRepository): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');

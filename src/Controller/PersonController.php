@@ -51,7 +51,7 @@ class PersonController extends AbstractController
 
     #[Route(path: '/person/profile/{id}', name: 'person-profile')]
     public function profile(
-        $id,
+        int $id,
         Request $request,
         PersonRepository $personRepository,
         AssignmentPersonRepository $assignmentPersonRepository,
@@ -110,7 +110,7 @@ class PersonController extends AbstractController
 
     #[Route(path: '/person/import/{id}', name: 'import-person')]
     public function import(
-        $id,
+        int $id,
         CsvImporter $csvImporter,
         UserPasswordHasherInterface $passwordHasher,
         ResourceFileRepository $resourceFileRepository,
