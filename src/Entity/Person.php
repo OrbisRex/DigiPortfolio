@@ -128,14 +128,6 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Deprecated - remove in Symfony 6.
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
-
-    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
