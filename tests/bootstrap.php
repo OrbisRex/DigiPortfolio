@@ -23,3 +23,7 @@ if (isset($_ENV['BOOTSTRAP_CREATE_TEST_SCHEMA'])) {
         __DIR__
     ));
 }
+
+if ($_SERVER['APP_DEBUG']) {
+    umask(0000);
+}
