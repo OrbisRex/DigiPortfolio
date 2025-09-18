@@ -17,7 +17,7 @@ use App\Repository\ResourceFileRepository;
 class ResourceFile
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column()]
     private ?int $id = null;
 

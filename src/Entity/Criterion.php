@@ -22,7 +22,7 @@ class Criterion
      */
     #[ORM\Id]
     #[ORM\Column()]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
     /**

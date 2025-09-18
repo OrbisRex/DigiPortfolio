@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PersonRepository;
-use AssignmentPerson;
+use App\Entity\AssignmentPerson;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,15 +24,12 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     
     #[ORM\Id]
     #[ORM\Column()]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    /**
-     * @var string
-     */    
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
