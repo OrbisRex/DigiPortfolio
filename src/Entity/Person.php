@@ -30,6 +30,9 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * @var string
+     */    
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -142,10 +145,11 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles[] = $this->roles;
+        $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        // $roles = [];
-        $roles[] = self::ROLE_USER;
+        if(empty($roles)) {
+            $roles[] = self::ROLE_USER;
+        }
 
         return array_unique($roles);
     }
