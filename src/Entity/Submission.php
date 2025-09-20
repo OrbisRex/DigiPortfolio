@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use DateTimeInterface;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 use App\Entity\Assignment;
 use App\Entity\ResourceFile;
@@ -36,51 +37,44 @@ class Submission
     private ?string $text = null;
 
     /**
-     * Many files can be in many submissions.
-     *
-     * @var Collection
+     * Many submissions can have many files.
      */
     #[ORM\ManyToMany(targetEntity: ResourceFile::class, inversedBy: 'submissions', cascade: ['persist'])]
     private Collection $files;
 
     /**
-     * Many people can be in many submissions.
-     *
-     * @var Collection
+     * Many submissions can belong to many people.
      */
     #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'submissions', cascade: ['persist'])]
     private Collection $people;
 
     /**
-     * One assignment can have many submissions.
+     * Submissions can belong to one assignment.
      */
     #[ORM\ManyToOne(targetEntity: Assignment::class, inversedBy: 'submissions', cascade: ['persist', 'remove'])]
     private ?Assignment $assignment = null;
 
-    /**
-     * @var Collection
-     */
-    #[ORM\ManyToMany(targetEntity: Criterion::class, inversedBy: 'submissions', cascade: ['persist'])]
-    private Collection $criteria;
-
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column(nullable: false)]
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private ?int $log = null;
 
-    #[ORM\Column()]
-    private ?DateTimeInterface $updatetime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $updatetime = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?DateTimeInterface $createtime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $createtime = null;
 
-    #[ORM\OneToOne(mappedBy: 'submission', cascade: ['persist', 'remove'])]
-    private ?Feedback $feedback = null;
+    /**
+     * Submission can have many feedbacks.
+     */    
+    #[ORM\OneToMany(targetEntity: Feedback::class, mappedBy: 'submission', cascade: ['persist', 'remove'])]
+    private Collection $feedbacks;
 
     public function __construct()
     {
         $this->people = new ArrayCollection();
         $this->files = new ArrayCollection();
-        $this->criteria = new ArrayCollection();
+        $this->feedbacks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,7 +165,7 @@ class Submission
             $this->files->removeElement($file);
             // set the owning side to null (unless already changed) NOTE: Is it better then just remove???
             if ($file->getSubmission($this) === $this) {
-                $file->addSubmission(null);
+                $file->addSubmission($this);
             }
         }
 
@@ -211,35 +205,9 @@ class Submission
         return $this->assignment;
     }
 
-    public function setAssignment(Assignment $assignment): self
+    public function setAssignment(?Assignment $assignment): self
     {
         $this->assignment = $assignment;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Criterion[]
-     */
-    public function getCriteria(): Collection
-    {
-        return $this->criteria;
-    }
-
-    public function addCriterion(Criterion $criterion): self
-    {
-        if (!$this->criteria->contains($criterion)) {
-            $this->criteria[] = $criterion;
-        }
-
-        return $this;
-    }
-
-    public function removeCriterion(Criterion $criterion): self
-    {
-        if ($this->criteria->contains($criterion)) {
-            $this->criteria->removeElement($criterion);
-        }
 
         return $this;
     }
@@ -249,49 +217,58 @@ class Submission
         return $this->log;
     }
 
-    public function setLog(Log $log): self
+    public function setLog(?Log $log): self
     {
         $this->log = $log;
 
         return $this;
     }
 
-    public function getUpdatetime(): ?DateTimeInterface
+    public function getUpdatetime(): ?DateTimeImmutable
     {
         return $this->updatetime;
     }
 
-    public function setUpdatetime(DateTimeInterface $updatetime): self
+    public function setUpdatetime(DateTimeImmutable $updatetime): self
     {
         $this->updatetime = $updatetime;
 
         return $this;
     }
 
-    public function getCreatetime(): ?DateTimeInterface
+    public function getCreatetime(): ?DateTimeImmutable
     {
         return $this->createtime;
     }
 
-    public function setCreatetime(DateTimeInterface $createtime): self
+    public function setCreatetime(DateTimeImmutable $createtime): self
     {
         $this->createtime = $createtime;
 
         return $this;
     }
 
-    public function getFeedback(): ?Feedback
+    /**
+     * @return Collection|Feedback[]
+     */
+    public function getFeedback(): Collection
     {
-        return $this->feedback;
+        return $this->feedbacks;
     }
 
-    public function setFeedback(Feedback $feedback): self
+    public function addFeedback(Feedback $feedback): self
     {
-        $this->feedback = $feedback;
+        if (!$this->feedbacks->contains($feedback)) {
+            $this->feedbacks[] = $feedback;
+        }
 
-        // set the owning side of the relation if necessary
-        if ($feedback->getSubmission() !== $this) {
-            $feedback->setSubmission($this);
+        return $this;
+    }
+
+    public function removeFeedback(Criterion $criterion): self
+    {
+        if ($this->feedbacks->contains($criterion)) {
+            $this->feedbacks->removeElement($criterion);
         }
 
         return $this;

@@ -17,37 +17,28 @@ use App\Repository\SetRepository;
 #[ORM\Entity(repositoryClass: SetRepository::class)]
 class Set
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
     /**
      * Many people can be in many sets.
-     *
-     * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'sets', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'sets', cascade: ['persist'])]
     private Collection $people;
 
     /**
      * One set has many assignments.
      */
+    #[ORM\JoinColumn(name: 'assignment_id', referencedColumnName: 'id')]
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'set')]
     private Collection $assignments;
 
@@ -66,22 +57,16 @@ class Set
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Set
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -90,10 +75,8 @@ class Set
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -133,6 +116,32 @@ class Set
         if ($this->people->contains($person)) {
             $this->people->removeElement($person);
             $person->removeSet($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Assignment[]
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Assignment $assigment): self
+    {
+        if (!$this->assignments->contains($assigment)) {
+            $this->assignments[] = $assigment;
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assigment): self
+    {
+        if ($this->assignments->contains($assigment)) {
+            $this->assignments->removeElement($assigment);
         }
 
         return $this;

@@ -9,7 +9,7 @@ class PersonTest extends KernelTestCase
 {
     private $person;
 
-    public function setup(): void
+    public function setUp(): void
     {
         $this->person = new Person();
         $this->person->setName('Admin');

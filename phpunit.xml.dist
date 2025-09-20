@@ -15,8 +15,15 @@
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
         <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
-        <!-- <env name="BOOTSTRAP_CREATE_TEST_DATABASE" value="true"/> -->
-        <!-- <env name="BOOTSTRAP_CREATE_TEST_SCHEMA" value="true"/> -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled=1"/>
+        
+        <!-- Not use now. 
+        <env name="BOOTSTRAP_CREATE_TEST_DATABASE" value="true"/>
+        <env name="BOOTSTRAP_CREATE_TEST_SCHEMA" value="true"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="verbose=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=1"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+         -->
     </php>
 
     <testsuites>
@@ -30,10 +37,6 @@
             <directory suffix=".php">src</directory>
         </include>
     </coverage>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 
     <extensions>
         <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />

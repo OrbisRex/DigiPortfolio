@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use DateTime;
-use App\Repository\FeedbackRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
+use App\Repository\FeedbackRepository;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 class Feedback
@@ -19,32 +21,45 @@ class Feedback
     #[ORM\Column(type: 'text')]
     private ?string $note = null;
 
+    /**
+     * Feedback belongs to one author.
+     */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: false)]
-    #[ORM\ManyToOne(inversedBy: 'owner', cascade: ['persist', 'remove'])]
-    private ?Person $owner = null;
+    #[ORM\ManyToOne(inversedBy: 'feedbacks', cascade: ['persist', 'remove'])]
+    private ?Person $author = null;
 
+    /**
+     * One Feedback belongs to one submission.
+     */
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\OneToOne(targetEntity: Submission::class, inversedBy: 'feedback', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Submission::class, inversedBy: 'feedbacks', cascade: ['persist', 'remove'])]
     private $submission;
 
-    #[ORM\ManyToMany(targetEntity: Descriptor::class, inversedBy: 'descriptors', cascade: ['persist'])]
-    private Collection $descriptors;
+    /**
+     * Feedbacks have many comments.
+     */
+    #[ORM\JoinColumn(name: 'comment_id', referencedColumnName: 'id')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy:'feedback', cascade: ['persist'])]
+    private Collection $comments;
 
+    /**
+     * One Feedback has One Log.
+     */
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private ?int $log = null;
 
     #[ORM\Column()]
     private ?int $version = null;
 
-    #[ORM\Column()]
-    private ?DateTime $createtime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $createtime = null;
 
-    #[ORM\Column()]
-    private ?DateTime $updatetime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $updatetime = null;
 
     public function __construct()
     {
-        $this->descriptors = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,14 +79,14 @@ class Feedback
         return $this;
     }
 
-    public function getOwner(): ?Person
+    public function getAuthor(): ?Person
     {
-        return $this->owner;
+        return $this->author;
     }
 
-    public function setOwner(Person $owner): self
+    public function setAuthor(Person $author): self
     {
-        $this->owner = $owner;
+        $this->author = $author;
 
         return $this;
     }
@@ -89,26 +104,26 @@ class Feedback
     }
 
     /**
-     * @return Collection|Descriptor[]
+     * @return Collection|Comment[]
      */
-    public function getDescriptors(): Collection
+    public function getComments(): Collection
     {
-        return $this->descriptors;
+        return $this->comments;
     }
 
-    public function addDescriptor(Descriptor $descriptor): self
+    public function addComment(Comment $comment): self
     {
-        if (!$this->descriptors->contains($descriptor)) {
-            $this->descriptors[] = $descriptor;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
         }
 
         return $this;
     }
 
-    public function removeDescriptor(Descriptor $descriptor): self
+    public function removeComment(Comment $comment): self
     {
-        if ($this->descriptors->contains($descriptor)) {
-            $this->descriptors->removeElement($descriptor);
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
         }
 
         return $this;
@@ -138,24 +153,24 @@ class Feedback
         return $this;
     }
 
-    public function getCreatetime(): ?DateTimeInterface
+    public function getCreatetime(): ?DateTimeImmutable
     {
         return $this->createtime;
     }
 
-    public function setCreatetime(?DateTimeInterface $createtime): self
+    public function setCreatetime(?DateTimeImmutable $createtime): self
     {
         $this->createtime = $createtime;
 
         return $this;
     }
 
-    public function getUpdatetime(): ?DateTimeInterface
+    public function getUpdatetime(): ?DateTimeImmutable
     {
         return $this->updatetime;
     }
 
-    public function setUpdatetime(?DateTimeInterface $updatetime): self
+    public function setUpdatetime(?DateTimeImmutable $updatetime): self
     {
         $this->updatetime = $updatetime;
 

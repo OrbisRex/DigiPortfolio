@@ -17,34 +17,26 @@ use App\Repository\CriterionRepository;
 #[ORM\Entity(repositoryClass: CriterionRepository::class)]
 class Criterion
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
     /**
      * Criteria have many descriptors.
-     *
-     * @var Collection
      */
     #[ORM\JoinTable(name: 'criteria_descriptors')]
-    #[ORM\ManyToMany(targetEntity: Criterion::class, inversedBy: 'criteria', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Descriptor::class, inversedBy: 'criteria', cascade: ['persist'])]
     private Collection $descriptors;
 
     /**
-     * One Criterion has One Person.
+     * Many criterion belongs to one author.
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'criterion')]
+    #[ORM\ManyToOne(inversedBy: 'criteria')]
     private ?Person $author = null;
 
     /**
@@ -55,46 +47,29 @@ class Criterion
     private ?int $log = null;
 
     /**
-     * Criteria have many assignments.
-     *
-     * @var Collection
+     * Many Criteria have many assignments.
      */
     #[ORM\ManyToMany(targetEntity: Assignment::class, mappedBy: 'criteria')]
     private Collection $assignments;
-
-    /**
-     * Many Criteria have Many submissions.
-     *
-     * @var Collection
-     */
-    #[ORM\ManyToMany(targetEntity: Submission::class, mappedBy: 'criteria')]
-    private Collection $submissions;
 
     public function __construct()
     {
         $this->descriptors = new ArrayCollection();
         $this->assignments = new ArrayCollection();
-        $this->submissions = new ArrayCollection();
     }
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Criterion
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -103,10 +78,8 @@ class Criterion
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -130,7 +103,7 @@ class Criterion
 
     public function setAuthor(?Person $author): self
     {
-        $this->person = $author;
+        $this->author = $author;
 
         return $this;
     }
@@ -157,7 +130,7 @@ class Criterion
     {
         if ($this->descriptors->contains($descriptor)) {
             $this->descriptors->removeElement($descriptor);
-            $descriptor->removeCriteria($this);
+            $descriptor->removeCriterion($this);
         }
 
         return $this;
@@ -186,44 +159,6 @@ class Criterion
         if ($this->assignments->contains($assignment)) {
             $this->assignments->removeElement($assignment);
             $assignment->removeCriterion($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Submission[]
-     */
-    public function getSubmissions(): Collection
-    {
-        return $this->submissions;
-    }
-
-    public function addSubmissions(Submission $submission): self
-    {
-        if (!$this->submissions->contains($submission)) {
-            $this->submissions[] = $submission;
-            $submission->addSubmission($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubmission(Submission $submission): self
-    {
-        if ($this->submissions->contains($submission)) {
-            $this->submissions->removeElement($submission);
-            $submission->removeSubmission($this);
-        }
-
-        return $this;
-    }
-
-    public function addSubmission(Submission $submission): self
-    {
-        if (!$this->submissions->contains($submission)) {
-            $this->submissions[] = $submission;
-            $submission->addCriterion($this);
         }
 
         return $this;

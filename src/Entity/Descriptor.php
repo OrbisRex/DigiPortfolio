@@ -17,58 +17,48 @@ use App\Repository\DescriptorRepository;
 #[ORM\Entity(repositoryClass: DescriptorRepository::class)]
 class Descriptor
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $type = null;
 
-    /**
-     * @var int
-     */
     #[ORM\Column()]
     private ?int $weight = null;
 
     /**
-     * Descriptors have many criteria.
-     *
-     * @var Collection
+     * Many Descriptors have many criteria.
      */
-    #[ORM\ManyToMany(targetEntity: \Descriptor::class, mappedBy: 'descriptors')]
+    #[ORM\ManyToMany(targetEntity: Criterion::class, mappedBy: 'descriptors')]
     private Collection $criteria;
 
     /**
-     * One Descriptor has One Person.
+     * Descriptor belongs to one author.
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'descriptor')]
+    #[ORM\ManyToOne()]
     private ?Person $author = null;
+
+    /**
+     * Descriptor has one comment.
+     */
+    #[ORM\JoinColumn(name: 'comment_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: Comment::class)]
+    private ?int $comment= null;
 
     /**
      * One Descriptor has One Log.
      */
     #[ORM\JoinColumn(name: 'log_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Log::class)]
+    #[ORM\OneToOne(targetEntity: Log::class)]
     private ?int $log= null;
 
     public function __construct()
@@ -78,22 +68,16 @@ class Descriptor
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Descriptor
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -102,22 +86,16 @@ class Descriptor
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return Descriptor
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -126,22 +104,16 @@ class Descriptor
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * Set type.
-     *
-     * @param string $type
-     *
-     * @return Descriptor
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -150,22 +122,16 @@ class Descriptor
 
     /**
      * Get type.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
      * Set weight.
-     *
-     * @param int $weight
-     *
-     * @return Descriptor
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight): self
     {
         $this->weight = $weight;
 
@@ -174,10 +140,8 @@ class Descriptor
 
     /**
      * Get weight.
-     *
-     * @return int
      */
-    public function getWeight()
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
@@ -204,6 +168,18 @@ class Descriptor
         if ($this->criteria->contains($criterion)) {
             $this->criteria->removeElement($criterion);
         }
+
+        return $this;
+    }
+
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?Comment $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }

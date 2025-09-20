@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Assignment;
 
 use App\Repository\TopicRepository;
-use PHPStan\Collectors\CollectedData;
 
 /**
  * Topic.
@@ -18,36 +17,26 @@ use PHPStan\Collectors\CollectedData;
 #[ORM\Entity(repositoryClass: TopicRepository::class)]
 class Topic
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    /**
-     * One topic has many assignments.
-     */
+    #[ORM\JoinColumn(name: 'assignment_id', referencedColumnName: 'id')]
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'topic')]
     private Collection $assignments;
 
     /**
-     * Many topics has one person.
+     * Many topics has one author.
      */
-    #[ORM\ManyToOne(inversedBy: 'topics')]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(inversedBy: 'topics', cascade: ['persist'])]
     private ?Person $person = null;
 
     /**
@@ -64,22 +53,16 @@ class Topic
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Topic
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -88,22 +71,16 @@ class Topic
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return Topic
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -112,12 +89,36 @@ class Topic
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    /**
+     * @return Collection|Assignment[]
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Assignment $assigment): self
+    {
+        if (!$this->assignments->contains($assigment)) {
+            $this->assignments[] = $assigment;
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assigment): self
+    {
+        if ($this->assignments->contains($assigment)) {
+            $this->assignments->removeElement($assigment);
+        }
+
+        return $this;
     }
 
     public function getPerson(): ?Person

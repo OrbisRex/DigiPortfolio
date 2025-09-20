@@ -17,31 +17,25 @@ use App\Repository\SubjectRepository;
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 class Subject
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100, unique: true)]
     private ?string $name = null;
 
     /**
      * Many people can have many subjects.
-     *
-     * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Person::class, inversedBy: 'subjects', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'subjects', cascade: ['persist'])]
     private Collection $people;
 
     /**
      * One subect has many assignments.
      */
+    #[ORM\JoinColumn(name: 'assignment_id', referencedColumnName: 'id')]
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'subject')]
     private Collection $assignments;
 
@@ -60,22 +54,16 @@ class Subject
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Subject
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -84,10 +72,8 @@ class Subject
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -127,6 +113,32 @@ class Subject
         if ($this->people->contains($person)) {
             $this->people->removeElement($person);
             $person->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Assignment[]
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Assignment $assigment): self
+    {
+        if (!$this->assignments->contains($assigment)) {
+            $this->assignments[] = $assigment;
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assigment): self
+    {
+        if ($this->assignments->contains($assigment)) {
+            $this->assignments->removeElement($assigment);
         }
 
         return $this;

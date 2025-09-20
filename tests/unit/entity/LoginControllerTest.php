@@ -13,6 +13,11 @@ class LoginControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
+        //Use to skip a test
+        //$this->markTestSkipped(
+        //    'Check if DB is ready and works.'
+        //);
+
         $this->client = static::createClient();
         $container = static::getContainer();
         $em = $container->get('doctrine.orm.entity_manager');
@@ -31,6 +36,9 @@ class LoginControllerTest extends WebTestCase
 
         $user = (new Person())->setEmail('email@example.com');
         $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+        $user->setName('TestAdmin');
+        $user->setRoles(['ROLE_ADMIN']);
+        $user->setDisabled(false);
 
         $em->persist($user);
         $em->flush();
@@ -74,7 +82,7 @@ class LoginControllerTest extends WebTestCase
             '_password' => 'password',
         ]);
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/dashboard');
         $this->client->followRedirect();
 
         self::assertSelectorNotExists('.alert-danger');

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LogRepository;
-use DateTime;
-use DateTimeInterface;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
+use App\Repository\LogRepository;
 
 /**
  * Log.
@@ -14,17 +15,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LogRepository::class)]
 class Log
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $operation = null;
 
@@ -34,36 +29,24 @@ class Log
     #[ORM\OneToOne()]
     private ?Person $person = null;
 
-    /**
-     * @var DateTimeInterface
-     */
-    #[ORM\Column()]
-    private ?DateTimeInterface $timestamp = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $timestamp = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $result = null;
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set operation.
-     *
-     * @param string $operation
-     *
-     * @return Log
      */
-    public function setOperation($operation)
+    public function setOperation(string $operation): self
     {
         $this->operation = $operation;
 
@@ -72,10 +55,8 @@ class Log
 
     /**
      * Get operation.
-     *
-     * @return string
      */
-    public function getOperation()
+    public function getOperation(): ?string
     {
         return $this->operation;
     }
@@ -90,8 +71,6 @@ class Log
 
     /**
      * Set person.
-     *
-     * @param Person $person
      */
     public function setPerson($person): self
     {
@@ -102,9 +81,8 @@ class Log
 
     /**
      * Set timestamp.
-     *
      */
-    public function setTimestamp(DateTimeInterface $timestamp): self
+    public function setTimestamp(DateTimeImmutable $timestamp): self
     {
         $this->timestamp = $timestamp;
 
@@ -113,22 +91,16 @@ class Log
 
     /**
      * Get timestamp.
-     *
-     * @return DateTime
      */
-    public function getTimestamp(): ?DateTimeInterface
+    public function getTimestamp(): ?DateTimeImmutable
     {
         return $this->timestamp;
     }
 
     /**
      * Set result.
-     *
-     * @param string $result
-     *
-     * @return Log
      */
-    public function setResult($result)
+    public function setResult(string $result): self
     {
         $this->result = $result;
 
@@ -137,10 +109,8 @@ class Log
 
     /**
      * Get result.
-     *
-     * @return string
      */
-    public function getResult()
+    public function getResult(): ?string
     {
         return $this->result;
     }

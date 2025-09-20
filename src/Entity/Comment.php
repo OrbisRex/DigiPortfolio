@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
 use DateTimeInterface;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
+use App\Repository\CommentRepository;
+use DateTimeImmutable;
 
 /**
  * Comment.
@@ -14,58 +16,46 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'text')]
     private ?string $text = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $type = null;
 
+    /**
+     * Many coments belongs to one author.
+     */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'Comment', cascade: ['persist', 'remove'])]
-    private ?Person $owner = null;
-
-    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'Comment', cascade: ['persist', 'remove'])]
-    private ?Submission $submission = null;
+    #[ORM\ManyToOne(inversedBy: 'comments', cascade: ['persist', 'remove'])]
+    private ?Person $author = null;
 
     /**
-     * @var DateTimeInterface
+     * Many coments belongs to one submission.
      */
-    #[ORM\Column()]
-    private ?DateTimeInterface $createtime = null;
+    #[ORM\JoinColumn(name: 'feedback_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(inversedBy: 'comments', cascade: ['persist', 'remove'])]
+    private ?Feedback $feedback = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $createtime = null;
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set text.
-     *
-     * @param string $text
-     *
-     * @return Comment
      */
-    public function setText($text)
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -74,22 +64,16 @@ class Comment
 
     /**
      * Get text.
-     *
-     * @return string
      */
-    public function getText()
+    public function getText(): ?string
     {
         return $this->text;
     }
 
     /**
      * Set type.
-     *
-     * @param string $type
-     *
-     * @return Comment
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -98,15 +82,13 @@ class Comment
 
     /**
      * Get type.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function getCreatetime(): ?DateTimeInterface
+    public function getCreatetime(): ?DateTimeImmutable
     {
         return $this->createtime;
     }
@@ -118,26 +100,26 @@ class Comment
         return $this;
     }
 
-    public function getOwner(): ?Person
+    public function getAuthor(): ?Person
     {
-        return $this->owner;
+        return $this->author;
     }
 
-    public function setOwner(?Person $owner): self
+    public function setAuthor(?Person $author): self
     {
-        $this->owner = $owner;
+        $this->author = $author;
 
         return $this;
     }
 
-    public function getSubmission(): ?Submission
+    public function getFeedback(): ?Feedback
     {
-        return $this->submission;
+        return $this->feedback;
     }
 
-    public function setSubmission(?Submission $submission): self
+    public function setFeedback(?Feedback $feedback): self
     {
-        $this->submission = $submission;
+        $this->feedback = $feedback;
 
         return $this;
     }

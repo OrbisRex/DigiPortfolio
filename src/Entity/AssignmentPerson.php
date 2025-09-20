@@ -16,7 +16,7 @@ use App\Repository\AssignmentPersonRepository;
 class AssignmentPerson
 {
     /**
-     * @var int
+     * Id
      */
     #[ORM\Id]
     #[ORM\Column()]
@@ -25,24 +25,18 @@ class AssignmentPerson
 
     /**
      * Many people can have one assignment.
-     *
-     * @var Person
      */
     #[ORM\ManyToOne(inversedBy: 'assignments')]
     private ?Person $person = null;
 
     /**
      * Many assignments have one person.
-     *
-     * @var Assignment
      */
     #[ORM\ManyToOne(inversedBy: 'people')]
     private ?Assignment $assignment = null;
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId()
     {
@@ -51,12 +45,8 @@ class AssignmentPerson
 
     /**
      * Set assignment.
-     *
-     * @param int $assignment
-     *
-     * @return AssignmentPerson
      */
-    public function setAssignment($assignment)
+    public function setAssignment(Assignment $assignment): self
     {
         $this->assignment = $assignment;
 
@@ -65,8 +55,6 @@ class AssignmentPerson
 
     /**
      * Get assignment.
-     *
-     * @return Assignment
      */
     public function getAssignment()
     {

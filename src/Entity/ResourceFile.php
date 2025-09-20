@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\DBAL\Types\Types;
 
 use App\Entity\Person;
 
@@ -36,7 +37,7 @@ class ResourceFile
     /**
      * One file can have one owner.
      */
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(inversedBy: 'resourceFiles')]
     private ?Person $owner = null;
 
@@ -45,7 +46,7 @@ class ResourceFile
      *
      * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Submission::class, mappedBy: 'files', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Submission::class, mappedBy: 'files', cascade: ['persist'])]
     private Collection $submissions;
 
     #[ORM\Column(length: 255)]
@@ -55,13 +56,13 @@ class ResourceFile
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
     private ?int $log = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?DateTimeInterface $updatetime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $updatetime = null;
 
     /**
-     * @var File|null
+     * Represents file (NOTE: Do I needed?)
      */
-    private $file;
+    private ?File $file;
 
     public function __construct()
     {
@@ -90,7 +91,7 @@ class ResourceFile
         return $this->size;
     }
 
-    public function setSize(string $size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -172,7 +173,7 @@ class ResourceFile
         return $this->log;
     }
 
-    public function setLog(Log $log): self
+    public function setLog(?Log $log): self
     {
         $this->log = $log;
 
@@ -195,7 +196,7 @@ class ResourceFile
         }
     }
 
-    public function getUpdatetime(): ?DateTimeInterface
+    public function getUpdatetime(): ?DateTimeImmutable
     {
         return $this->updatetime;
     }

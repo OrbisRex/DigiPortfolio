@@ -2,16 +2,18 @@
 
 namespace App\Entity;
 
-use DateTime;
-use App\Repository\AssignmentRepository;
-use DateTimeInterface;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 use App\Entity\Subject;
 use App\Entity\Topic;
 use App\Entity\AssignmentPerson;
+use App\Entity\Criterion;
+
+use App\Repository\AssignmentRepository;
 
 /**
  * Assignment.
@@ -20,23 +22,14 @@ use App\Entity\AssignmentPerson;
 #[ORM\Entity(repositoryClass: AssignmentRepository::class)]
 class Assignment
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     private ?int $id = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $name = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 100)]
     private ?string $state = null;
 
@@ -44,14 +37,14 @@ class Assignment
      * Many Assignments has one Subject.
      */
     #[ORM\JoinColumn(name: 'subject_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'subjects', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private ?Subject $subject = null;
 
     /**
      * Many Assignments has one Topic.
      */
     #[ORM\JoinColumn(name: 'topic_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(inversedBy: 'topics', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'assignments', cascade: ['persist', 'remove'])]
     private ?Topic $topic = null;
 
     /**
@@ -63,36 +56,25 @@ class Assignment
 
     /**
      * One assignment can have many people.
-     *
-     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'person')]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'assignment')]
     private Collection $people;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(length: 255)]
     private ?string $note = null;
 
-    /**
-     * @var DateTimeInterface
-     */
-    #[ORM\Column()]
-    private ?DateTimeInterface $updatetime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeImmutable $updatetime = null;
 
     /**
      * Assignment has many criteria.
-     *
-     * @var Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Criterion::class, inversedBy: 'assignments', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Criterion::class, inversedBy: 'assignments', cascade: ['persist'])]
     private Collection $criteria;
 
     /**
      * One assignment can have many submissions.
-     *
-     * @var Collection
      */
     #[ORM\OneToMany(targetEntity: Submission::class, mappedBy: 'assignment', cascade: ['persist', 'remove'])]
     private Collection $submissions;
@@ -106,22 +88,16 @@ class Assignment
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Assignment
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -130,22 +106,16 @@ class Assignment
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * Set state.
-     *
-     * @param string $state
-     *
-     * @return Assignment
      */
-    public function setState($state)
+    public function setState(string $state): self
     {
         $this->state = $state;
 
@@ -154,22 +124,16 @@ class Assignment
 
     /**
      * Get state.
-     *
-     * @return string
      */
-    public function getState()
+    public function getState(): ?string
     {
         return $this->state;
     }
 
     /**
      * Set subject.
-     *
-     * @param string $subject
-     *
-     * @return Assignment
      */
-    public function setSubject($subject)
+    public function setSubject(?Subject $subject): self
     {
         $this->subject = $subject;
 
@@ -178,22 +142,16 @@ class Assignment
 
     /**
      * Get subject.
-     *
-     * @return string
      */
-    public function getSubject()
+    public function getSubject(): ?Subject
     {
         return $this->subject;
     }
 
     /**
      * Set topic.
-     *
-     * @param string $topic
-     *
-     * @return Assignment
      */
-    public function setTopic($topic)
+    public function setTopic(?Topic $topic): self
     {
         $this->topic = $topic;
 
@@ -202,14 +160,15 @@ class Assignment
 
     /**
      * Get topic.
-     *
-     * @return string
      */
-    public function getTopic()
+    public function getTopic(): ?Topic
     {
         return $this->topic;
     }
 
+    /**
+     * Get set.
+     */
     public function getSet(): ?Set
     {
         return $this->set;
@@ -252,22 +211,16 @@ class Assignment
 
     /**
      * Get note.
-     *
-     * @return string
      */
-    public function getNote()
+    public function getNote(): ?string
     {
         return $this->note;
     }
 
     /**
      * Set note.
-     *
-     * @param string $note
-     *
-     * @return Assignment
      */
-    public function setNote($note)
+    public function setNote(string $note): self
     {
         $this->note = $note;
 
@@ -276,19 +229,16 @@ class Assignment
 
     /**
      * Get updatetime.
-     *
      */
-    public function getUpdatetime(): ?DateTimeInterface
+    public function getUpdatetime(): ?DateTimeImmutable
     {
         return $this->updatetime;
     }
 
     /**
      * Set updatetime.
-     *
-     * @param string $updatetime
      */
-    public function setUpdatetime(DateTimeInterface $updatetime): self
+    public function setUpdatetime(DateTimeImmutable $updatetime): self
     {
         $this->updatetime = $updatetime;
 
@@ -331,7 +281,7 @@ class Assignment
 
     public function setSubmissions(Submission $submission): self
     {
-        $this->submission = $submission;
+        $this->submissions[] = $submission;
 
         // set the owning side of the relation if necessary
         if ($submission->getAssignment() !== $this) {
