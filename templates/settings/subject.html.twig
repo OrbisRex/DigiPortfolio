@@ -1,30 +1,40 @@
 {# Settings template #}
 {% extends 'base.html.twig' %}
 
-{% block title %}SinglePoint | Settings - Subject{% endblock %}
+{% block title %}DigiPortfolio | Settings - Subject{% endblock %}
 
 {% block body %}
     <section id="top" class="main">
         <div class="wide-envelop">
-        {%if subject == FALSE %}
-            <p class='info'>No subject found. Add some!</p>
-        {% else %}
-            <h1>{{ subject.name }}</h1>
-            <p>by {{ subject.person.name }}</p>
-        {% endif %}
+            {% if subject %}
+                <h1>{{ subject.name }}</h1>
+            {% else %}
+                <h1>New subject</h1>
+            {% endif %}
+            
+            {# Form to create or edit item. #}
+            {{ form_start(formSubject) }}
+                {{ form_errors(formSubject) }}
+                {{ form_row(formSubject.name) }}
+                <div class="wide">
+                    {{ form_row(formSubject.save) }}
+                </div>
+            {{ form_end(formSubject) }}
 
-        {{ form_start(formSubject) }}
-            {{ form_errors(formSubject) }}
-            {{ form_row(formSubject.name) }}
-            <div class="wide">
-                {{ form_row(formSubject.save) }}
-            </div>
-        {{ form_end(formSubject) }}
+            {% if subject %}
+                <h2>Who is in?</h2>
+                {% for person in subject.people %}
+                    <p>{{ person.name }}</p>
+                {% endfor %}
+            {% else %}
+                {# TODO: Add form to add new participants. #}
+                <p class='info'>No people found. Add some!</p>
+            {% endif %}
         </div>
     </section>
 
     <section id="navigation">
-        <span class="button"><a href="{{ path('settings') }}#subject" title="Settings"><</a></span>
+        <span class="button"><a href="{{ path('settings') }}#subject" title="Settings">&lt;</a></span>
         <span class="button warning"><a href="{{ path('app_logout')}}">Log Out</a></span>
     </section>
 {% endblock %}

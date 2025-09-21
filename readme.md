@@ -20,7 +20,7 @@ scoop install main/nodejs-lts
 node --version
 npm --version
 npm install --legacy-peer-deps
-npm watch (constant build) or npm run dev (one build)
+npm run watch (constant build) or npm run dev (one build)
 pg_ctl start
 symfony server:start --port 8080
 

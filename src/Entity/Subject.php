@@ -28,7 +28,7 @@ class Subject
     /**
      * Many people can have many subjects.
      */
-    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'subject_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'subjects', cascade: ['persist'])]
     private Collection $people;
 
