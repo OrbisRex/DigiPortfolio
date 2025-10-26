@@ -11,5 +11,55 @@
 		"emmet.includeLanguages": {
 			"twig": "html"
 		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Listen for Xdebug 8.4.12",
+				"type": "php",
+				"request": "launch",
+				"port": 9003,
+				"runtimeExecutable": "C:/xampp/php/php.exe",
+				"env": {
+					"XDEBUG_MODE": "debug, profile",
+					"XDEBUG_CONFIG": "log_level=7 log=C:/Users/escap/WebDocs/DigiPortfolio/var/log/xdebug-log.txt"
+				}
+			},
+			{
+				"name": "Launch currently open script",
+				"type": "php",
+				"request": "launch",
+				"program": "${file}",
+				"cwd": "${fileDirname}",
+				"port": 0,
+				"runtimeArgs": [
+					"-dxdebug.start_with_request=no"
+				],
+				"env": {
+					"XDEBUG_MODE": "debug, develop",
+					"XDEBUG_CONFIG": "client_port=${port}"
+				}
+			},
+			{
+				"name": "Launch Built-in web server",
+				"type": "php",
+				"request": "launch",
+				"runtimeArgs": [
+					"-dxdebug.mode=debug",
+					"-dxdebug.start_with_request=yes",
+					"-S",
+					"localhost:0"
+				],
+				"program": "",
+				"cwd": "${workspaceRoot}",
+				"port": 9003,
+				"serverReadyAction": {
+					"pattern": "Development Server \\(http://localhost:([0-9]+)\\) started",
+					"uriFormat": "http://localhost:%s",
+					"action": "openExternally"
+				}
+			}
+		]
 	}
 }

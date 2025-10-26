@@ -12,19 +12,19 @@
                 <h1>New set</h1>
             {% endif %}
 
+            {# Form to create or edit item. #}
             {{ form_start(form) }}
                 {{ form_errors(form) }}
-                <div class="wide">
-                    {{ form_row(form.name) }}
-                </div>
-                {{ form_row(form.people) }}
+                {{ form_row(form.type) }}
+                {{ form_row(form.name) }}
                 <div class="wide">
                     {{ form_row(form.save) }}
                 </div>
-            {{ form_end(formSubject) }}
+            {{ form_end(form) }}
 
+            {# List of registered people #}
+            <h2>Who is in?</h2>
             {% if set %}
-                <h2>Who is in?</h2>
                 {% for person in set.people %}
                     <p>{{ person.name }}</p>
                 {% endfor %}

@@ -155,12 +155,6 @@ class SettingsController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Item has been saved.');
-
-            return $this->render('settings/subject.html.twig', [
-                'subject' => $subject,
-                'formSubject' => $formSubject->createView(),
-                'error' => false,
-            ]);
         }
 
         return $this->render('settings/subject.html.twig', [
@@ -188,6 +182,7 @@ class SettingsController extends AbstractController
             if ($topic === null) { $topic = new Topic(); }
 
             $topic->setName($newTopic->getName());
+            $topic->setPerson($this->getUser());
 
             // Save data to the DB.
             $entityManager->persist($topic);
@@ -204,22 +199,23 @@ class SettingsController extends AbstractController
     }
 
     #[Route(path: '/settings/set/{id?}', name: 'settings-set')]
-    public function set(?int $id, Request $request, Set $set, EntityManagerInterface $entityManager): Response
+    public function set(Request $request, ?Set $set, EntityManagerInterface $entityManager): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        $form = $this->createForm(SetFormType::class, $set);
-        $form->handleRequest($request);
+        $formSet = $this->createForm(SetFormType::class, $set);
+        $formSet->handleRequest($request);
 
         // Process Form form
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+        if ($formSet->isSubmitted() && $formSet->isValid()) {
+            $data = $formSet->getData();
 
             // New item
             if ($set === null) { $set = new Set(); } 
 
             $set->setName($data->getName());
+            $set->setType($data->getType());
             // People are automaticaly updated
 
             // Save data to the DB.
@@ -231,7 +227,7 @@ class SettingsController extends AbstractController
 
         return $this->render('settings/set.html.twig', [
             'set' => $set,
-            'form' => $form->createView(),
+            'form' => $formSet->createView(),
             'error' => false,
         ]);
     }

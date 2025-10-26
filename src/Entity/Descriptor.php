@@ -17,6 +17,19 @@ use App\Repository\DescriptorRepository;
 #[ORM\Entity(repositoryClass: DescriptorRepository::class)]
 class Descriptor
 {
+    public const LEVEL_CHOICES = [
+        'Level - Basic' => 'basic',
+        'Level - Standard' => 'standard',
+        'Level - Advanced' => 'advanced',
+        'Level - Master' => 'master'
+    ];
+
+    public const WEIGHT_CHOICES = [
+        'Relevance - Normal' => 1,
+        'Relevance - Important' => 2,
+        'Relevance - Very Important' => 3
+    ];
+    
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
@@ -37,7 +50,7 @@ class Descriptor
     /**
      * Many Descriptors have many criteria.
      */
-    #[ORM\ManyToMany(targetEntity: Criterion::class, mappedBy: 'descriptors')]
+    #[ORM\ManyToMany(targetEntity: Criterion::class, mappedBy: 'descriptors', cascade: ['persist'])]
     private Collection $criteria;
 
     /**
@@ -158,6 +171,7 @@ class Descriptor
     {
         if (!$this->criteria->contains($criterion)) {
             $this->criteria[] = $criterion;
+            $criterion->addDescriptor($this);
         }
 
         return $this;
@@ -167,6 +181,7 @@ class Descriptor
     {
         if ($this->criteria->contains($criterion)) {
             $this->criteria->removeElement($criterion);
+            $criterion->removeDescriptor($this);
         }
 
         return $this;

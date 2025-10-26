@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Person;
 use App\Entity\Set;
+use Doctrine\ORM\Query\Expr\Select;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 // Entities
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 // Form types
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,10 +24,10 @@ class SetFormType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'Set'],
             ])
-            ->add('people', EntityType::class, [
-                'class' => Person::class,
-                'choice_label' => 'name',
-                'multiple' => true,
+            ->add('type', ChoiceType::class, [
+                'choices' => Set::SET_TYPE,
+                'label' => false,
+                'placeholder' => 'Type',
             ])
             ->add('save', SubmitType::class, ['label' => 'Save'])
         ;

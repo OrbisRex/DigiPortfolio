@@ -3,17 +3,18 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\Criterion;
 use App\Entity\Descriptor;
-use App\Form\CriterionFormType;
-// Entities
-use App\Repository\CriterionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// Repositories
-use Symfony\Component\HttpFoundation\Request;
 
-// Forms
+use App\Form\CriterionFormType;
+
+use App\Repository\CriterionRepository;
+
 
 class CriterionController extends AbstractController
 {
@@ -33,7 +34,7 @@ class CriterionController extends AbstractController
     }
 
     #[Route(path: '/criterion/new', name: 'new-criterion')]
-    public function new(Request $request)
+    public function new(Request $request, EntityManagerInterface $entityManager)
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -50,8 +51,6 @@ class CriterionController extends AbstractController
             $criterion = new Criterion();
             $criterion->setName($data->getName());
 
-            // Doctrine Entity Manager
-            $entityManager = $this->getDoctrine()->getManager();
             // Save data to the DB.
             $entityManager->persist($criterion);
             $entityManager->flush();

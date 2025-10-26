@@ -50,19 +50,19 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Many people can organise many sets (co-leading).
      */
-    #[ORM\ManyToMany(targetEntity: Set::class, mappedBy: 'people')]
+    #[ORM\ManyToMany(targetEntity: Set::class, mappedBy: 'people', cascade: ['persist'])]
     private Collection $sets;
 
     /**
      * Many people can have many subjects (co-teaching).
      */
-    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'people')]
+    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'people', cascade: ['persist'])]
     private Collection $subjects;
 
     /**
      * One person can have many topics (author).
      */
-    #[ORM\OneToMany(targetEntity: Topic::class, mappedBy: 'person')]
+    #[ORM\OneToMany(targetEntity: Topic::class, mappedBy: 'person', cascade: ['persist'])]
     private Collection $topics;
 
     /**

@@ -17,6 +17,10 @@ use App\Repository\SetRepository;
 #[ORM\Entity(repositoryClass: SetRepository::class)]
 class Set
 {
+    public const SET_TYPE = [
+        'Year group' => 'YEAR_GROUP',
+    ];
+
     #[ORM\Id]
     #[ORM\Column()]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
@@ -31,7 +35,6 @@ class Set
     /**
      * Many people can be in many sets.
      */
-    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'sets', cascade: ['persist'])]
     private Collection $people;
 

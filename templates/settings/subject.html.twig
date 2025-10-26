@@ -20,9 +20,10 @@
                     {{ form_row(formSubject.save) }}
                 </div>
             {{ form_end(formSubject) }}
-
+            
+            {# List of registered people #}
+            <h2>Who is in?</h2>
             {% if subject %}
-                <h2>Who is in?</h2>
                 {% for person in subject.people %}
                     <p>{{ person.name }}</p>
                 {% endfor %}

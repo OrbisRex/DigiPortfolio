@@ -8,6 +8,7 @@
         <div class="wide-envelop">
             {% if topic %}
                 <h1>{{ topic.name }}</h1>
+                <p>by {{ topic.person.name }}</p>
             {% else %}
                 <h1>New topic</h1>
             {% endif %}
@@ -20,16 +21,6 @@
                     {{ form_row(formTopic.save) }}
                 </div>
             {{ form_end(formTopic) }}
-
-            {% if topic %}
-                <h2>Who is in?</h2>
-                {% for person in topic.author %}
-                    <p>by {{ person.name }}</p>
-                {% endfor %}
-            {% else %}
-                {# TODO: Add form to add new participants. #}
-                <p class='info'>No people found. Add some!</p>
-            {% endif %}
         </div>
     </section>
 

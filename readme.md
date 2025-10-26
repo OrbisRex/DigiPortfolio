@@ -16,6 +16,7 @@ This code has its cousin in Python and Django. It has been created for my learni
 composer --version
 composer install
 symfony --version
+composer --diagnose
 scoop install main/nodejs-lts
 node --version
 npm --version
