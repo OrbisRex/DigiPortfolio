@@ -64,7 +64,7 @@ class SubmissionController extends AbstractController
         if (!$setId) {
             $set = null;
             if ($this->isGranted('ROLE_TEACHER')) {
-                $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()->getUserIdentifier()]);
+                $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()]);
             }
         } else {
             $set = $this->setRepository->find($setId);

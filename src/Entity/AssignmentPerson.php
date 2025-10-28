@@ -26,13 +26,15 @@ class AssignmentPerson
     /**
      * Many people can have one assignment.
      */
-    #[ORM\ManyToOne(inversedBy: 'assignments')]
+    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'assignments')]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     private ?Person $person = null;
 
     /**
      * Many assignments have one person.
      */
-    #[ORM\ManyToOne(inversedBy: 'people')]
+    #[ORM\ManyToOne(targetEntity: Assignment::class, inversedBy: 'people')]
+    #[ORM\JoinColumn(name: 'assignment_id', referencedColumnName: 'id')]
     private ?Assignment $assignment = null;
 
     /**

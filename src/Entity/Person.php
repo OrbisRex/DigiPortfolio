@@ -343,7 +343,7 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Assignment[]
+     * @return Collection|AssignmentPerson[]
      */
     public function getAssignments(): Collection
     {

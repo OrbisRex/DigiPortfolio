@@ -57,7 +57,6 @@ class Assignment
     /**
      * One assignment can have many people.
      */
-    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
     #[ORM\OneToMany(targetEntity: AssignmentPerson::class, mappedBy: 'assignment')]
     private Collection $people;
 
@@ -182,7 +181,7 @@ class Assignment
     }
 
     /**
-     * @return Collection|Person[]
+     * @return Collection|AssignmentPerson[]
      */
     public function getPeople(): Collection
     {

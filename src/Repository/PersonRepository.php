@@ -20,21 +20,18 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function findAllStudents()
+    public function findAllStudents(): array
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT p '
-              .'FROM App:Person p '
-              .'WHERE JSON_GET_TEXT(p.roles, 1) = \'ROLE_STUDENT\' '
-              .'ORDER BY p.name'
-            );
+        $conn = $this->getEntityManager()->getConnection();
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        $sql = "SELECT * 
+                FROM Person p
+                WHERE p.roles->> 0 = :role 
+                ORDER BY p.name
+               ";
+
+        $resultSet = $conn->executeQuery($sql, ['role'=>'ROLE_STUDENT']);
+        return $resultSet->fetchAllAssociative();
     }
 
     public function findStudentsFromGroup($group)

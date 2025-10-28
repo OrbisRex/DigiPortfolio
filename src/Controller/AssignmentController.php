@@ -4,16 +4,14 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
-use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use DateTimeImmutable;
+
 use App\Entity\Assignment;
 use App\Entity\AssignmentPerson;
-// Forms
-// Entities
 use App\Form\AssignmentFormType;
 use App\Repository\AssignmentPersonRepository;
-// Forms
 use App\Repository\AssignmentRepository;
-// Repositories
 use App\Repository\CommentRepository;
 use App\Repository\CriterionRepository;
 use App\Repository\DescriptorRepository;
@@ -30,7 +28,18 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AssignmentController extends BasicController
 {
-    public function __construct(private readonly AssignmentRepository $assignmentRepository, private readonly SubjectRepository $subjectRepository, private readonly TopicRepository $topicRepository, private readonly CriterionRepository $criterionRepository, private readonly DescriptorRepository $descriptorRepository, private readonly AssignmentPersonRepository $assignmentPersonRepository, private readonly CommentRepository $commentRepository, private readonly SetRepository $setRepository, private readonly PersonRepository $personRepository)
+    public function __construct(
+        private readonly AssignmentRepository $assignmentRepository,
+        private readonly SubjectRepository $subjectRepository,
+        private readonly TopicRepository $topicRepository,
+        private readonly CriterionRepository $criterionRepository,
+        private readonly DescriptorRepository $descriptorRepository,
+        private readonly AssignmentPersonRepository $assignmentPersonRepository,
+        private readonly CommentRepository $commentRepository,
+        private readonly SetRepository $setRepository,
+        private readonly PersonRepository $personRepository,
+        EntityManagerInterface $entityManager
+    )
     {
     }
 
@@ -41,11 +50,8 @@ class AssignmentController extends BasicController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         // Fetch last assignments
-        if ($this->isGranted('ROLE_TEACHER')) {
-            $assignments = $this->assignmentPersonRepository->findLastAssignmentsByTeacher($this->getUser()->getId(), 8);
-        } else {
-            $assignments = $this->assignmentPersonRepository->findLastAssignments($this->getUser()->getId(), 8);
-        }
+        $assignments = $this->assignmentPersonRepository->findLastAssignments($this->getUser(), 8);
+        dump($assignments);
         if (!$assignments) {
             $assignments = false;
         }
@@ -69,6 +75,7 @@ class AssignmentController extends BasicController
 
         // Fetch assignments by Topic
         $topicId = $request->query->get('topicId');
+
         if ($topicId) {
             $assignmentsByTopic = $this->groupAssignmentsByTopic($topicId);
             $currentTopic = $this->topicRepository->findOneById($topicId);
@@ -89,27 +96,16 @@ class AssignmentController extends BasicController
     }
 
     #[Route(path: '/assignment/detail/{id}', name: 'assignment-detail')]
-    public function detail(int $id): Response
+    public function detail(Assignment $assignment): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $studentList = false;
-        if (!$id) {
-            throw $this->createNotFoundException('No Assignment ID found.');
-        }
-
-        // Fetch descriptor for assignment
-        $assignment = $this->assignmentRepository->find($id);
-        if (!$assignment) {
-            throw $this->createNotFoundException('No Assignment found.');
-        }
 
         // Fetch criteria for assignment and group them by name
         $criteria = $assignment->getCriteria();
 
         // Fetch student's list
-        $students = $this->assignmentPersonRepository->findByAssignment($assignment->getId());
+        $students = $this->assignmentPersonRepository->findStudentsByAssignment($assignment);
 
         return $this->render('assignment/detail.html.twig', [
             'assignment' => $assignment,
@@ -119,7 +115,7 @@ class AssignmentController extends BasicController
     }
 
     #[Route(path: '/assignment/new', name: 'new-assignment')]
-    public function new(Request $request)
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
@@ -135,24 +131,21 @@ class AssignmentController extends BasicController
             // $topic = $this->findById($entityManager, 'App:Topic', $data['topic']);
 
             // Current time
-            $now = new DateTime('now');
+            $now = new DateTimeImmutable('now');
 
             // Create new Assignment
             $assignment = new Assignment();
             $assignment->setName($data->getName());
             $assignment->setState('public');
-            $assignment->setTeacher($this->getUser());
             $assignment->setSubject($data->getSubject());
             $assignment->setTopic($data->getTopic());
             $assignment->setNote($data->getNote());
             $assignment->setUpdatetime($now);
-            $assignment->setPerson($this->getUser());
+            //$assignment->addPerson($this->getUser());
             foreach ($data->getCriteria() as $criterion) {
                 $assignment->addCriterion($criterion);
             }
 
-            // Doctrine Entity Manager
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($assignment);
 
             // Copy assignment for each student in group.
@@ -289,22 +282,12 @@ class AssignmentController extends BasicController
         }
 
         if (empty($subjects)) {
-            if ($this->isGranted('ROLE_TEACHER')) {
-                $assignments = $this->assignmentPersonRepository
-                        ->findAssignmentsByTeacher($this->getUser()->getId());
-            } else {
-                $assignments = $this->assignmentPersonRepository
-                        ->findAssignmentsByStudent($this->getUser()->getId());
-            }
+            $assignments = $this->assignmentPersonRepository
+                ->findAssignmentsByPerson($this->getUser());
         } else {
             foreach ($subjects as $subject) {
-                if ($this->isGranted('ROLE_TEACHER')) {
-                    $assignments = $this->assignmentPersonRepository
-                            ->findAssignmentsByTeacherForSubject($this->getUser()->getId(), $subject->getId());
-                } else {
-                    $assignments = $this->assignmentPersonRepository
-                            ->findAssignmentsByStudentBySubject($this->getUser()->getId(), $subject->getId());
-                }
+                $assignments = $this->assignmentPersonRepository
+                    ->findAssignmentsByPersonForSubject($this->getUser(), $subject);
             }
         }
 
@@ -318,22 +301,12 @@ class AssignmentController extends BasicController
         }
 
         if (empty($topics)) {
-            if ($this->isGranted('ROLE_TEACHER')) {
-                $assignments = $this->assignmentPersonRepository
-                        ->findAssignmentsByTeacher($this->getUser()->getId());
-            } else {
-                $assignments = $this->assignmentPersonRepository
-                        ->findAssignmentsByStudent($this->getUser()->getId());
-            }
+            $assignments = $this->assignmentPersonRepository
+                ->findAssignmentsByPerson($this->getUser());
         } else {
             foreach ($topics as $topic) {
-                if ($this->isGranted('ROLE_TEACHER')) {
-                    $assignments = $this->assignmentPersonRepository
-                            ->findAssignmentsByTeacherForTopic($this->getUser()->getId(), $topic->getId());
-                } else {
-                    $assignments = $this->assignmentPersonRepository
-                            ->findAssignmentsByStudentForTopic($this->getUser()->getId(), $topic->getId());
-                }
+                $assignments = $this->assignmentPersonRepository
+                    ->findAssignmentsByPersonForTopic($this->getUser(), $topic);
             }
         }
 

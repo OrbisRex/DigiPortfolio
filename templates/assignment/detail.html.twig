@@ -30,9 +30,9 @@
                 <div class="darkblue-block">
                     <h3 class="title">
                     {% if is_granted('ROLE_TEACHER') %}
-                        <a href="{{ path('person-profile', {'id': student.person.id}) }}" title="Student's profile">{{ student.person.name }}</a>
+                        <a href="{{ path('person-profile', {'id': student.id}) }}" title="Student's profile">{{ student.name }}</a>
                     {% else %}
-                        {{ student.person.name }}
+                        {{ student.name }}
                     {% endif %}
                     </h3>
                     {% for comments in student %}

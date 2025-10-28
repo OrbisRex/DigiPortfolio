@@ -2,10 +2,14 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\NoResultException;
-use App\Entity\AssignmentPerson;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
+use App\Entity\AssignmentPerson;
+use App\Entity\Assignment;
+use App\Entity\Person;
+use App\Entity\Subject;
+use App\Entity\Topic;
 
 /**
  * @method AssignmentPerson|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,155 +24,82 @@ class AssignmentPersonRepository extends ServiceEntityRepository
         parent::__construct($registry, AssignmentPerson::class);
     }
 
-    public function findLastAssignments($userId, $number)
+    public function findLastAssignments(Person $person, int $number): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'ORDER BY a.updatetime DESC'
-            )
-            ->setMaxResults($number);
+        $query = $this->createQueryBuilder('ap')
+            ->select('a.id, a.name, s.name subject, t.name topic')
+            ->join('ap.assignment', 'a')
+            ->join('a.subject', 's')
+            ->join('a.topic', 't')
+            ->where('ap.person = :person')
+            ->setParameter('person', $person)
+            ->orderBy('a.updatetime', 'DESC')
+            ->setMaxResults($number)
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findLastAssignmentsByTeacher($userId, $number)
+    public function findAssignmentsByPerson(Person $person): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'ORDER BY a.updatetime DESC'
-            )
-            ->setMaxResults($number);
+        $query = $this->createQueryBuilder('ap')
+            ->select('a.id, a.name, s.name subject, t.name topic')
+            ->join('ap.assignment', 'a')
+            ->join('a.subject', 's')
+            ->join('a.topic', 't')
+            ->where('ap.person = :person')
+            ->setParameter('person', $person)
+            ->orderBy('a.updatetime', 'DESC')
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findAssignmentsByTeacher($userId)
+    public function findStudentsByAssignment(Assignment $assignment): mixed 
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
+        $query = $this->createQueryBuilder('ap')
+            ->select('p.id, p.name, p.email')
+            ->join('ap.person', 'p')
+            ->where('ap.assignment = :assignment')
+            ->setParameter('assignment', $assignment)
+            ->orderBy('p.name', 'ASC')
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findAssignmentsByStudent($userId)
+    public function findAssignmentsByPersonForSubject(Person $person, Subject $subject): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
+        $query = $this->createQueryBuilder('ap')
+            ->select('a.id, a.name, s.name subject')
+            ->join('ap.assignment', 'a')
+            ->join('a.subject', 's')
+            ->where('ap.person = :person')
+            ->setParameter('person', $person)
+            ->where('a.subject = :subject')
+            ->setParameter('subject', $subject)
+            ->orderBy('a.updatetime', 'DESC')
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findAssignmentsByTeacherForSubject($userId, $subjectId)
+    public function findAssignmentsByPersonForTopic(Person $person, Topic $topic): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'AND a.subject = '.$subjectId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
+        $query = $this->createQueryBuilder('ap')
+            ->select('a.id, a.name, t.name topic')
+            ->join('ap.assignment', 'a')
+            ->join('a.topic', 't')
+            ->where('ap.person = :person')
+            ->setParameter('person', $person)
+            ->where('a.topic = :topic')
+            ->setParameter('topic', $topic)
+            ->orderBy('a.updatetime', 'DESC')
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findAssignmentsByStudentBySubject($userId, $subjectId)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a'
-              .'WHERE ap.person = '.$userId.' '
-              .'AND a.subject = '.$subjectId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
-
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
-    }
-
-    public function findAssignmentsByStudentForTopic($userId, $topicId)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE ap.person = '.$userId.' '
-              .'AND a.topic = '.$topicId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
-
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
-    }
-
-    public function findAssignmentsByTeacherForTopic($userId, $topicId)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT ap '
-              .'FROM App:AssignmentPerson ap '
-              .'JOIN ap.assignment a '
-              .'WHERE a.teacher = '.$userId.' '
-              .'AND a.topic = '.$topicId.' '
-              .'ORDER BY a.updatetime DESC'
-            );
-
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
-    }
 
     // /**
     //  * @return AssignmentPerson[] Returns an array of AssignmentPerson objects

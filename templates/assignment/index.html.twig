@@ -10,10 +10,13 @@
         {%if assignments == FALSE %}
             <p class='info'>No assignment found.</p>
         {% else %}    
-            {% for assignmentPerson in assignments %}
+            {% for assignment in assignments %}
                 <span class="block-envelop">
-                    <span class="group">{% if assignmentPerson.assignment.subject %}{{ assignmentPerson.assignment.subject.name }} {% else %} No Subject {% endif %}</span>
-                    <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                    <span class="group">
+                        <div>{% if assignment.subject %}{{ assignment.subject }} {% else %} No Subject {% endif %}</div>                        
+                        <div>{% if assignment.topic %}{{ assignment.topic }} {% else %} No Topic {% endif %}</div>
+                    </span>
+                    <span class="data"><a href='{{ path('assignment-detail', {'id':assignment.id }) }}'>{{ assignment.name }}</a></span>
                 </span>
             {% endfor %}    
         {% endif %}    
@@ -36,10 +39,10 @@
             {%elseif assignmentsBySubject == false and currentSubject is empty %}
                 <p class='info'>No assignment found.</p>
             {% else %}
-                {% for assignmentPerson in assignmentsBySubject %}
+                {% for assignment in assignmentsBySubject %}
                     <span class="block-envelop">
-                        <span class="group">{% if assignmentPerson.assignment.subject %}{{ assignmentPerson.assignment.subject.name }} {% else %} No Subject {% endif %}</span>
-                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                        <span class="group">{% if assignment.subject %}{{ assignment.subject }} {% else %} No Subject {% endif %}</span>
+                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignment.id }) }}'>{{ assignment.name }}</a></span>
                     </span>
                 {% endfor %}    
             {% endif %}
@@ -63,10 +66,10 @@
             {%elseif assignmentsByTopic == false and currentTopic is empty %}
                 <p class='info'>No assignment found.</p>
             {% else %}
-                {% for assignmentPerson in assignmentsByTopic %}
+                {% for assignment in assignmentsByTopic %}
                     <span class="block-envelop">
-                        <span class="group">{% if assignmentPerson.assignment.topic %}{{ assignmentPerson.assignment.topic.name }} {% else %} No Topic {% endif %}</span>
-                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignmentPerson.assignment.id }) }}'>{{ assignmentPerson.assignment.name }}</a></span>
+                        <span class="group">{% if assignment.topic %}{{ assignment.topic }} {% else %} No Topic {% endif %}</span>
+                        <span class="data"><a href='{{ path('assignment-detail', {'id':assignment.id }) }}'>{{ assignment.name }}</a></span>
                     </span>
                 {% endfor %}
             {% endif %}

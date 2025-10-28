@@ -6,17 +6,26 @@
 {% block body %}
     <section id="top" class="main">
         <div class="wide-envelop">
-        {%if user == FALSE %}
+        {%if person == FALSE %}
             <p class='info'>No user found. Add some!</p>
         {% else %}
-            {% if user.name %}
-                <h1>{{ user.name }}</h1>
+            {% if person.name %}
+                <h1>{{ person.name }}</h1>
             {% else %}
-                <h1>{{ user.email }}</h1>
+                <h1>{{ person.email }}</h1>
             {% endif %}
-            {% for role in user.roles %}
-                {% if role == 'ROLE_STUDENT' %}
+            {% for role in person.roles %}
+                {% if not role %}
+                    <p>No role assigned</p>
+                {% endif %}
+                {% if role == "ROLE_STUDENT" %}
                     <p>Student</p>
+                {% endif %}
+                {% if role == "ROLE_TEACHER" %}
+                    <p>Teacher</p>
+                {% endif %}
+                {% if role == "ROLE_ADMIN" %}
+                    <p>Admin</p>
                 {% endif %}
             {% endfor %}
         {% endif %}
@@ -26,9 +35,11 @@
     <section id="assignments" class="lightgray">
         <h2>Assignments</h2>
         <div class="wide-envelop">
-            {%if assignments == FALSE %}
+            {% if assignments == FALSE %}
                 <p class='info'>No assignment found.</p>
-                <span class="button"><a href="{{ path('new-assignment') }}">+</a></span>
+                {% if is_granted('ROLE_TEACHER') %}
+                    <span class="button"><a href="{{ path('new-assignment') }}">+</a></span>
+                {% endif %}
             {% else %}    
                 <div>
                     <span class="button"><a href="{{ path('new-assignment') }}">+</a></span>

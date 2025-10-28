@@ -4,24 +4,22 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\Person;
 use App\Entity\Set;
 use App\Form\ProfileFormType;
 use App\Repository\AssignmentPersonRepository;
 use App\Repository\PersonRepository;
 use App\Repository\ResourceFileRepository;
-// Services
 use App\Repository\SetRepository;
-// Entities
 use App\Repository\SubmissionRepository;
 use App\Service\CsvImporter;
-// Forms
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// Repositories
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class PersonController extends AbstractController
 {
@@ -51,29 +49,23 @@ class PersonController extends AbstractController
 
     #[Route(path: '/person/profile/{id}', name: 'person-profile')]
     public function profile(
-        int $id,
         Request $request,
-        PersonRepository $personRepository,
+        Person $person,
         AssignmentPersonRepository $assignmentPersonRepository,
         SubmissionRepository $submissionRepository,
+        EntityManagerInterface $entityManager,
     ): Response {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $user = $personRepository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('No user found for id '.$id);
-        }
-
         // Find all assignments for user
-        $assignments = $assignmentPersonRepository->findByPerson($user->getId());
+        $assignments = $assignmentPersonRepository->findByPerson($person->getId());
 
         // Find all submissions for user
-        $submissions = $submissionRepository->findByPeople([$user->getId()]);
+        $submissions = $submissionRepository->findByPeople([$person->getId()]);
 
         // Edit User Profile
-        $form = $this->createForm(ProfileFormType::class, $user);
+        $form = $this->createForm(ProfileFormType::class, $person);
         $form->handleRequest($request);
         // dump($formSubject);
 
@@ -82,25 +74,23 @@ class PersonController extends AbstractController
             $data = $form->getData();
             // dump($data);
 
-            $user->setName($data->getName());
-            $user->setEmail($data->getEmail());
+            $person->setName($data->getName());
+            $person->setEmail($data->getEmail());
             // encode the plain password
-            $user->setPassword($data->getPassword());
-            $user->setDisabled($data->getDisabled());
-            $user->setRoles($data->getRoles());
+            $person->setPassword($data->getPassword());
+            $person->setDisabled($data->getDisabled());
+            $person->setRoles($data->getRoles());
             // Set is automatically updated
 
-            // Doctrine Entity Manager
-            $entityManager = $this->getDoctrine()->getManager();
             // Save data to the DB.
-            $entityManager->persist($user);
+            $entityManager->persist($person);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Item has been saved.');
+            $this->addFlash('success', 'Profile has been saved.');
         }
 
         return $this->render('person/profile.html.twig', [
-            'user' => $user,
+            'person' => $person,
             'assignments' => $assignments,
             'submissions' => $submissions,
             'form' => $form->createView(),

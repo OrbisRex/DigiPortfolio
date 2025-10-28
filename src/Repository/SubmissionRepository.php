@@ -25,58 +25,52 @@ class SubmissionRepository extends ServiceEntityRepository
     public function findLastSubmissions($person, $number)
     {
         $query = $this->createQueryBuilder('s')
-            ->join('s.assignment', 'a')
-            ->where('s.people = ?1')
-            ->setParameter(1, $person)
+            ->select('s.id, s.name')
+            ->join('s.people', 'p')
+            ->where('p.id = :person')
+            ->setParameter('person', $person)
             ->orderBy('s.name', 'ASC')
-            ->getQuery()
-            ->setMaxResults($number);
+            ->setMaxResults($number)
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
     public function findBySet($setId, $people)
     {
         $query = $this->createQueryBuilder('s')
             ->join('s.assignment', 'a')
-            ->where('a.set = ?1')
-            ->andWhere('s.people IN (?2)')
+            ->where('a.set = :setId')
+            ->andWhere('s.people IN (:people)')
             ->setParameters(
                 new ArrayCollection([
-                    new Parameter('1', $setId),
-                    new Parameter('2', array_values($people)),
+                    new Parameter('setId', $setId),
+                    new Parameter('people', array_values($people)),
                 ])
             )
             ->orderBy('s.name', 'ASC')
-            ->getQuery()
         ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
     public function findByPeople(array $people)
     {
+        // Guard: empty input => no results
+        if (empty($people)) {
+            return [];
+        }
+
+        // Submissions have a ManyToMany `people` relation (App\Entity\Person).
+        // Query submissions that are linked to any of the provided person ids.
         $query = $this->createQueryBuilder('s')
-            ->join('s.assignment', 'a')
-            ->where('a.people IN (:people)')
+            ->join('s.people', 'p')
+            ->where('p.id IN (:people)')
             ->setParameter('people', array_values($people))
             ->orderBy('s.name', 'ASC')
-            ->getQuery()
         ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
     // /**
