@@ -9,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
+use App\Entity\Set;
+use App\Entity\Person;
+
 /**
  * @method Submission|null find($id, $lockMode = null, $lockVersion = null)
  * @method Submission|null findOneBy(array $criteria, array $orderBy = null)
@@ -36,16 +39,18 @@ class SubmissionRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function findBySet($setId, $people)
+    public function findBySet(Set $set, Person $person)
     {
         $query = $this->createQueryBuilder('s')
+            ->join('s.people', 'p')
             ->join('s.assignment', 'a')
-            ->where('a.set = :setId')
-            ->andWhere('s.people IN (:people)')
+            ->join('a.set', 'st')
+            ->where('st.id = :set')
+            ->andWhere('p.id = :person')
             ->setParameters(
                 new ArrayCollection([
-                    new Parameter('setId', $setId),
-                    new Parameter('people', array_values($people)),
+                    new Parameter('set', $set),
+                    new Parameter('person', $person),
                 ])
             )
             ->orderBy('s.name', 'ASC')

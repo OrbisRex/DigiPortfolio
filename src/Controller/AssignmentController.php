@@ -19,6 +19,7 @@ use App\Repository\PersonRepository;
 use App\Repository\SetRepository;
 use App\Repository\SubjectRepository;
 use App\Repository\TopicRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -51,7 +52,6 @@ class AssignmentController extends BasicController
 
         // Fetch last assignments
         $assignments = $this->assignmentPersonRepository->findLastAssignments($this->getUser(), 8);
-        dump($assignments);
         if (!$assignments) {
             $assignments = false;
         }
@@ -64,7 +64,7 @@ class AssignmentController extends BasicController
 
         if ($subjectId) {
             $assignmentsBySubject = $this->groupAssignmentsBySubject($subjectId);
-            $currentSubject = $this->subjectRepository->findOneById($subjectId);
+            $currentSubject = $this->subjectRepository->find($subjectId);
         } else {
             $assignmentsBySubject = $this->groupAssignmentsBySubject();
             $currentSubject = null;
@@ -78,7 +78,7 @@ class AssignmentController extends BasicController
 
         if ($topicId) {
             $assignmentsByTopic = $this->groupAssignmentsByTopic($topicId);
-            $currentTopic = $this->topicRepository->findOneById($topicId);
+            $currentTopic = $this->topicRepository->find($topicId);
         } else {
             $assignmentsByTopic = $this->groupAssignmentsByTopic();
             $currentTopic = null;
@@ -139,6 +139,7 @@ class AssignmentController extends BasicController
             $assignment->setState('public');
             $assignment->setSubject($data->getSubject());
             $assignment->setTopic($data->getTopic());
+            $assignment->setSet($data->getSet());
             $assignment->setNote($data->getNote());
             $assignment->setUpdatetime($now);
             //$assignment->addPerson($this->getUser());
@@ -151,6 +152,7 @@ class AssignmentController extends BasicController
             // Copy assignment for each student in group.
             $students = $data->getSet()->getPeople();
             foreach ($students as $student) {
+                dump($student);
                 $assign = new AssignmentPerson();
 
                 $assign->setPerson($student);
@@ -173,16 +175,10 @@ class AssignmentController extends BasicController
     }
 
     #[Route(path: '/assignment/edit/{id}', name: 'edit-assignment')]
-    public function edit(int $id, Request $request)
+    public function edit(Request $request, Assignment $assignment, EntityManagerInterface $entityManager): Response
     {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
-
-        if (!$id) {
-            throw $this->createNotFoundException('No Assignment ID found.');
-        }
-
-        $assignment = $this->assignmentRepository->find($id);
 
         // Assignment Form
         $form = $this->createForm(AssignmentFormType::class, $assignment);
@@ -196,25 +192,26 @@ class AssignmentController extends BasicController
             // $topic = $this->topicRepository->find($data->getTopic());
 
             // Current time
-            $now = new DateTime('now');
+            $now = new DateTimeImmutable('now');
 
             // Update Assignment
             $data->setName($data->getName());
             $data->setSubject($data->getSubject());
             $data->setTopic($data->getTopic());
+            $data->setSet($data->getSet());
             $data->setNote($data->getNote());
             $data->setUpdatetime($now);
 
             // Doctrine Entity Manager
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($data);
 
             // Copy assignment for each student in set.
             // TODO: Assignment has only one set but students are added in every update in edit form.
             $students = $data->getSet()->getPeople();
             foreach ($students as $student) {
+                dump($student->getAssignments());
                 $assign = new AssignmentPerson();
-
+                //if ($student )
                 $assign->setPerson($student);
                 $assign->setAssignment($data);
 

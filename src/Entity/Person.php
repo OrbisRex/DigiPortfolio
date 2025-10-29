@@ -220,10 +220,11 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->sets;
     }
 
-    public function addSet(Set $set): self
+    public function addSet(?Set $set): self
     {
-        if (!$this->sets->contains($set)) {
+        if (!empty($set) && !$this->sets->contains($set)) {
             $this->sets[] = $set;
+            $set->addPerson($this);
         }
 
         return $this;
@@ -231,8 +232,14 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeSet(Set $set): self
     {
+        dump($this->sets->contains($set));
         if ($this->sets->contains($set)) {
+            dump($set);
+            dump($this->sets);
             $this->sets->removeElement($set);
+            // Set the owning side to null (unless already changed)
+            $set->addPerson(null);
+            dump($this->sets);
         }
 
         return $this;

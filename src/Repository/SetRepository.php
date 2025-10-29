@@ -19,6 +19,18 @@ class SetRepository extends ServiceEntityRepository
         parent::__construct($registry, Set::class);
     }
 
+    public function removePerson($person): mixed
+    {
+        $query = $this->createQueryBuilder('s')
+            ->delete('App:Set', 's')
+            ->where('s.people = :person')
+            ->setParameter('person', $person)
+        ;
+        
+        return $query->getQuery()->execute();
+    }
+
+
     // /**
     //  * @return Set[] Returns an array of Set objects
     //  */

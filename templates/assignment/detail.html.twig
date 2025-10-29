@@ -8,6 +8,8 @@
     <section id="top" class="main">
         <h1>{{ assignment.name }}</h1>
         <p>
+           {% if assignment.set %} {{ assignment.set.name }} {% else %} No Set {% endif %}
+            |
            {% if assignment.subject %} {{ assignment.subject.name }} {% else %} No Subject {% endif %} 
             | 
            {% if assignment.topic %} {{ assignment.topic.name }} {% else %} No Topic {% endif %}

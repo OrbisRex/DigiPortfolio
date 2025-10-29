@@ -104,9 +104,9 @@ class Set
         return $this->people;
     }
 
-    public function addPerson(Person $person): self
+    public function addPerson(?Person $person): self
     {
-        if (!$this->people->contains($person)) {
+        if (!empty($person) && !$this->people->contains($person)) {
             $this->people[] = $person;
             $person->addSet($this);
         }
@@ -118,7 +118,7 @@ class Set
     {
         if ($this->people->contains($person)) {
             $this->people->removeElement($person);
-            $person->removeSet($this);
+            $person->addSet(null);
         }
 
         return $this;

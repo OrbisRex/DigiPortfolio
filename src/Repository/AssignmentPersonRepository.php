@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 
 use App\Entity\AssignmentPerson;
 use App\Entity\Assignment;
@@ -75,9 +77,13 @@ class AssignmentPersonRepository extends ServiceEntityRepository
             ->join('ap.assignment', 'a')
             ->join('a.subject', 's')
             ->where('ap.person = :person')
-            ->setParameter('person', $person)
-            ->where('a.subject = :subject')
-            ->setParameter('subject', $subject)
+            ->andWhere('a.subject = :subject')
+            ->setParameters(
+                new ArrayCollection([
+                    new Parameter('person', $person),
+                    new Parameter('subject', $subject),
+                ])
+            )
             ->orderBy('a.updatetime', 'DESC')
         ;
 
@@ -91,9 +97,13 @@ class AssignmentPersonRepository extends ServiceEntityRepository
             ->join('ap.assignment', 'a')
             ->join('a.topic', 't')
             ->where('ap.person = :person')
-            ->setParameter('person', $person)
-            ->where('a.topic = :topic')
-            ->setParameter('topic', $topic)
+            ->andWhere('a.topic = :topic')
+            ->setParameters(
+                new ArrayCollection([
+                    new Parameter('person', $person),
+                    new Parameter('topic', $topic),
+                ])
+            )
             ->orderBy('a.updatetime', 'DESC')
         ;
 

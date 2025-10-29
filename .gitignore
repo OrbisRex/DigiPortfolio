@@ -5,6 +5,9 @@
 /vendor/
 /var/
 
+### VSCode ###
+/.github/
+
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###

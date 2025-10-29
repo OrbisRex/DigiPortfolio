@@ -4,23 +4,23 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use DateTime;
 use DateTimeImmutable;
+
 use App\Entity\Comment;
 use App\Entity\Feedback;
 use App\Entity\Log;
 use App\Entity\ResourceFile;
-// Entities
 use App\Entity\Submission;
 use App\Form\CommentFormType;
 use App\Form\FeedbackFormType;
 use App\Form\SubmissionFormType;
 use App\Repository\AssignmentPersonRepository;
-// Forms
 use App\Repository\AssignmentRepository;
 use App\Repository\CommentRepository;
 use App\Repository\CriterionRepository;
-// Repositories
 use App\Repository\DescriptorRepository;
 use App\Repository\FeedbackRepository;
 use App\Repository\PersonRepository;
@@ -30,8 +30,6 @@ use App\Repository\SubjectRepository;
 use App\Repository\SubmissionRepository;
 use App\Repository\TopicRepository;
 use App\Service\FileUploader;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Description of SubmissionController.
@@ -40,7 +38,20 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SubmissionController extends AbstractController
 {
-    public function __construct(private readonly SubmissionRepository $submissionRepository, private readonly SubjectRepository $subjectRepository, private readonly TopicRepository $topicRepository, private readonly CriterionRepository $criterionRepository, private readonly DescriptorRepository $descriptorRepository, private readonly AssignmentRepository $assignmentRepository, private readonly AssignmentPersonRepository $assignmentPersonRepository, private readonly CommentRepository $commentRepository, private readonly SetRepository $setRepository, private readonly PersonRepository $personRepository, private readonly FeedbackRepository $feedbackRepository, private readonly ResourceFileRepository $resourceFileRepository, private readonly FileUploader $fileUploader)
+    public function __construct(
+        private readonly SubmissionRepository $submissionRepository, 
+        private readonly SubjectRepository $subjectRepository, 
+        private readonly TopicRepository $topicRepository, 
+        private readonly CriterionRepository $criterionRepository, 
+        private readonly DescriptorRepository $descriptorRepository, 
+        private readonly AssignmentRepository $assignmentRepository, 
+        private readonly AssignmentPersonRepository $assignmentPersonRepository, 
+        private readonly CommentRepository $commentRepository, 
+        private readonly SetRepository $setRepository, 
+        private readonly PersonRepository $personRepository, 
+        private readonly FeedbackRepository $feedbackRepository, 
+        private readonly ResourceFileRepository $resourceFileRepository, 
+        private readonly FileUploader $fileUploader)
     {
     }
 
@@ -57,32 +68,24 @@ class SubmissionController extends AbstractController
         }
 
         // Generate set buttons
+        // TODO: Filter only sets assigned to the user
         $sets = $this->setRepository->findAll();
 
-        // Fetch submissions by a Set
+        // Fetch submissions for the set lists
         $setId = $request->query->get('setId');
         if (!$setId) {
             $set = null;
-            if ($this->isGranted('ROLE_TEACHER')) {
-                $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()]);
-            }
+            $submissionsBySet[] = $this->submissionRepository->findByPeople([$this->getUser()]);
         } else {
             $set = $this->setRepository->find($setId);
             if (!$set) {
                 $submissionsBySet = null;
             } else {
                 if ($this->isGranted('ROLE_TEACHER')) {
-                    $people = $set->getPeople();
-                    foreach ($people as $person) {
-                        $submissionsBySet[] = $this->submissionRepository->findByPeople([$person]);
-                    }
+                    $submissionsBySet[] = $this->submissionRepository->findByPeople([$set->getPeople()]);
                 } else {
-                    $submissions = $this->submissionRepository->findBySet($set, $this->getUser()->getUserIdentifier());
-                    if ($submissions) {
-                        $submissionsBySet[] = $submissions;
-                    } else {
-                        $submissionsBySet = null;
-                    }
+                    $submissions = $this->submissionRepository->findBySet($set, $this->getUser());
+                    ($submissions) ? $submissionsBySet[] = $submissions : $submissionsBySet = null;
                 }
             }
         }

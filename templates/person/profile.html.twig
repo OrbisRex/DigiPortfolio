@@ -15,7 +15,7 @@
                 <h1>{{ person.email }}</h1>
             {% endif %}
             {% for role in person.roles %}
-                {% if not role %}
+                {% if role is empty %}
                     <p>No role assigned</p>
                 {% endif %}
                 {% if role == "ROLE_STUDENT" %}
@@ -28,6 +28,15 @@
                     <p>Admin</p>
                 {% endif %}
             {% endfor %}
+            <p>
+            {% for set in person.sets %}
+                {% if set is empty %}
+                    No set assigned
+                {% else %}
+                    {{ set.name }} {{ not loop.last ? '|' }}
+                {% endif %}
+            {% endfor %}
+            </p>
         {% endif %}
         </div>
     </section>

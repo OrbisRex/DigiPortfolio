@@ -51,6 +51,7 @@ class PersonController extends AbstractController
     public function profile(
         Request $request,
         Person $person,
+        SetRepository $setRepository,
         AssignmentPersonRepository $assignmentPersonRepository,
         SubmissionRepository $submissionRepository,
         EntityManagerInterface $entityManager,
@@ -63,6 +64,7 @@ class PersonController extends AbstractController
 
         // Find all submissions for user
         $submissions = $submissionRepository->findByPeople([$person->getId()]);
+        $currentSets = $person->getSets()->toArray();
 
         // Edit User Profile
         $form = $this->createForm(ProfileFormType::class, $person);
@@ -72,7 +74,6 @@ class PersonController extends AbstractController
         // Process form
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            // dump($data);
 
             $person->setName($data->getName());
             $person->setEmail($data->getEmail());
@@ -80,13 +81,24 @@ class PersonController extends AbstractController
             $person->setPassword($data->getPassword());
             $person->setDisabled($data->getDisabled());
             $person->setRoles($data->getRoles());
-            // Set is automatically updated
+
+            // Remove old sets
+            foreach($currentSets as $set) {
+                $set->removePerson($person);
+            }
+
+            // Add new sets
+            foreach ($data->getSets() as $set) {
+                $set->addPerson($person);
+            }
 
             // Save data to the DB.
+            $entityManager->persist($set);
             $entityManager->persist($person);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profile has been saved.');
+            return $this->redirectToRoute('person');
         }
 
         return $this->render('person/profile.html.twig', [
