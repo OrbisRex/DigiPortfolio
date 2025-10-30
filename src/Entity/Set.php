@@ -19,6 +19,7 @@ class Set
 {
     public const SET_TYPE = [
         'Year group' => 'YEAR_GROUP',
+        'Organization' => 'TYPE_ORGANIZATION',
     ];
 
     #[ORM\Id]

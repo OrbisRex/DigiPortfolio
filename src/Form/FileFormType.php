@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\File;
 
 class FileFormType extends AbstractType
 {
@@ -15,8 +17,18 @@ class FileFormType extends AbstractType
     {
         $builder
             ->add('files', FileType::class, [
+                'label' => 'Files to upload',
                 'multiple' => true,
                 'mapped' => false,
+                'constraints' => [
+                    new All([
+                        new File([
+                            'maxSize' => '1024k',
+                            //'extensions' => ['jpg'],
+                            //'extensionsMessage' => 'Please upload a valid JPG image.',
+                        ])
+                    ])
+                ],
             ])
             ->add('save', SubmitType::class, ['label' => 'Save'])
         ;

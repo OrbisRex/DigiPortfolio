@@ -12,6 +12,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Person;
+use App\Entity\ResourceFile;
 use App\Entity\Set;
 use App\Form\ProfileFormType;
 use App\Repository\AssignmentPersonRepository;
@@ -112,58 +113,67 @@ class PersonController extends AbstractController
 
     #[Route(path: '/person/import/{id}', name: 'import-person')]
     public function import(
-        int $id,
+        ResourceFile $csvFile,
         CsvImporter $csvImporter,
         UserPasswordHasherInterface $passwordHasher,
         ResourceFileRepository $resourceFileRepository,
         PersonRepository $personRepository,
         SetRepository $setRepository,
-    ): RedirectResponse {
+        EntityManagerInterface $entityManager,
+    ): RedirectResponse 
+    {
         // Check access
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
         $newUserCount = 0;
 
-        $csvFile = $resourceFileRepository->find($id);
-        if (!$csvFile) {
-            throw $this->createNotFoundException('No user import file found for id '.$id);
-        }
-
         $data = $csvImporter->userImport($csvFile->getName());
         foreach ($data as $person) {
+            dump($person);
             $existingUser = $personRepository->findOneBy(['email' => $person['email']]);
             if (!$existingUser) {
                 $user = new Person();
-                $user->setName($person['name']);
+                if (array_key_exists('firstname', $person)) {$user->setFirstname($person['firstname']);}
+                if (array_key_exists('lastname', $person)) {$user->setLastname($person['lastname']);}
+                if (array_key_exists('fullname', $person)) {$user->setName($person['fullname']);}
+                if (array_key_exists('name', $person)) {
+                    $user->setName($person['name']);
+                } else {
+                    $name = (!empty($person['firstname'])) ? $person['firstname'] : '';
+                    $name .= (!empty($person['lastname'])) ? ' ' . $person['lastname'] : '';
+                    $user->setName($name);
+                }
                 $user->setEmail($person['email']);
-                // encode the plain password
+                // Encode the plain password
                 $user->setPassword(
                     $passwordHasher->hashPassword(
                         $user,
                         $person['password'],
                     )
                 );
-                $user->setRoles(['ROLE_USER', 'ROLE_STUDENT']);
+                
+                // Add by default student role
+                $role = (strtolower($person['role']) == 'teacher') ? 'ROLE_TEACHER' : 'ROLE_STUDENT';
+                $user->setRoles(['ROLE_USER', $role]);
 
                 $set = $setRepository->findOneBy(['name' => $person['set']]);
                 if (!$set) {
                     $set = new Set();
                     $set->setName($person['set']);
-                    $set->setType('Organisation');
+                    $set->setType(Set::SET_TYPE['Organization']);
                 }
                 $user->addSet($set);
-                $user->setDisabled(0);
+                $user->setDisabled(($person['disabled']) ?? 0);
 
-                // Doctrine Entity Manager
-                $entityManager = $this->getDoctrine()->getManager();
                 // Save data to the DB.
                 $entityManager->persist($user);
+                dump($user);
                 $entityManager->flush();
-
+                
                 ++$newUserCount;
             }
         }
 
-        $this->addFlash('success', $newUserCount.' new users have been imported.');
+        $this->addFlash('success', ($newUserCount == 1) ? "$newUserCount new user has been imported." : "$newUserCount new users have been imported.");
 
         // Redirect to File Management
         return $this->redirectToRoute('person');

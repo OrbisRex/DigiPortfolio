@@ -15,10 +15,12 @@ class CsvImporter
         $this->rowNumber = 0;
     }
 
-    public function userImport($csvFileName)
+    public function userImport(string $csvFileName): array
     {
-        if (($file = fopen($this->targetDirectory.'/'.$csvFileName, 'r')) !== false) {
+        if (($file = fopen("$this->targetDirectory/$csvFileName", 'r')) !== false) {
+            // Get column heading
             $header = $row = fgetcsv($file, 1000, ',');
+            
             while (($row = fgetcsv($file, 1000, ',')) !== false) {
                 // Row has less items than heading.
                 if (count($header) > count($row)) {
@@ -26,8 +28,9 @@ class CsvImporter
                 }
 
                 foreach ($header as $column => $heading) {
-                    $row_new[strtolower((string) $heading)] = $row[$column];
+                    $row_new[trim(strtolower((string) $heading), "\xEF\xBB\xBF")] = $row[$column];
                 }
+
                 $this->data[] = $row_new;
                 ++$this->rowNumber;
             }
@@ -43,7 +46,7 @@ class CsvImporter
     /*
      * Check validity of email.
      */
-    private function checkEmail()
+    private function checkEmail(): void
     {
         foreach ($this->data as $line) {
             if (!filter_var($line['email'], FILTER_VALIDATE_EMAIL)) {
@@ -55,7 +58,7 @@ class CsvImporter
     /*
      * Generate new password if column password or password value does not exist.
      */
-    private function generatePassword()
+    private function generatePassword(): void
     {
         foreach ($this->data as $index => $line) {
             if (!array_key_exists('password', $line)) {

@@ -44,6 +44,12 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 250, nullable: true)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 250, nullable: true)]
+    private ?string $lastname = null;
+
     #[ORM\Column(type: 'smallint')]
     private ?int $disabled = null;
 
@@ -196,6 +202,29 @@ class Person implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstName(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setlastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }

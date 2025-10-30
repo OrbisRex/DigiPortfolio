@@ -154,7 +154,7 @@ class SettingsController extends AbstractController
             $entityManager->persist($subject);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.');
+            $this->addFlash('success', 'Subject has been saved.');
         }
 
         return $this->render('settings/subject.html.twig', [
@@ -188,7 +188,7 @@ class SettingsController extends AbstractController
             $entityManager->persist($topic);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.');
+            $this->addFlash('success', 'Topic has been saved.');
         }
 
         return $this->render('settings/topic.html.twig', [
@@ -222,7 +222,7 @@ class SettingsController extends AbstractController
             $entityManager->persist($set);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Item has been saved.');
+            $this->addFlash('success', 'Set has been saved.');
         }
 
         return $this->render('settings/set.html.twig', [

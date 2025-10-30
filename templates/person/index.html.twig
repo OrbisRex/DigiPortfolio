@@ -43,11 +43,11 @@
         <h2>Import people</h2>
         <div class="wide-envelop">
             <div class="button-list">
-            {%if otherFiles == FALSE %}
-                <p class='info'>No CSV file found for an import. Add some!</p>
+            {% if otherFiles == FALSE %}
+                <p class='info'>No CSV file found for import. Add some!</p>
             {% else %}
-                {% for otherFile in otherFiles %}
-                    <span class="button"><a href="{{ path('import-person', {'id':otherFile.id }) }}" title="{{ otherFile.type }}">{{ otherFile.name }}</a></span>
+                {% for file in otherFiles %}
+                    <span class="button"><a href="{{ path('import-person', {'id':file.id }) }}" title="{{ file.type }}">{{ file.id }}] {{ file.name }}</a></span>
                 {% endfor %}
             {% endif %}
                 <span class="button"><a href="{{ path('file') }}#new" title="Add CSV file for import">+</a></span>

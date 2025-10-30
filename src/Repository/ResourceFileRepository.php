@@ -3,9 +3,13 @@
 namespace App\Repository;
 
 use Doctrine\ORM\NoResultException;
-use App\Entity\ResourceFile;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
+
+use App\Entity\ResourceFile;
+use App\Entity\Person;
 
 /**
  * @method ResourceFile|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,46 +24,40 @@ class ResourceFileRepository extends ServiceEntityRepository
         parent::__construct($registry, ResourceFile::class);
     }
 
-    public function findFilesByType($type, $owner, $limit = 100)
+    public function findFilesByType(string $type, Person $owner, int $limit = 100): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT f '
-              .'FROM App:ResourceFile f '
-              .'WHERE f.owner = :owner '
-              .'AND f.type LIKE :type '
-              .'ORDER BY f.updatetime DESC'
+        $query = $this->createQueryBuilder('f')
+            ->where('f.owner = :owner')
+            ->andWhere('f.type LIKE :type')
+            ->setParameters(
+                new ArrayCollection([
+                    new Parameter('type', $type),
+                    new Parameter('owner', $owner),
+                ])
             )
-            ->setParameter('owner', $owner)
-            ->setParameter('type', $type)
-            ->setMaxResults($limit);
+            ->orderBy('f.updatetime', 'DESC')
+            ->setMaxResults($limit)        
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
-    public function findOtherFilesThen($type, $owner, $limit = 100)
+    public function findOtherFilesThen(string $type, Person $owner, int $limit = 100): mixed
     {
-        $query = $this->getEntityManager()
-            ->createQuery(
-                'SELECT f '
-              .'FROM App:ResourceFile f '
-              .'WHERE f.owner = :owner '
-              .'AND f.type NOT LIKE :type '
-              .'ORDER BY f.updatetime DESC'
+        $query = $this->createQueryBuilder('f')
+            ->where('f.owner = :owner')
+            ->andWhere('f.type NOT LIKE :type')
+            ->setParameters(
+                new ArrayCollection([
+                    new Parameter('type', $type),
+                    new Parameter('owner', $owner),
+                ])
             )
-            ->setParameter('owner', $owner)
-            ->setParameter('type', $type)
-            ->setMaxResults($limit);
+            ->orderBy('f.updatetime', 'DESC')
+            ->setMaxResults($limit)        
+        ;
 
-        try {
-            return $query->getResult();
-        } catch (NoResultException) {
-            return null;
-        }
+        return $query->getQuery()->getResult();
     }
 
     // /**

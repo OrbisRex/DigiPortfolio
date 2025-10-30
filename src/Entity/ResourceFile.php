@@ -29,6 +29,9 @@ class ResourceFile
     private ?int $size = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $path = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $type = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
@@ -48,9 +51,6 @@ class ResourceFile
      */
     #[ORM\ManyToMany(targetEntity: Submission::class, mappedBy: 'files', cascade: ['persist'])]
     private Collection $submissions;
-
-    #[ORM\Column(length: 255)]
-    private ?string $path = null;
 
     #[ORM\JoinColumn(nullable: true)]
     #[ORM\OneToOne(targetEntity: Log::class, cascade: ['persist', 'remove'])]
@@ -94,6 +94,18 @@ class ResourceFile
     public function setSize(int $size): self
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
 
         return $this;
     }
@@ -152,18 +164,6 @@ class ResourceFile
         if (!$this->submissions->contains($submission)) {
             $this->submissions[] = $submission;
         }
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
 
         return $this;
     }

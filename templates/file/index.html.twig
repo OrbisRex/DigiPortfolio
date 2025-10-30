@@ -7,12 +7,12 @@
         <h1>Files</h1>
         <div class="wide-white-block">
             <div class="button-list">
-            {%if files == FALSE %}
-                <p class='info'>No file found. Add some!</p>
-            {% else %}
+            {%if files %}
                 {% for file in files %}
-                    <span class="button"><a href="{{ asset(file.path) }}" title="Open file in new tab." target="_blank">{{ file.name }}^</a></span>
+                    <span class="button"><a href="{{ asset(file.path) }}" title="Open file in new tab." target="_blank">{{ file.name }} (^</a></span>
                 {% endfor %}
+            {% else %}
+                <p class='info'>No file found. Add some!</p>
             {% endif %}
             </div>
         </div>    
@@ -40,27 +40,27 @@
         <h2>Images</h2>
         <div class="wide-envelop">
             <div class="button-list">
-            {%if images == FALSE %}
-                <p class='info'>No file found. Add some!</p>
-            {% else %}
+            {%if images %}
                 {% for image in images %}
-                    <span class="button"><a href="{{ asset(image.path) }}" title="Open file in new tab." target="_blank">{{ image.name }}^</a></span>
+                    <span class="button"><a href="{{ asset(image.path) }}" title="Open file in new tab." target="_blank">{{ image.id }}] {{ image.name }} (^</a></span>
                 {% endfor %}
+            {% else %}
+                <p class='info'>No file found. Add some!</p>
             {% endif %}
             </div>
         </div>
     </section>
 
     <section id="other" class="lightgray">
-        <h2>Other files</h2>
+        <h2>CSV files</h2>
         <div class="wide-envelop">
             <div class="button-list">
-            {%if otherFiles == FALSE %}
-                <p class='info'>No file found. Add some!</p>
-            {% else %}
-                {% for otherFile in otherFiles %}
-                    <span class="button"><a href="{{ path('import-person', {'id':otherFile.id }) }}" title="{{ otherFile.type }}">{{ otherFile.name }}</a></span>
+            {%if csvFiles %}
+                {% for file in csvFiles %}
+                    <span class="button"><a href="{{ asset(file.path) }}" title="Download {{ file.type }}">{{ file.id }}] {{ file.name }} (v</a></span>
                 {% endfor %}
+            {% else %}
+                <p class='info'>No file found. Add some!</p>
             {% endif %}
             </div>
         </div>
